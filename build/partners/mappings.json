@@ -1,0 +1,4 @@
+{"count":2,"components":[
+ {"id":"2454:52787","name":"Navgation","mapping":{"componentName":"AppBottomTab","source":"src/components/base/index.js","framework":"React Native","importPath":"@/components/base","props":{"Navigation":"active"}}},
+ {"id":"3444:5120","name":"Button","mapping":{"componentName":"AppButton","source":"src/components/base/AppButton.js","framework":"React Native","importPath":"@/components/base","props":{"Label":"children","Type":"variant","Size":"size"}}}
+]}

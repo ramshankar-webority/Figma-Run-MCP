@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "file": "Webority Partners V_2.0",
+  "components": {
+    "2454:52787": {
+      "name": "Navgation",
+      "componentName": "AppBottomTab",
+      "source": "src/components/base/index.js",
+      "framework": "React Native",
+      "importPath": "@/components/base",
+      "props": {
+        "Navigation": "active"
+      },
+      "updatedAt": "2026-09-16T08:40:28.937Z"
+    },
+    "3444:5120": {
+      "name": "Button",
+      "componentName": "AppButton",
+      "source": "src/components/base/AppButton.js",
+      "framework": "React Native",
+      "importPath": "@/components/base",
+      "props": {
+        "✏️ Label": "children",
+        "🎲 Type": "variant",
+        "📏 Size": "size"
+      },
+      "updatedAt": "2026-09-16T08:40:28.934Z"
+    }
+  },
+  "updatedAt": "2026-09-16T08:40:28.938Z"
+}

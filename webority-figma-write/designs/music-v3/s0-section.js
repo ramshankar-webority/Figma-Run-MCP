@@ -1,0 +1,13 @@
+const page = figma.currentPage;
+let maxX = 0;
+for (const n of page.children) if ("x" in n && n.x + n.width > maxX) maxX = n.x + n.width;
+const section = figma.createSection();
+section.name = "Pulse v2 · Liquid Glass · Auto layout";
+page.appendChild(section);
+section.x = Math.round(maxX + 400);
+section.y = 0;
+section.resizeWithoutConstraints(80 + 4 * 470, 160 + 844 + 110);
+section.fills = solid("#040407");
+text(section, "Pulse", 80, 40, { size: 44, weight: "xbold", ls: -1.5 });
+text(section, "Music player  ·  Liquid Glass  ·  Auto layout  ·  Iconsax  ·  Bricolage Grotesque  ·  Photos: Pexels", 80, 100, { size: 16, color: C.muted, weight: "medium" });
+return { sectionId: section.id };

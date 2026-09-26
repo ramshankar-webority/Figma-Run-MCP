@@ -1,0 +1,2186 @@
+[
+ {
+  "y": 41,
+  "x": 457,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#466efa",
+  "text": "How it Works"
+ },
+ {
+  "y": 41,
+  "x": 600,
+  "size": 16,
+  "weight": "Medium",
+  "color": "#071437",
+  "text": "Services"
+ },
+ {
+  "y": 41,
+  "x": 707,
+  "size": 16,
+  "weight": "Medium",
+  "color": "#071437",
+  "text": "Benefits"
+ },
+ {
+  "y": 41,
+  "x": 811,
+  "size": 16,
+  "weight": "Medium",
+  "color": "#071437",
+  "text": "FAQ"
+ },
+ {
+  "y": 41,
+  "x": 1050,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#466efa",
+  "text": "Visit Webority"
+ },
+ {
+  "y": 41,
+  "x": 1216,
+  "size": 16,
+  "weight": "Bold",
+  "color": "#466efa",
+  "text": "Contact Us"
+ },
+ {
+  "y": 200,
+  "x": 446,
+  "size": 64,
+  "weight": "",
+  "color": "mixed",
+  "text": "Turn your Network | into Earnings"
+ },
+ {
+  "y": 379,
+  "x": 334,
+  "size": 18,
+  "weight": "Medium",
+  "color": "#252f4a",
+  "text": "Join the Webority Partner Program and earn commission by sharing project opportunities."
+ },
+ {
+  "y": 451,
+  "x": 588,
+  "size": 16,
+  "weight": "Bold",
+  "color": "#ffffff",
+  "text": "Get the App"
+ },
+ {
+  "y": 451,
+  "x": 761,
+  "size": 16,
+  "weight": "Bold",
+  "color": "#466efa",
+  "text": "Learn More"
+ },
+ {
+  "y": 645,
+  "x": 925,
+  "size": 16,
+  "weight": "Medium",
+  "color": "#071437",
+  "text": "Earnings Overview"
+ },
+ {
+  "y": 645,
+  "x": 1201,
+  "size": 10,
+  "weight": "SemiBold",
+  "color": "#3f4254",
+  "text": "Month"
+ },
+ {
+  "y": 647,
+  "x": 286,
+  "size": 16,
+  "weight": "SemiBold",
+  "color": "#252f4a",
+  "text": "Earned this Month"
+ },
+ {
+  "y": 690,
+  "x": 242,
+  "size": 20,
+  "weight": "Bold",
+  "color": "#071437",
+  "text": "$18.4K"
+ },
+ {
+  "y": 693,
+  "x": 439,
+  "size": 12,
+  "weight": "Medium",
+  "color": "#04b440",
+  "text": "4.2%"
+ },
+ {
+  "y": 693,
+  "x": 473,
+  "size": 12,
+  "weight": "Regular",
+  "color": "#78829d",
+  "text": "vs last month"
+ },
+ {
+  "y": 693,
+  "x": 1075,
+  "size": 12,
+  "weight": "SemiBold",
+  "color": "#071437",
+  "text": "$20,000"
+ },
+ {
+  "y": 693,
+  "x": 1174,
+  "size": 12,
+  "weight": "SemiBold",
+  "color": "#071437",
+  "text": "$5,800"
+ },
+ {
+  "y": 699,
+  "x": 925,
+  "size": 16,
+  "weight": "Bold",
+  "color": "#071437",
+  "text": "$25,800"
+ },
+ {
+  "y": 708,
+  "x": 1075,
+  "size": 10,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "My earnings"
+ },
+ {
+  "y": 708,
+  "x": 1174,
+  "size": 10,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Referral Rewards"
+ },
+ {
+  "y": 739,
+  "x": 925,
+  "size": 10,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "$1k"
+ },
+ {
+  "y": 756,
+  "x": 299,
+  "size": 12,
+  "weight": "Medium",
+  "color": "#181c32",
+  "text": "Trusted by"
+ },
+ {
+  "y": 765,
+  "x": 925,
+  "size": 10,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "$800"
+ },
+ {
+  "y": 775,
+  "x": 299,
+  "size": 14,
+  "weight": "Bold",
+  "color": "#466efa",
+  "text": "8,915+"
+ },
+ {
+  "y": 775,
+  "x": 351,
+  "size": 12,
+  "weight": "Semi Bold",
+  "color": "#4b5675",
+  "text": "Users"
+ },
+ {
+  "y": 790,
+  "x": 925,
+  "size": 10,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "$600"
+ },
+ {
+  "y": 816,
+  "x": 925,
+  "size": 10,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "$400"
+ },
+ {
+  "y": 841,
+  "x": 925,
+  "size": 10,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "$200"
+ },
+ {
+  "y": 853,
+  "x": 290,
+  "size": 14,
+  "weight": "SemiBold",
+  "color": "#071437",
+  "text": "Credited"
+ },
+ {
+  "y": 858,
+  "x": 471,
+  "size": 18,
+  "weight": "SemiBold",
+  "color": "#04b440",
+  "text": "$450.00"
+ },
+ {
+  "y": 867,
+  "x": 925,
+  "size": 10,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "$0"
+ },
+ {
+  "y": 869,
+  "x": 290,
+  "size": 10,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "29 Aug 2024"
+ },
+ {
+  "y": 882,
+  "x": 961,
+  "size": 10,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Jan"
+ },
+ {
+  "y": 882,
+  "x": 1005,
+  "size": 10,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Feb"
+ },
+ {
+  "y": 882,
+  "x": 1049,
+  "size": 10,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Mar"
+ },
+ {
+  "y": 882,
+  "x": 1093,
+  "size": 10,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Apr"
+ },
+ {
+  "y": 882,
+  "x": 1137,
+  "size": 10,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "May"
+ },
+ {
+  "y": 882,
+  "x": 1181,
+  "size": 10,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Jun"
+ },
+ {
+  "y": 882,
+  "x": 1225,
+  "size": 10,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Jul"
+ },
+ {
+  "y": 962,
+  "x": 119,
+  "size": 24,
+  "weight": "Semi Bold",
+  "color": "#ffffff",
+  "text": "Free to join"
+ },
+ {
+  "y": 962,
+  "x": 429,
+  "size": 24,
+  "weight": "Semi Bold",
+  "color": "#ffffff",
+  "text": "No investment needed"
+ },
+ {
+  "y": 962,
+  "x": 888,
+  "size": 24,
+  "weight": "Semi Bold",
+  "color": "#ffffff",
+  "text": "Earn commission on projects"
+ },
+ {
+  "y": 1150,
+  "x": 740,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#78829d",
+  "text": "About the Program"
+ },
+ {
+  "y": 1170,
+  "x": 740,
+  "size": 42,
+  "weight": "Semi Bold",
+  "color": "mixed",
+  "text": "What is the Webority Partner Program? |"
+ },
+ {
+  "y": 1304,
+  "x": 740,
+  "size": 16,
+  "weight": "Medium",
+  "color": "#252f4a",
+  "text": "The Webority Partner Program allows individuals and professionals to earn commission by referring business opportunities and project leads. | If you know a business that needs services like web development, mobile app development, AI solutions, or digital marketing, you can submit the lead through the Webority Partner App. | Once the project is successfully closed, you earn a commission. | Our partner platform makes it simple to share leads, track project status, and monitor your earnings all in one place. | Whether you are a freelancer, consultant, or business professional, the Webority Partner Program gives you the opportunity to turn your connections into income."
+ },
+ {
+  "y": 1786,
+  "x": 641,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#466efa",
+  "text": "Simple Process"
+ },
+ {
+  "y": 1806,
+  "x": 406,
+  "size": 42,
+  "weight": "Semi Bold",
+  "color": "#ffffff",
+  "text": "How the Partner Program Works?"
+ },
+ {
+  "y": 2067,
+  "x": 599,
+  "size": 20,
+  "weight": "Bold",
+  "color": "#ffffff",
+  "text": "Register as a Partner"
+ },
+ {
+  "y": 2070,
+  "x": 537,
+  "size": 24,
+  "weight": "Bold",
+  "color": "#ffffff33",
+  "text": "02"
+ },
+ {
+  "y": 2117,
+  "x": 530,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#ffffff",
+  "text": "Complete your partner registration and start accessing tools to submit and track leads. |"
+ },
+ {
+  "y": 2377,
+  "x": 209,
+  "size": 20,
+  "weight": "Bold",
+  "color": "#ffffff",
+  "text": "Download Our App"
+ },
+ {
+  "y": 2377,
+  "x": 599,
+  "size": 20,
+  "weight": "Bold",
+  "color": "#ffffff",
+  "text": "Share Project Leads"
+ },
+ {
+  "y": 2377,
+  "x": 1079,
+  "size": 20,
+  "weight": "Bold",
+  "color": "#ffffff",
+  "text": "Earn Commission"
+ },
+ {
+  "y": 2380,
+  "x": 148,
+  "size": 24,
+  "weight": "Bold",
+  "color": "#ffffff33",
+  "text": "01"
+ },
+ {
+  "y": 2380,
+  "x": 536,
+  "size": 24,
+  "weight": "Bold",
+  "color": "#ffffff33",
+  "text": "03"
+ },
+ {
+  "y": 2380,
+  "x": 1016,
+  "size": 24,
+  "weight": "Bold",
+  "color": "#ffffff33",
+  "text": "04"
+ },
+ {
+  "y": 2427,
+  "x": 140,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#ffffff",
+  "text": "Install the Webority Partner App from Google Play or the App Store."
+ },
+ {
+  "y": 2427,
+  "x": 530,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#ffffff",
+  "text": "Submit project opportunities from businesses that need digital solutions"
+ },
+ {
+  "y": 2427,
+  "x": 1010,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#ffffff",
+  "text": "When the project is successfully delivered, you receive your commission"
+ },
+ {
+  "y": 2707,
+  "x": 100,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#4b5675",
+  "text": "What You Can Refer"
+ },
+ {
+  "y": 2707,
+  "x": 530,
+  "size": 28,
+  "weight": "Semi Bold",
+  "color": "#c4cada",
+  "text": "01."
+ },
+ {
+  "y": 2707,
+  "x": 985,
+  "size": 28,
+  "weight": "Semi Bold",
+  "color": "#c4cada",
+  "text": "02."
+ },
+ {
+  "y": 2727,
+  "x": 100,
+  "size": 42,
+  "weight": "Semi Bold",
+  "color": "mixed",
+  "text": "We do what we love, and we love what we do."
+ },
+ {
+  "y": 2751,
+  "x": 530,
+  "size": 24,
+  "weight": "",
+  "color": "#071437",
+  "text": "Web Development"
+ },
+ {
+  "y": 2751,
+  "x": 985,
+  "size": 24,
+  "weight": "",
+  "color": "#071437",
+  "text": "Mobile App Development"
+ },
+ {
+  "y": 2796,
+  "x": 530,
+  "size": 16,
+  "weight": "Regular",
+  "color": "#252f4a",
+  "text": "Custom websites, e-commerce platforms, and scalable web applications for businesses."
+ },
+ {
+  "y": 2796,
+  "x": 985,
+  "size": 16,
+  "weight": "Regular",
+  "color": "#252f4a",
+  "text": "Android and iOS applications designed for startups and enterprises."
+ },
+ {
+  "y": 2912,
+  "x": 100,
+  "size": 18,
+  "weight": "Medium",
+  "color": "#252f4a",
+  "text": "Refer project opportunities in the following areas and earn commission when the project is completed."
+ },
+ {
+  "y": 2920,
+  "x": 530,
+  "size": 28,
+  "weight": "Semi Bold",
+  "color": "#c4cada",
+  "text": "03."
+ },
+ {
+  "y": 2920,
+  "x": 985,
+  "size": 28,
+  "weight": "Semi Bold",
+  "color": "#c4cada",
+  "text": "04."
+ },
+ {
+  "y": 2964,
+  "x": 530,
+  "size": 24,
+  "weight": "",
+  "color": "#071437",
+  "text": "AI & Automation Solutions"
+ },
+ {
+  "y": 2964,
+  "x": 985,
+  "size": 24,
+  "weight": "",
+  "color": "#071437",
+  "text": "UI/UX Design"
+ },
+ {
+  "y": 3009,
+  "x": 530,
+  "size": 16,
+  "weight": "Regular",
+  "color": "#252f4a",
+  "text": "AI-powered solutions, chatbots, automation systems, and smart digital tools."
+ },
+ {
+  "y": 3009,
+  "x": 985,
+  "size": 16,
+  "weight": "Regular",
+  "color": "#252f4a",
+  "text": "Modern user experience and interface design for web and mobile products."
+ },
+ {
+  "y": 3133,
+  "x": 530,
+  "size": 28,
+  "weight": "Semi Bold",
+  "color": "#c4cada",
+  "text": "05."
+ },
+ {
+  "y": 3133,
+  "x": 985,
+  "size": 28,
+  "weight": "Semi Bold",
+  "color": "#c4cada",
+  "text": "06."
+ },
+ {
+  "y": 3177,
+  "x": 530,
+  "size": 24,
+  "weight": "",
+  "color": "#071437",
+  "text": "Digital Marketing"
+ },
+ {
+  "y": 3177,
+  "x": 985,
+  "size": 24,
+  "weight": "",
+  "color": "#071437",
+  "text": "Custom Software Development"
+ },
+ {
+  "y": 3222,
+  "x": 530,
+  "size": 16,
+  "weight": "Regular",
+  "color": "#252f4a",
+  "text": "SEO, paid advertising, and growth marketing strategies for businesses."
+ },
+ {
+  "y": 3251,
+  "x": 985,
+  "size": 16,
+  "weight": "Regular",
+  "color": "#252f4a",
+  "text": "Tailored software solutions to improve business operations and productivity."
+ },
+ {
+  "y": 3546,
+  "x": 514,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#4b5675",
+  "text": "Why Join"
+ },
+ {
+  "y": 3566,
+  "x": 100,
+  "size": 42,
+  "weight": "Semi Bold",
+  "color": "mixed",
+  "text": "Benefits of Joining Webority Partners"
+ },
+ {
+  "y": 3715,
+  "x": 1187,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Milestone 1"
+ },
+ {
+  "y": 3719,
+  "x": 826,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#252f4a",
+  "text": "Earnings Overview"
+ },
+ {
+  "y": 3719,
+  "x": 1043,
+  "size": 9.375,
+  "weight": "Semi Bold",
+  "color": "#466efa",
+  "text": "Month"
+ },
+ {
+  "y": 3728,
+  "x": 80,
+  "size": 32,
+  "weight": "Bold",
+  "color": "#071437",
+  "text": "Earn Commission"
+ },
+ {
+  "y": 3742,
+  "x": 1187,
+  "size": 14,
+  "weight": "Semi Bold",
+  "color": "#04b440",
+  "text": "$4,000"
+ },
+ {
+  "y": 3765,
+  "x": 826,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#4b5675",
+  "text": "$1k"
+ },
+ {
+  "y": 3784,
+  "x": 1187,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Milestone 2"
+ },
+ {
+  "y": 3788,
+  "x": 826,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#4b5675",
+  "text": "$800"
+ },
+ {
+  "y": 3791,
+  "x": 80,
+  "size": 18,
+  "weight": "Medium",
+  "color": "#252f4a",
+  "text": "Refer businesses to Webority and earn attractive commissions whenever your referred project lead converts successfully."
+ },
+ {
+  "y": 3811,
+  "x": 1187,
+  "size": 14,
+  "weight": "Semi Bold",
+  "color": "#04b440",
+  "text": "$4,000"
+ },
+ {
+  "y": 3812,
+  "x": 826,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#4b5675",
+  "text": "$600"
+ },
+ {
+  "y": 3836,
+  "x": 826,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#4b5675",
+  "text": "$400"
+ },
+ {
+  "y": 3854,
+  "x": 1187,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Milestone 3"
+ },
+ {
+  "y": 3860,
+  "x": 826,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#4b5675",
+  "text": "$200"
+ },
+ {
+  "y": 3881,
+  "x": 1187,
+  "size": 14,
+  "weight": "SemiBold",
+  "color": "#0db969",
+  "text": "$4,000"
+ },
+ {
+  "y": 3884,
+  "x": 826,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#4b5675",
+  "text": "$0"
+ },
+ {
+  "y": 3899,
+  "x": 859,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Jan"
+ },
+ {
+  "y": 3899,
+  "x": 894,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Feb"
+ },
+ {
+  "y": 3899,
+  "x": 928,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Mar"
+ },
+ {
+  "y": 3899,
+  "x": 963,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Apr"
+ },
+ {
+  "y": 3899,
+  "x": 997,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "May"
+ },
+ {
+  "y": 3899,
+  "x": 1031,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Jun"
+ },
+ {
+  "y": 3899,
+  "x": 1066,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Jul"
+ },
+ {
+  "y": 3923,
+  "x": 1187,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Milestone 4"
+ },
+ {
+  "y": 3939,
+  "x": 80,
+  "size": 20,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "High Referral Earnings"
+ },
+ {
+  "y": 3940,
+  "x": 415,
+  "size": 20,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Fast & Transparent Payouts"
+ },
+ {
+  "y": 3950,
+  "x": 1187,
+  "size": 14,
+  "weight": "Semi Bold",
+  "color": "#4b5675",
+  "text": "$4,000"
+ },
+ {
+  "y": 3969,
+  "x": 870,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#252f4a",
+  "text": "Earned this Month"
+ },
+ {
+  "y": 3975,
+  "x": 80,
+  "size": 14,
+  "weight": "Regular",
+  "color": "#252f4a",
+  "text": "Start speeding up all your workflows processes."
+ },
+ {
+  "y": 3976,
+  "x": 415,
+  "size": 14,
+  "weight": "Regular",
+  "color": "#252f4a",
+  "text": "Track your earnings and receive payouts quickly once projects are closed."
+ },
+ {
+  "y": 3993,
+  "x": 1187,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Milestone 5"
+ },
+ {
+  "y": 4009,
+  "x": 928,
+  "size": 12,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "$20,000"
+ },
+ {
+  "y": 4009,
+  "x": 1012,
+  "size": 12,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "$5,800"
+ },
+ {
+  "y": 4014,
+  "x": 826,
+  "size": 16,
+  "weight": "Bold",
+  "color": "#071437",
+  "text": "$25,800"
+ },
+ {
+  "y": 4020,
+  "x": 1187,
+  "size": 14,
+  "weight": "Semi Bold",
+  "color": "#4b5675",
+  "text": "$4,000"
+ },
+ {
+  "y": 4024,
+  "x": 928,
+  "size": 10,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "My earnings"
+ },
+ {
+  "y": 4024,
+  "x": 1012,
+  "size": 10,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Referral Rewards"
+ },
+ {
+  "y": 4225,
+  "x": 487,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Milestone 1"
+ },
+ {
+  "y": 4229,
+  "x": 126,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#252f4a",
+  "text": "Earnings Overview"
+ },
+ {
+  "y": 4229,
+  "x": 343,
+  "size": 9.375,
+  "weight": "Semi Bold",
+  "color": "#466efa",
+  "text": "Month"
+ },
+ {
+  "y": 4238,
+  "x": 740,
+  "size": 32,
+  "weight": "Bold",
+  "color": "#071437",
+  "text": "Simple & Hassle-Free Partnership"
+ },
+ {
+  "y": 4252,
+  "x": 487,
+  "size": 14,
+  "weight": "Semi Bold",
+  "color": "#04b440",
+  "text": "$4,000"
+ },
+ {
+  "y": 4275,
+  "x": 126,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#4b5675",
+  "text": "$1k"
+ },
+ {
+  "y": 4294,
+  "x": 487,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Milestone 2"
+ },
+ {
+  "y": 4298,
+  "x": 126,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#4b5675",
+  "text": "$800"
+ },
+ {
+  "y": 4301,
+  "x": 740,
+  "size": 18,
+  "weight": "Medium",
+  "color": "#252f4a",
+  "text": "Joining the Webority Partner Network is simple, with no financial commitment and a quick onboarding process."
+ },
+ {
+  "y": 4321,
+  "x": 487,
+  "size": 14,
+  "weight": "Semi Bold",
+  "color": "#04b440",
+  "text": "$4,000"
+ },
+ {
+  "y": 4322,
+  "x": 126,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#4b5675",
+  "text": "$600"
+ },
+ {
+  "y": 4346,
+  "x": 126,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#4b5675",
+  "text": "$400"
+ },
+ {
+  "y": 4364,
+  "x": 487,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Milestone 3"
+ },
+ {
+  "y": 4370,
+  "x": 126,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#4b5675",
+  "text": "$200"
+ },
+ {
+  "y": 4391,
+  "x": 487,
+  "size": 14,
+  "weight": "SemiBold",
+  "color": "#0db969",
+  "text": "$4,000"
+ },
+ {
+  "y": 4394,
+  "x": 126,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#4b5675",
+  "text": "$0"
+ },
+ {
+  "y": 4409,
+  "x": 159,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Jan"
+ },
+ {
+  "y": 4409,
+  "x": 194,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Feb"
+ },
+ {
+  "y": 4409,
+  "x": 228,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Mar"
+ },
+ {
+  "y": 4409,
+  "x": 263,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Apr"
+ },
+ {
+  "y": 4409,
+  "x": 297,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "May"
+ },
+ {
+  "y": 4409,
+  "x": 331,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Jun"
+ },
+ {
+  "y": 4409,
+  "x": 366,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Jul"
+ },
+ {
+  "y": 4433,
+  "x": 487,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Milestone 4"
+ },
+ {
+  "y": 4449,
+  "x": 740,
+  "size": 20,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "No Investment Required"
+ },
+ {
+  "y": 4450,
+  "x": 1075,
+  "size": 20,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Easy Lead Submission"
+ },
+ {
+  "y": 4460,
+  "x": 487,
+  "size": 14,
+  "weight": "Semi Bold",
+  "color": "#4b5675",
+  "text": "$4,000"
+ },
+ {
+  "y": 4479,
+  "x": 170,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#252f4a",
+  "text": "Earned this Month"
+ },
+ {
+  "y": 4485,
+  "x": 740,
+  "size": 14,
+  "weight": "Regular",
+  "color": "#252f4a",
+  "text": "Completely free to join with no registration fee or hidden costs."
+ },
+ {
+  "y": 4486,
+  "x": 1075,
+  "size": 14,
+  "weight": "Regular",
+  "color": "#252f4a",
+  "text": "Quickly submit client leads via our partner portal."
+ },
+ {
+  "y": 4503,
+  "x": 487,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Milestone 5"
+ },
+ {
+  "y": 4519,
+  "x": 228,
+  "size": 12,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "$20,000"
+ },
+ {
+  "y": 4519,
+  "x": 312,
+  "size": 12,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "$5,800"
+ },
+ {
+  "y": 4524,
+  "x": 126,
+  "size": 16,
+  "weight": "Bold",
+  "color": "#071437",
+  "text": "$25,800"
+ },
+ {
+  "y": 4530,
+  "x": 487,
+  "size": 14,
+  "weight": "Semi Bold",
+  "color": "#4b5675",
+  "text": "$4,000"
+ },
+ {
+  "y": 4534,
+  "x": 228,
+  "size": 10,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "My earnings"
+ },
+ {
+  "y": 4534,
+  "x": 312,
+  "size": 10,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Referral Rewards"
+ },
+ {
+  "y": 4735,
+  "x": 1187,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Milestone 1"
+ },
+ {
+  "y": 4739,
+  "x": 826,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#252f4a",
+  "text": "Earnings Overview"
+ },
+ {
+  "y": 4739,
+  "x": 1043,
+  "size": 9.375,
+  "weight": "Semi Bold",
+  "color": "#466efa",
+  "text": "Month"
+ },
+ {
+  "y": 4748,
+  "x": 80,
+  "size": 32,
+  "weight": "Bold",
+  "color": "#071437",
+  "text": "Track and Grow Your Opportunities"
+ },
+ {
+  "y": 4762,
+  "x": 1187,
+  "size": 14,
+  "weight": "Semi Bold",
+  "color": "#04b440",
+  "text": "$4,000"
+ },
+ {
+  "y": 4785,
+  "x": 826,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#4b5675",
+  "text": "$1k"
+ },
+ {
+  "y": 4804,
+  "x": 1187,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Milestone 2"
+ },
+ {
+  "y": 4808,
+  "x": 826,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#4b5675",
+  "text": "$800"
+ },
+ {
+  "y": 4811,
+  "x": 80,
+  "size": 18,
+  "weight": "Medium",
+  "color": "#252f4a",
+  "text": "Stay informed about your referrals and manage opportunities easily through the partner dashboard."
+ },
+ {
+  "y": 4831,
+  "x": 1187,
+  "size": 14,
+  "weight": "Semi Bold",
+  "color": "#04b440",
+  "text": "$4,000"
+ },
+ {
+  "y": 4832,
+  "x": 826,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#4b5675",
+  "text": "$600"
+ },
+ {
+  "y": 4856,
+  "x": 826,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#4b5675",
+  "text": "$400"
+ },
+ {
+  "y": 4874,
+  "x": 1187,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Milestone 3"
+ },
+ {
+  "y": 4880,
+  "x": 826,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#4b5675",
+  "text": "$200"
+ },
+ {
+  "y": 4901,
+  "x": 1187,
+  "size": 14,
+  "weight": "SemiBold",
+  "color": "#0db969",
+  "text": "$4,000"
+ },
+ {
+  "y": 4904,
+  "x": 826,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#4b5675",
+  "text": "$0"
+ },
+ {
+  "y": 4919,
+  "x": 859,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Jan"
+ },
+ {
+  "y": 4919,
+  "x": 894,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Feb"
+ },
+ {
+  "y": 4919,
+  "x": 928,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Mar"
+ },
+ {
+  "y": 4919,
+  "x": 963,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Apr"
+ },
+ {
+  "y": 4919,
+  "x": 997,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "May"
+ },
+ {
+  "y": 4919,
+  "x": 1031,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Jun"
+ },
+ {
+  "y": 4919,
+  "x": 1066,
+  "size": 9.375,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Jul"
+ },
+ {
+  "y": 4943,
+  "x": 1187,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Milestone 4"
+ },
+ {
+  "y": 4959,
+  "x": 80,
+  "size": 20,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Real-Time Lead Tracking"
+ },
+ {
+  "y": 4960,
+  "x": 415,
+  "size": 20,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Dedicated Partner Support"
+ },
+ {
+  "y": 4970,
+  "x": 1187,
+  "size": 14,
+  "weight": "Semi Bold",
+  "color": "#4b5675",
+  "text": "$4,000"
+ },
+ {
+  "y": 4989,
+  "x": 870,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#252f4a",
+  "text": "Earned this Month"
+ },
+ {
+  "y": 4995,
+  "x": 80,
+  "size": 14,
+  "weight": "Regular",
+  "color": "#252f4a",
+  "text": "Start speeding up all your workflows processes."
+ },
+ {
+  "y": 4996,
+  "x": 415,
+  "size": 14,
+  "weight": "Regular",
+  "color": "#252f4a",
+  "text": "We assist you in the referral process for successful collaboration."
+ },
+ {
+  "y": 5013,
+  "x": 1187,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Milestone 5"
+ },
+ {
+  "y": 5029,
+  "x": 928,
+  "size": 12,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "$20,000"
+ },
+ {
+  "y": 5029,
+  "x": 1012,
+  "size": 12,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "$5,800"
+ },
+ {
+  "y": 5034,
+  "x": 826,
+  "size": 16,
+  "weight": "Bold",
+  "color": "#071437",
+  "text": "$25,800"
+ },
+ {
+  "y": 5040,
+  "x": 1187,
+  "size": 14,
+  "weight": "Semi Bold",
+  "color": "#4b5675",
+  "text": "$4,000"
+ },
+ {
+  "y": 5044,
+  "x": 928,
+  "size": 10,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "My earnings"
+ },
+ {
+  "y": 5044,
+  "x": 1012,
+  "size": 10,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Referral Rewards"
+ },
+ {
+  "y": 5297,
+  "x": 514,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#466efa",
+  "text": "Partner App"
+ },
+ {
+  "y": 5317,
+  "x": 100,
+  "size": 42,
+  "weight": "Semi Bold",
+  "color": "#ffffff",
+  "text": "Everything in | your Pocket"
+ },
+ {
+  "y": 5474,
+  "x": 988,
+  "size": 24,
+  "weight": "Semi Bold",
+  "color": "#252f4a",
+  "text": "Register as Partner"
+ },
+ {
+  "y": 5564,
+  "x": 988,
+  "size": 24,
+  "weight": "Semi Bold",
+  "color": "#466efa",
+  "text": "Submit Leads"
+ },
+ {
+  "y": 5654,
+  "x": 988,
+  "size": 24,
+  "weight": "Semi Bold",
+  "color": "#252f4a",
+  "text": "Track Lead Status"
+ },
+ {
+  "y": 5744,
+  "x": 988,
+  "size": 24,
+  "weight": "Semi Bold",
+  "color": "#252f4a",
+  "text": "View Earnings"
+ },
+ {
+  "y": 5834,
+  "x": 988,
+  "size": 24,
+  "weight": "Semi Bold",
+  "color": "#252f4a",
+  "text": "Manage Profile |"
+ },
+ {
+  "y": 6118,
+  "x": 514,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#4b5675",
+  "text": "Testimonials"
+ },
+ {
+  "y": 6138,
+  "x": 100,
+  "size": 42,
+  "weight": "Semi Bold",
+  "color": "mixed",
+  "text": "Built for Growth, Proven by Partners"
+ },
+ {
+  "y": 6221,
+  "x": 468,
+  "size": 18,
+  "weight": "Medium",
+  "color": "#252f4a",
+  "text": "Hear from partners who are already earning with Webority."
+ },
+ {
+  "y": 6320,
+  "x": -6,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#252f4a",
+  "text": "“The transparency is what won me over. I can see exactly where my lead is in the pipeline and when my payout is coming.\""
+ },
+ {
+  "y": 6320,
+  "x": 350,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#252f4a",
+  "text": "\"I've earned over ₹2 lakhs in 4 months just by connecting my network with Webority's services. Highly recommend!\""
+ },
+ {
+  "y": 6320,
+  "x": 706,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#252f4a",
+  "text": "\"I shared a lead for a government project and earned my first commission in 3 weeks. The app makes tracking easy.\""
+ },
+ {
+  "y": 6320,
+  "x": 1062,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#252f4a",
+  "text": "\"As a freelance consultant, I come across clients needing software all the time. I refer them to Webority for passive income."
+ },
+ {
+  "y": 6320,
+  "x": 1418,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#252f4a",
+  "text": "\"The transparency is what won me over. I can see exactly where my lead is in the pipeline and when my payout is coming.\""
+ },
+ {
+  "y": 6404,
+  "x": -6,
+  "size": 20,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Laura Mitchell"
+ },
+ {
+  "y": 6404,
+  "x": 350,
+  "size": 20,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Sarah Lopez"
+ },
+ {
+  "y": 6404,
+  "x": 706,
+  "size": 20,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Michael Zhang"
+ },
+ {
+  "y": 6404,
+  "x": 1062,
+  "size": 20,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Emily Carter"
+ },
+ {
+  "y": 6404,
+  "x": 1418,
+  "size": 20,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "James William"
+ },
+ {
+  "y": 6430,
+  "x": -6,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Business Consultant"
+ },
+ {
+  "y": 6430,
+  "x": 350,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Business Consultant"
+ },
+ {
+  "y": 6430,
+  "x": 706,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "IT Freelancer"
+ },
+ {
+  "y": 6430,
+  "x": 1062,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Finance Manager"
+ },
+ {
+  "y": 6430,
+  "x": 1418,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Entrepreneur"
+ },
+ {
+  "y": 6511,
+  "x": -156,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#252f4a",
+  "text": "\"The app dashboard is really clean. I can see my leads, their status, and my earnings all in one place. Great user experience.\""
+ },
+ {
+  "y": 6511,
+  "x": 200,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#252f4a",
+  "text": "\"I love the zero investment. I share leads and Webority handles everything else. Payouts are fast.\""
+ },
+ {
+  "y": 6511,
+  "x": 556,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#252f4a",
+  "text": "\"Partnering with a CMMI Level 5 company gives me confidence when I refer clients. They always deliver quality work.\""
+ },
+ {
+  "y": 6511,
+  "x": 912,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#252f4a",
+  "text": "\"Partnering with a CMMI Level 5 company gives me confidence when I refer clients. They always deliver quality work.\""
+ },
+ {
+  "y": 6511,
+  "x": 1268,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#252f4a",
+  "text": "\"The app dashboard is really clean. I can see my leads, their status, and my earnings all in one place. Great user experience.\""
+ },
+ {
+  "y": 6595,
+  "x": -156,
+  "size": 20,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Anna Roberts"
+ },
+ {
+  "y": 6595,
+  "x": 200,
+  "size": 20,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Laura Mitchell"
+ },
+ {
+  "y": 6595,
+  "x": 556,
+  "size": 20,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Daniel Kim"
+ },
+ {
+  "y": 6595,
+  "x": 912,
+  "size": 20,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Marcus Lee"
+ },
+ {
+  "y": 6595,
+  "x": 1268,
+  "size": 20,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Alex Romero"
+ },
+ {
+  "y": 6621,
+  "x": -156,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "VP Finance @ AtlasBank"
+ },
+ {
+  "y": 6621,
+  "x": 200,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Business Consultant"
+ },
+ {
+  "y": 6621,
+  "x": 556,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Finance Manager"
+ },
+ {
+  "y": 6621,
+  "x": 912,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Business Consultant"
+ },
+ {
+  "y": 6621,
+  "x": 1268,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#78829d",
+  "text": "Marketing Manager"
+ },
+ {
+  "y": 6862,
+  "x": 100,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#4b5675",
+  "text": "FAQ"
+ },
+ {
+  "y": 6882,
+  "x": 100,
+  "size": 42,
+  "weight": "Semi Bold",
+  "color": "mixed",
+  "text": "Got Questions? We've Got Answers"
+ },
+ {
+  "y": 6889,
+  "x": 605,
+  "size": 20,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Is the Webority Partner Program free to join?"
+ },
+ {
+  "y": 6893,
+  "x": 554,
+  "size": 24,
+  "weight": "Bold",
+  "color": "#c4cada",
+  "text": "01"
+ },
+ {
+  "y": 6979,
+  "x": 605,
+  "size": 20,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Who can become a partner?"
+ },
+ {
+  "y": 6983,
+  "x": 554,
+  "size": 24,
+  "weight": "Bold",
+  "color": "#466efa",
+  "text": "02"
+ },
+ {
+  "y": 7026,
+  "x": 554,
+  "size": 16,
+  "weight": "Medium",
+  "color": "#252f4a",
+  "text": "Freelancers, consultants, marketers, business professionals, and anyone with business connections can join."
+ },
+ {
+  "y": 7067,
+  "x": 100,
+  "size": 18,
+  "weight": "Medium",
+  "color": "#252f4a",
+  "text": "Find quick solutions to the most asked topics about our partner program. |"
+ },
+ {
+  "y": 7131,
+  "x": 605,
+  "size": 20,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "How do I earn commission?"
+ },
+ {
+  "y": 7135,
+  "x": 554,
+  "size": 24,
+  "weight": "Bold",
+  "color": "#c4cada",
+  "text": "03"
+ },
+ {
+  "y": 7221,
+  "x": 605,
+  "size": 20,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "How do I submit leads?"
+ },
+ {
+  "y": 7225,
+  "x": 554,
+  "size": 24,
+  "weight": "Bold",
+  "color": "#c4cada",
+  "text": "04"
+ },
+ {
+  "y": 7311,
+  "x": 605,
+  "size": 20,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Is the partner app available for Android and iOS?"
+ },
+ {
+  "y": 7315,
+  "x": 554,
+  "size": 24,
+  "weight": "Bold",
+  "color": "#c4cada",
+  "text": "05"
+ },
+ {
+  "y": 7401,
+  "x": 605,
+  "size": 20,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "Is the partner app available for Android and iOS?"
+ },
+ {
+  "y": 7405,
+  "x": 554,
+  "size": 24,
+  "weight": "Bold",
+  "color": "#c4cada",
+  "text": "06"
+ },
+ {
+  "y": 7491,
+  "x": 605,
+  "size": 20,
+  "weight": "Semi Bold",
+  "color": "#071437",
+  "text": "When do partners receive payouts?"
+ },
+ {
+  "y": 7495,
+  "x": 554,
+  "size": 24,
+  "weight": "Bold",
+  "color": "#c4cada",
+  "text": "07"
+ },
+ {
+  "y": 7742,
+  "x": 100,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#ffffff",
+  "text": "Get the App"
+ },
+ {
+  "y": 7762,
+  "x": 100,
+  "size": 42,
+  "weight": "Semi Bold",
+  "color": "#ffffff",
+  "text": "Start Earning Today | Become a Partner"
+ },
+ {
+  "y": 7896,
+  "x": 100,
+  "size": 18,
+  "weight": "Medium",
+  "color": "#ffffff",
+  "text": "Download our Partner App and begin sharing project leads to earn commission. Your network is your greatest asset."
+ },
+ {
+  "y": 7923,
+  "x": 1071,
+  "size": 18.047714233398438,
+  "weight": "Bold",
+  "color": "#ffffff",
+  "text": "Paste your design here"
+ },
+ {
+  "y": 8292,
+  "x": 882,
+  "size": 42,
+  "weight": "Italic",
+  "color": "#ffffff",
+  "text": "Your network, your income."
+ },
+ {
+  "y": 8444,
+  "x": 100,
+  "size": 42,
+  "weight": "Medium",
+  "color": "#ffffff",
+  "text": "Where connections __turn into earnings."
+ },
+ {
+  "y": 8444,
+  "x": 640,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#78829d",
+  "text": "Quick Links"
+ },
+ {
+  "y": 8444,
+  "x": 910,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#78829d",
+  "text": "Company"
+ },
+ {
+  "y": 8444,
+  "x": 1180,
+  "size": 16,
+  "weight": "Semi Bold",
+  "color": "#78829d",
+  "text": "Download"
+ },
+ {
+  "y": 8483,
+  "x": 640,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#ffffff",
+  "text": "How It Works"
+ },
+ {
+  "y": 8483,
+  "x": 910,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#ffffff",
+  "text": "Contact Us"
+ },
+ {
+  "y": 8483,
+  "x": 1180,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#ffffff",
+  "text": "App Store"
+ },
+ {
+  "y": 8516,
+  "x": 640,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#ffffff",
+  "text": "Services You Can Refer"
+ },
+ {
+  "y": 8516,
+  "x": 910,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#ffffff",
+  "text": "Visit Webority Website"
+ },
+ {
+  "y": 8516,
+  "x": 1180,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#ffffff",
+  "text": "Google Play Store"
+ },
+ {
+  "y": 8549,
+  "x": 640,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#ffffff",
+  "text": "Benefits"
+ },
+ {
+  "y": 8582,
+  "x": 640,
+  "size": 14,
+  "weight": "Medium",
+  "color": "#ffffff",
+  "text": "FAQ"
+ },
+ {
+  "y": 8607,
+  "x": 100,
+  "size": 16,
+  "weight": "Bold",
+  "color": "#ffffff",
+  "text": "Follow us"
+ },
+ {
+  "y": 8736,
+  "x": 100,
+  "size": 14,
+  "weight": "Semi Bold",
+  "color": "#ffffff",
+  "text": "Privacy Policy"
+ },
+ {
+  "y": 8736,
+  "x": 255,
+  "size": 14,
+  "weight": "Semi Bold",
+  "color": "#ffffff",
+  "text": "Terms & Conditions"
+ },
+ {
+  "y": 8736,
+  "x": 894,
+  "size": 14,
+  "weight": "Medium",
+  "color": "mixed",
+  "text": "© 2026 Webority Technologies Private Limited. All rights reserved."
+ }
+]

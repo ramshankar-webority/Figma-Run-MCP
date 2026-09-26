@@ -1,0 +1,290 @@
+<title>Flashbite Promo Email</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --ground: #FBF4EA;
+    --panel: #FFFFFF;
+    --ink: #14100E;
+    --muted: #6E635C;
+    --faint: #8E8178;
+    --rule: #E4D8C9;
+    --chilli: #E32D17;
+    --amber: #FFC94A;
+    --stage: #EFE6DA;
+    --ok: #1F7A4D;
+    --display: "Bricolage Grotesque", "Segoe UI", Tahoma, sans-serif;
+    --body: "Inter", "Segoe UI", Helvetica, Arial, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #141110;
+      --panel: #1E1917;
+      --ink: #F6EEE4;
+      --muted: #B3A599;
+      --faint: #8C7F74;
+      --rule: #342B26;
+      --chilli: #FF6A4F;
+      --amber: #FFC94A;
+      --stage: #0E0C0B;
+      --ok: #5CC28C;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #141110;
+    --panel: #1E1917;
+    --ink: #F6EEE4;
+    --muted: #B3A599;
+    --faint: #8C7F74;
+    --rule: #342B26;
+    --chilli: #FF6A4F;
+    --amber: #FFC94A;
+    --stage: #0E0C0B;
+    --ok: #5CC28C;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1240px; margin: 0 auto; padding-inline: 20px; padding-block: 36px 64px; }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--chilli);
+    margin: 0 0 10px;
+  }
+  h1 {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(30px, 5vw, 46px);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    margin: 0 0 12px;
+    text-wrap: balance;
+  }
+  .lede { margin: 0; max-width: 62ch; color: var(--muted); font-size: 16px; }
+
+  .masthead { border-bottom: 1px solid var(--rule); padding-bottom: 28px; margin-bottom: 28px; }
+  .facts { display: flex; flex-wrap: wrap; gap: 8px 26px; margin-top: 20px; font-family: var(--mono); font-size: 12px; color: var(--faint); }
+  .facts b { color: var(--ink); font-weight: 500; }
+
+  .cols { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 34px; align-items: start; }
+  @media (max-width: 900px) { .cols { grid-template-columns: minmax(0, 1fr); } }
+
+  /* Stage */
+  .stagebar { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px 16px; margin-bottom: 12px; }
+  .stagebar h2 { font-family: var(--display); font-weight: 600; font-size: 19px; letter-spacing: -0.01em; margin: 0; }
+  .widths { display: flex; gap: 6px; margin-left: auto; }
+  .widths button {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    background: var(--panel); color: var(--muted);
+    border: 1px solid var(--rule); border-radius: 999px;
+    padding: 7px 14px; cursor: pointer;
+  }
+  .widths button[aria-pressed="true"] { background: var(--ink); color: var(--ground); border-color: var(--ink); }
+  .widths button:focus-visible, a:focus-visible { outline: 2px solid var(--chilli); outline-offset: 2px; }
+
+  .stage { background: var(--stage); border: 1px solid var(--rule); border-radius: 14px; padding: 18px; display: flex; justify-content: center; }
+  .device { width: 100%; max-width: 640px; transition: max-width .28s ease; }
+  .device.phone { max-width: 390px; }
+  .device iframe { display: block; width: 100%; height: 92vh; min-height: 560px; border: 0; border-radius: 8px; background: #EFE6DA; }
+  .caption { font-family: var(--mono); font-size: 11px; color: var(--faint); margin-top: 10px; text-align: center; }
+
+  /* Rail */
+  .card { background: var(--panel); border: 1px solid var(--rule); border-radius: 12px; padding: 20px; }
+  .rail { display: grid; gap: 18px; }
+  .rail h3 { font-family: var(--display); font-weight: 600; font-size: 15px; margin: 0 0 12px; letter-spacing: -0.01em; }
+
+  dl.kv { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 7px 14px; font-size: 13px; }
+  dl.kv dt { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); align-self: baseline; }
+  dl.kv dd { margin: 0; font-variant-numeric: tabular-nums; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--rule); }
+  th { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); font-weight: 500; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--mono); font-size: 12px; }
+  tbody tr:last-child td { border-bottom: 0; }
+  .pass { color: var(--ok); font-family: var(--mono); font-size: 11px; }
+  .tablewrap { overflow-x: auto; }
+
+  ul.plain { margin: 0; padding: 0; list-style: none; display: grid; gap: 9px; font-size: 13px; }
+  ul.plain li { display: grid; grid-template-columns: 8px 1fr; gap: 10px; align-items: start; }
+  ul.plain li::before { content: ""; width: 5px; height: 5px; margin-top: 8px; border-radius: 50%; background: var(--chilli); }
+
+  .swatches { display: flex; gap: 8px; margin-top: 4px; }
+  .sw { flex: 1; height: 38px; border-radius: 6px; border: 1px solid var(--rule); }
+  .swrow { display: flex; gap: 8px; font-family: var(--mono); font-size: 9px; color: var(--faint); margin-top: 5px; }
+  .swrow span { flex: 1; text-align: center; }
+
+  .note { font-size: 13px; color: var(--muted); margin: 0; }
+  .note + .note { margin-top: 9px; }
+  code { font-family: var(--mono); font-size: 12px; background: var(--stage);
+         padding: 0 5px; border-radius: 4px; line-height: 1.5;
+         overflow-wrap: anywhere; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+
+  footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--rule); font-size: 12px; color: var(--faint); }
+  footer a { color: var(--muted); }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <p class="eyebrow">Email template &middot; review copy</p>
+    <h1>Dinner in 10 minutes, not 40.</h1>
+    <p class="lede">A promotional email for a ten minute food delivery app, built as a sendable HTML template and as editable Figma layers. Flashbite is a concept brand standing in for the real product name.</p>
+    <div class="facts">
+      <span><b>600px</b> table layout</span>
+      <span><b>31 KB</b> markup</span>
+      <span><b>6</b> photos</span>
+      <span><b>Bricolage Grotesque</b> + Inter</span>
+      <span>Built <b>21-Sep-2026</b></span>
+    </div>
+  </header>
+
+  <div class="cols">
+
+    <main>
+      <div class="stagebar">
+        <h2>The email, rendered live</h2>
+        <div class="widths" role="group" aria-label="Preview width">
+          <button id="w-desktop" type="button" aria-pressed="true">Desktop 600</button>
+          <button id="w-phone" type="button" aria-pressed="false">Phone 390</button>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="device" id="device">
+          <iframe id="frame" src="email.html" title="Flashbite promotional email, rendered"></iframe>
+        </div>
+      </div>
+      <p class="caption">Scroll inside the frame. Hero cycles burger, pizza, noodles; Outlook shows frame one only.</p>
+
+      <div class="card" style="margin-top:26px;">
+        <h3>What each client actually gets</h3>
+        <div class="tablewrap">
+          <table>
+            <thead>
+              <tr><th>Client</th><th>Type</th><th>Hero</th><th>Gradients</th><th>Motion</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Apple Mail, iOS Mail</td><td>Bricolage Grotesque</td><td>Animated</td><td>Yes</td><td>Yes</td></tr>
+              <tr><td>Gmail web and app</td><td>Segoe UI / Arial</td><td>Animated</td><td>Yes</td><td>No</td></tr>
+              <tr><td>Outlook 2016 to 2021</td><td>Arial, forced</td><td>First frame</td><td>Flat fallback</td><td>No</td></tr>
+              <tr><td>Outlook.com</td><td>Segoe UI</td><td>Animated</td><td>Yes</td><td>No</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note" style="margin-top:12px;">Outlook desktop falls back to <em>Times New Roman</em>, not Arial, whenever a web font leads the stack, so the template forces Arial there with an <code>mso</code> conditional. Every gradient carries a solid <code>bgcolor</code> underneath it.</p>
+      </div>
+    </main>
+
+    <aside class="rail">
+
+      <section class="card">
+        <h3>Campaign</h3>
+        <dl class="kv">
+          <dt>Subject</dt><dd>Dinner in 10 minutes, not 40</dd>
+          <dt>Preheader</dt><dd>Flat &#8377;100 off your first 3 orders with code TEN10</dd>
+          <dt>Offer</dt><dd>TEN10, flat &#8377;100 off, first 3 orders, minimum &#8377;199</dd>
+          <dt>Expiry</dt><dd>31-Oct-2026</dd>
+          <dt>Claim</dt><dd>10:00 average, fee waived past 15 minutes</dd>
+        </dl>
+      </section>
+
+      <section class="card">
+        <h3>Palette</h3>
+        <div class="swatches" aria-hidden="true">
+          <div class="sw" style="background:#14100E"></div>
+          <div class="sw" style="background:#E32D17"></div>
+          <div class="sw" style="background:#DA2B16"></div>
+          <div class="sw" style="background:#FFC94A"></div>
+          <div class="sw" style="background:#FFF6EC"></div>
+        </div>
+        <div class="swrow">
+          <span>14100E</span><span>E32D17</span><span>DA2B16</span><span>FFC94A</span><span>FFF6EC</span>
+        </div>
+        <p class="note" style="margin-top:12px;">Two reds, not one: the lighter carries white body copy, the darker carries small red text on white and cream. A single red failed one of the two.</p>
+      </section>
+
+      <section class="card">
+        <h3>Contrast, after fixes</h3>
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>Pair</th><th>Ratio</th><th></th></tr></thead>
+            <tbody>
+              <tr><td>White on red</td><td class="num">4.51</td><td class="pass">AA</td></tr>
+              <tr><td>Price on white</td><td class="num">4.84</td><td class="pass">AA</td></tr>
+              <tr><td>Label on cream</td><td class="num">4.53</td><td class="pass">AA</td></tr>
+              <tr><td>Footer on cream</td><td class="num">4.52</td><td class="pass">AA</td></tr>
+              <tr><td>CTA sub on amber</td><td class="num">5.54</td><td class="pass">AA</td></tr>
+              <tr><td>Coupon sub on black</td><td class="num">8.28</td><td class="pass">AA</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note" style="margin-top:12px;">Five pairs failed the first audit at 4.5:1 and were darkened while holding their hue.</p>
+      </section>
+
+      <section class="card">
+        <h3>Photography</h3>
+        <dl class="kv">
+          <dt>Hero</dt><dd>Pexels 1639562</dd>
+          <dt>Pizza</dt><dd>Pexels 20115306</dd>
+          <dt>Noodles</dt><dd>Pexels 2347311</dd>
+          <dt>Burger</dt><dd>Pexels 2874989</dd>
+          <dt>Cake</dt><dd>Pexels 132694</dd>
+          <dt>Rider</dt><dd>Pexels 7362967</dd>
+        </dl>
+        <p class="note" style="margin-top:12px;">Every frame was opened before use. Two were rejected: one dessert shot was a cappuccino, and one burger shot carried a Coca-Cola bottle.</p>
+      </section>
+
+      <section class="card">
+        <h3>Swap before sending</h3>
+        <ul class="plain">
+          <li>Brand name, logo and the seven <code>example.com</code> links</li>
+          <li>The claims: 10:00 average, 4.7 rating, 1,20,000 orders, 40+ areas</li>
+          <li>Offer terms and the expiry date</li>
+          <li>Images onto your own CDN; Pexels needs no attribution but is not an image host</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h3>Sender</h3>
+        <p class="note">Webority Technologies Private Limited<br>629, Vipul Trade Centre, Sector 48, Gurgaon, Haryana 122018, India</p>
+        <p class="note">+91 959 900 6518 &middot; contact@webority.com &middot; www.webority.com</p>
+      </section>
+
+    </aside>
+  </div>
+
+  <footer>
+    Template files: <code>index.html</code> hotlinks Pexels for quick preview, <code>index-selfhosted.html</code> points at local <code>assets/</code>. Figma layers live in the Practice file as <em>Flashbite promo email</em>, 648 by 3031, with the headline carrying a rendered aurora shader.
+  </footer>
+</div>
+
+<script>
+  (function () {
+    var device = document.getElementById("device");
+    var dBtn = document.getElementById("w-desktop");
+    var pBtn = document.getElementById("w-phone");
+    function set(phone) {
+      device.classList.toggle("phone", phone);
+      dBtn.setAttribute("aria-pressed", String(!phone));
+      pBtn.setAttribute("aria-pressed", String(phone));
+      try { localStorage.setItem("fb-width", phone ? "phone" : "desktop"); } catch (e) {}
+    }
+    dBtn.addEventListener("click", function () { set(false); });
+    pBtn.addEventListener("click", function () { set(true); });
+    try { if (localStorage.getItem("fb-width") === "phone") set(true); } catch (e) {}
+  })();
+</script>

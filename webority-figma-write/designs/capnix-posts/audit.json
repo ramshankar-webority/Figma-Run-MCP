@@ -1,0 +1,4439 @@
+{
+ "gen": [
+  {
+   "id": "826:2346",
+   "name": "01",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 80,
+      "y": 1387,
+      "w": 173,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Swipe to explore",
+     "box": {
+      "x": 737,
+      "y": 1401,
+      "w": 319,
+      "h": 29
+     },
+     "segs": [
+      {
+       "t": "Swipe to explore",
+       "font": "Inter Medium",
+       "size": 40,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Why your",
+     "box": {
+      "x": 80,
+      "y": 319,
+      "w": 1040,
+      "h": 47
+     },
+     "segs": [
+      {
+       "t": "Why your",
+       "font": "Inter Semi Bold",
+       "size": 64,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "business loan",
+     "box": {
+      "x": 80,
+      "y": 416,
+      "w": 658,
+      "h": 69
+     },
+     "segs": [
+      {
+       "t": "business loan",
+       "font": "Addington CF Bold",
+       "size": 110,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "got rejected",
+     "box": {
+      "x": 80,
+      "y": 530,
+      "w": 584,
+      "h": 69
+     },
+     "segs": [
+      {
+       "t": "got rejected",
+       "font": "Addington CF Bold",
+       "size": 110,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "and what the reason really means",
+     "box": {
+      "x": 80,
+      "y": 649,
+      "w": 1040,
+      "h": 38
+     },
+     "segs": [
+      {
+       "t": "and what the reason really mea",
+       "font": "Inter Regular",
+       "size": 52,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 1
+    }
+   ],
+   "renders": [],
+   "infos": [],
+   "hiddenText": [],
+   "outside": []
+  },
+  {
+   "id": "826:2370",
+   "name": "02",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 80,
+      "y": 1387,
+      "w": 173,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#D20600"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "02",
+     "box": {
+      "x": 952,
+      "y": 1399,
+      "w": 52,
+      "h": 29
+     },
+     "segs": [
+      {
+       "t": "02",
+       "font": "Inter Semi Bold",
+       "size": 40,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "/10",
+     "box": {
+      "x": 1008,
+      "y": 1405,
+      "w": 48,
+      "h": 23
+     },
+     "segs": [
+      {
+       "t": "/10",
+       "font": "Inter Medium",
+       "size": 32,
+       "fill": "#4B5675"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Your credit score",
+     "box": {
+      "x": 80,
+      "y": 319,
+      "w": 718,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "Your credit score",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#071437"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "was below the cut-off",
+     "box": {
+      "x": 80,
+      "y": 419,
+      "w": 916,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "was below the cut-off",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Most lenders set a minimum score. One late EMI or a maxed-out card can pull you under it. Check your report and fix errors before you reapply.",
+     "box": {
+      "x": 80,
+      "y": 539,
+      "w": 954,
+      "h": 204
+     },
+     "segs": [
+      {
+       "t": "Most lenders set a minimum sco",
+       "font": "Inter Medium",
+       "size": 42,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 4
+    }
+   ],
+   "renders": [
+    {
+     "x": 205,
+     "y": 898,
+     "w": 995,
+     "h": 456
+    }
+   ],
+   "infos": [],
+   "hiddenText": [],
+   "outside": []
+  },
+  {
+   "id": "826:2394",
+   "name": "03",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 80,
+      "y": 1387,
+      "w": 173,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#D20600"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "03",
+     "box": {
+      "x": 951,
+      "y": 1399,
+      "w": 53,
+      "h": 29
+     },
+     "segs": [
+      {
+       "t": "03",
+       "font": "Inter Semi Bold",
+       "size": 40,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "/10",
+     "box": {
+      "x": 1008,
+      "y": 1405,
+      "w": 48,
+      "h": 23
+     },
+     "segs": [
+      {
+       "t": "/10",
+       "font": "Inter Medium",
+       "size": 32,
+       "fill": "#4B5675"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Your GST and bank",
+     "box": {
+      "x": 80,
+      "y": 319,
+      "w": 816,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "Your GST and bank",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#071437"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "numbers didn't match",
+     "box": {
+      "x": 80,
+      "y": 419,
+      "w": 918,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "numbers didn't match",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Lenders compare the turnover you filed with the money that reached your account. A big gap looks like hidden income or inflated sales.",
+     "box": {
+      "x": 80,
+      "y": 539,
+      "w": 954,
+      "h": 153
+     },
+     "segs": [
+      {
+       "t": "Lenders compare the turnover y",
+       "font": "Inter Medium",
+       "size": 42,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 3
+    }
+   ],
+   "renders": [
+    {
+     "x": 253,
+     "y": 948,
+     "w": 738,
+     "h": 359
+    }
+   ],
+   "infos": [],
+   "hiddenText": [],
+   "outside": []
+  },
+  {
+   "id": "826:2419",
+   "name": "04",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "Your business was",
+     "box": {
+      "x": 80,
+      "y": 319,
+      "w": 762,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "Your business was",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#071437"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "too new to qualify",
+     "box": {
+      "x": 80,
+      "y": 419,
+      "w": 763,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "too new to qualify",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Many lenders want two to three years of filed financials. If you are newer, look at lenders and schemes built for early-stage businesses.",
+     "box": {
+      "x": 80,
+      "y": 539,
+      "w": 954,
+      "h": 153
+     },
+     "segs": [
+      {
+       "t": "Many lenders want two to three",
+       "font": "Inter Medium",
+       "size": 42,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 3
+    },
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 80,
+      "y": 1387,
+      "w": 173,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#D20600"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "04",
+     "box": {
+      "x": 950,
+      "y": 1399,
+      "w": 54,
+      "h": 29
+     },
+     "segs": [
+      {
+       "t": "04",
+       "font": "Inter Semi Bold",
+       "size": 40,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "/10",
+     "box": {
+      "x": 1008,
+      "y": 1405,
+      "w": 48,
+      "h": 23
+     },
+     "segs": [
+      {
+       "t": "/10",
+       "font": "Inter Medium",
+       "size": 32,
+       "fill": "#4B5675"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    }
+   ],
+   "renders": [],
+   "infos": [],
+   "hiddenText": [],
+   "outside": []
+  },
+  {
+   "id": "826:2442",
+   "name": "05",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 80,
+      "y": 1387,
+      "w": 173,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#D20600"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "05",
+     "box": {
+      "x": 952,
+      "y": 1399,
+      "w": 52,
+      "h": 29
+     },
+     "segs": [
+      {
+       "t": "05",
+       "font": "Inter Semi Bold",
+       "size": 40,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "/10",
+     "box": {
+      "x": 1008,
+      "y": 1405,
+      "w": 48,
+      "h": 23
+     },
+     "segs": [
+      {
+       "t": "/10",
+       "font": "Inter Medium",
+       "size": 32,
+       "fill": "#4B5675"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Existing EMIs left",
+     "box": {
+      "x": 80,
+      "y": 319,
+      "w": 747,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "Existing EMIs left",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#071437"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "too little cash flow",
+     "box": {
+      "x": 80,
+      "y": 419,
+      "w": 782,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "too little cash flow",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "If repayments already take most of your monthly surplus, a new loan looks risky. Closing one small loan first can help.",
+     "box": {
+      "x": 80,
+      "y": 539,
+      "w": 954,
+      "h": 153
+     },
+     "segs": [
+      {
+       "t": "If repayments already take mos",
+       "font": "Inter Medium",
+       "size": 42,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 3
+    }
+   ],
+   "renders": [
+    {
+     "x": 232,
+     "y": 827,
+     "w": 735,
+     "h": 554
+    }
+   ],
+   "infos": [],
+   "hiddenText": [],
+   "outside": []
+  },
+  {
+   "id": "826:2470",
+   "name": "06",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 80,
+      "y": 1387,
+      "w": 173,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#D20600"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "06",
+     "box": {
+      "x": 951,
+      "y": 1399,
+      "w": 53,
+      "h": 29
+     },
+     "segs": [
+      {
+       "t": "06",
+       "font": "Inter Semi Bold",
+       "size": 40,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "/10",
+     "box": {
+      "x": 1008,
+      "y": 1405,
+      "w": 48,
+      "h": 23
+     },
+     "segs": [
+      {
+       "t": "/10",
+       "font": "Inter Medium",
+       "size": 32,
+       "fill": "#4B5675"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "You asked for more",
+     "box": {
+      "x": 80,
+      "y": 319,
+      "w": 812,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "You asked for more",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#071437"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "than your file supports",
+     "box": {
+      "x": 80,
+      "y": 419,
+      "w": 959,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "than your file supports",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "The amount has to match your turnover and cash flow. A smaller number with a clear purpose often gets approved faster.",
+     "box": {
+      "x": 80,
+      "y": 539,
+      "w": 954,
+      "h": 153
+     },
+     "segs": [
+      {
+       "t": "The amount has to match your t",
+       "font": "Inter Medium",
+       "size": 42,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 3
+    }
+   ],
+   "renders": [
+    {
+     "x": 200,
+     "y": 948,
+     "w": 818,
+     "h": 398
+    }
+   ],
+   "infos": [],
+   "hiddenText": [],
+   "outside": []
+  },
+  {
+   "id": "826:2496",
+   "name": "07",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 80,
+      "y": 1387,
+      "w": 173,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#D20600"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "07",
+     "box": {
+      "x": 954,
+      "y": 1399,
+      "w": 50,
+      "h": 29
+     },
+     "segs": [
+      {
+       "t": "07",
+       "font": "Inter Semi Bold",
+       "size": 40,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "/10",
+     "box": {
+      "x": 1008,
+      "y": 1405,
+      "w": 48,
+      "h": 23
+     },
+     "segs": [
+      {
+       "t": "/10",
+       "font": "Inter Medium",
+       "size": 32,
+       "fill": "#4B5675"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Your documents",
+     "box": {
+      "x": 80,
+      "y": 319,
+      "w": 686,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "Your documents",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#071437"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "were incomplete",
+     "box": {
+      "x": 80,
+      "y": 419,
+      "w": 703,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "were incomplete",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "A missing ITR, an unsigned balance sheet or an old bank statement can stall a file. Complete beats fast, every time.",
+     "box": {
+      "x": 80,
+      "y": 539,
+      "w": 954,
+      "h": 153
+     },
+     "segs": [
+      {
+       "t": "A missing ITR, an unsigned bal",
+       "font": "Inter Medium",
+       "size": 42,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 3
+    }
+   ],
+   "renders": [
+    {
+     "x": 189,
+     "y": 889,
+     "w": 867,
+     "h": 417
+    }
+   ],
+   "infos": [],
+   "hiddenText": [],
+   "outside": []
+  },
+  {
+   "id": "826:2522",
+   "name": "08",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 80,
+      "y": 1387,
+      "w": 173,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#D20600"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "08",
+     "box": {
+      "x": 951,
+      "y": 1399,
+      "w": 53,
+      "h": 29
+     },
+     "segs": [
+      {
+       "t": "08",
+       "font": "Inter Semi Bold",
+       "size": 40,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "/10",
+     "box": {
+      "x": 1008,
+      "y": 1405,
+      "w": 48,
+      "h": 23
+     },
+     "segs": [
+      {
+       "t": "/10",
+       "font": "Inter Medium",
+       "size": 32,
+       "fill": "#4B5675"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "You applied to the",
+     "box": {
+      "x": 80,
+      "y": 319,
+      "w": 765,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "You applied to the",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#071437"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "wrong kind of lender",
+     "box": {
+      "x": 80,
+      "y": 419,
+      "w": 888,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "wrong kind of lender",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Every lender prefers certain businesses. The same file can be rejected by one bank and approved by an NBFC.",
+     "box": {
+      "x": 80,
+      "y": 539,
+      "w": 954,
+      "h": 153
+     },
+     "segs": [
+      {
+       "t": "Every lender prefers certain b",
+       "font": "Inter Medium",
+       "size": 42,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 3
+    }
+   ],
+   "renders": [
+    {
+     "x": 285,
+     "y": 997,
+     "w": 677,
+     "h": 320
+    }
+   ],
+   "infos": [],
+   "hiddenText": [],
+   "outside": []
+  },
+  {
+   "id": "826:2548",
+   "name": "09",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 80,
+      "y": 1387,
+      "w": 173,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#D20600"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "09",
+     "box": {
+      "x": 951,
+      "y": 1399,
+      "w": 53,
+      "h": 29
+     },
+     "segs": [
+      {
+       "t": "09",
+       "font": "Inter Semi Bold",
+       "size": 40,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "/10",
+     "box": {
+      "x": 1008,
+      "y": 1405,
+      "w": 48,
+      "h": 23
+     },
+     "segs": [
+      {
+       "t": "/10",
+       "font": "Inter Medium",
+       "size": 32,
+       "fill": "#4B5675"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "A rejection is",
+     "box": {
+      "x": 80,
+      "y": 319,
+      "w": 546,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "A rejection is",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#071437"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "feedback, not a verdict",
+     "box": {
+      "x": 80,
+      "y": 419,
+      "w": 962,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "feedback, not a verdict",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Ask for the reason, fix that one thing and wait before reapplying. Several rejections in a row hurt more than one.",
+     "box": {
+      "x": 80,
+      "y": 539,
+      "w": 954,
+      "h": 153
+     },
+     "segs": [
+      {
+       "t": "Ask for the reason, fix that o",
+       "font": "Inter Medium",
+       "size": 42,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 3
+    }
+   ],
+   "renders": [
+    {
+     "x": 234,
+     "y": 884,
+     "w": 678,
+     "h": 507
+    }
+   ],
+   "infos": [],
+   "hiddenText": [],
+   "outside": []
+  },
+  {
+   "id": "826:2574",
+   "name": "10",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 514,
+      "y": 1387,
+      "w": 173,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#D20600"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "If you're an MSME owner, a rejection usually has one fixable reason behind it. We find that reason, strengthen your file with you, and take it to lenders who fit, until the money is in your account.",
+     "box": {
+      "x": 80,
+      "y": 319,
+      "w": 1040,
+      "h": 204
+     },
+     "segs": [
+      {
+       "t": "If you're an ",
+       "font": "Inter Medium",
+       "size": 42,
+       "fill": "#252F4A"
+      },
+      {
+       "t": "MSME owner",
+       "font": "Inter Semi Bold",
+       "size": 42,
+       "fill": "#FA4028"
+      },
+      {
+       "t": ", a rejection usually has one ",
+       "font": "Inter Medium",
+       "size": 42,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 4
+    },
+    {
+     "chars": "What reason were you given\nthe last time a lender said no?",
+     "box": {
+      "x": 126,
+      "y": 627,
+      "w": 994,
+      "h": 95
+     },
+     "segs": [
+      {
+       "t": "What reason were you given\n",
+       "font": "Addington CF Demi Bold",
+       "size": 52,
+       "fill": "#071437"
+      },
+      {
+       "t": "the last time a lender said no",
+       "font": "Addington CF Demi Bold",
+       "size": 52,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 2
+    },
+    {
+     "chars": "Save this for your next loan application.",
+     "box": {
+      "x": 80,
+      "y": 825,
+      "w": 685,
+      "h": 44
+     },
+     "segs": [
+      {
+       "t": "Save this for your next loan a",
+       "font": "Inter Semi Bold",
+       "size": 36,
+       "fill": "#4B5675"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Capnix is not a lender. Loans are offered by partner banks and NBFCs, subject to their approval.",
+     "box": {
+      "x": 80,
+      "y": 929,
+      "w": 1040,
+      "h": 68
+     },
+     "segs": [
+      {
+       "t": "Capnix is not a lender. Loans ",
+       "font": "Inter Medium",
+       "size": 28,
+       "fill": "#4B5675"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 2
+    }
+   ],
+   "renders": [],
+   "infos": [],
+   "hiddenText": [],
+   "outside": []
+  },
+  {
+   "id": "826:2596",
+   "name": "01",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 80,
+      "y": 1387,
+      "w": 173,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Swipe to explore",
+     "box": {
+      "x": 737,
+      "y": 1401,
+      "w": 319,
+      "h": 29
+     },
+     "segs": [
+      {
+       "t": "Swipe to explore",
+       "font": "Inter Medium",
+       "size": 40,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Working capital or",
+     "box": {
+      "x": 80,
+      "y": 318,
+      "w": 1040,
+      "h": 47
+     },
+     "segs": [
+      {
+       "t": "Working capital or",
+       "font": "Inter Semi Bold",
+       "size": 64,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "term loan?",
+     "box": {
+      "x": 80,
+      "y": 415,
+      "w": 537,
+      "h": 69
+     },
+     "segs": [
+      {
+       "t": "term loan?",
+       "font": "Addington CF Bold",
+       "size": 110,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "which one your business actually needs",
+     "box": {
+      "x": 80,
+      "y": 534,
+      "w": 977,
+      "h": 38
+     },
+     "segs": [
+      {
+       "t": "which one your business actual",
+       "font": "Inter Regular",
+       "size": 52,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Working capital",
+     "box": {
+      "x": 144,
+      "y": 852,
+      "w": 226,
+      "h": 36
+     },
+     "segs": [
+      {
+       "t": "Working capital",
+       "font": "Inter Semi Bold",
+       "size": 30,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Runs the business",
+     "box": {
+      "x": 122,
+      "y": 918,
+      "w": 420,
+      "h": 57
+     },
+     "segs": [
+      {
+       "t": "Runs the business",
+       "font": "Addington CF Demi Bold",
+       "size": 52,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Stock, salaries, suppliers",
+     "box": {
+      "x": 122,
+      "y": 1021,
+      "w": 420,
+      "h": 39
+     },
+     "segs": [
+      {
+       "t": "Stock, salaries, suppliers",
+       "font": "Inter Medium",
+       "size": 32,
+       "fill": "#DFE3EC"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "3 to 12 months",
+     "box": {
+      "x": 122,
+      "y": 1080,
+      "w": 420,
+      "h": 39
+     },
+     "segs": [
+      {
+       "t": "3 to 12 months",
+       "font": "Inter Medium",
+       "size": 32,
+       "fill": "#DFE3EC"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Credit line or overdraft",
+     "box": {
+      "x": 122,
+      "y": 1139,
+      "w": 420,
+      "h": 39
+     },
+     "segs": [
+      {
+       "t": "Credit line or overdraft",
+       "font": "Inter Medium",
+       "size": 32,
+       "fill": "#DFE3EC"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Term loan",
+     "box": {
+      "x": 678,
+      "y": 852,
+      "w": 144,
+      "h": 36
+     },
+     "segs": [
+      {
+       "t": "Term loan",
+       "font": "Inter Semi Bold",
+       "size": 30,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Builds the business",
+     "box": {
+      "x": 656,
+      "y": 918,
+      "w": 420,
+      "h": 114
+     },
+     "segs": [
+      {
+       "t": "Builds the business",
+       "font": "Addington CF Demi Bold",
+       "size": 52,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 2
+    },
+    {
+     "chars": "Machinery, premises, vehicles",
+     "box": {
+      "x": 656,
+      "y": 1078,
+      "w": 420,
+      "h": 78
+     },
+     "segs": [
+      {
+       "t": "Machinery, premises, vehicles",
+       "font": "Inter Medium",
+       "size": 32,
+       "fill": "#DFE3EC"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 2
+    },
+    {
+     "chars": "1 to 7 years",
+     "box": {
+      "x": 656,
+      "y": 1176,
+      "w": 420,
+      "h": 39
+     },
+     "segs": [
+      {
+       "t": "1 to 7 years",
+       "font": "Inter Medium",
+       "size": 32,
+       "fill": "#DFE3EC"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Fixed monthly EMIs",
+     "box": {
+      "x": 656,
+      "y": 1235,
+      "w": 420,
+      "h": 39
+     },
+     "segs": [
+      {
+       "t": "Fixed monthly EMIs",
+       "font": "Inter Medium",
+       "size": 32,
+       "fill": "#DFE3EC"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 1
+    }
+   ],
+   "renders": [],
+   "infos": [
+    {
+     "x": 80,
+     "y": 800,
+     "w": 1040,
+     "h": 520
+    }
+   ],
+   "hiddenText": [],
+   "outside": []
+  },
+  {
+   "id": "826:2637",
+   "name": "02",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 80,
+      "y": 1387,
+      "w": 173,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#D20600"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "02",
+     "box": {
+      "x": 952,
+      "y": 1399,
+      "w": 52,
+      "h": 29
+     },
+     "segs": [
+      {
+       "t": "02",
+       "font": "Inter Semi Bold",
+       "size": 40,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "/10",
+     "box": {
+      "x": 1008,
+      "y": 1405,
+      "w": 48,
+      "h": 23
+     },
+     "segs": [
+      {
+       "t": "/10",
+       "font": "Inter Medium",
+       "size": 32,
+       "fill": "#4B5675"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Working capital",
+     "box": {
+      "x": 80,
+      "y": 319,
+      "w": 685,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "Working capital",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#071437"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "runs the day-to-day",
+     "box": {
+      "x": 80,
+      "y": 419,
+      "w": 840,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "runs the day-to-day",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Stock, salaries, supplier payments and rent. It covers the gap between spending money and getting paid for it.",
+     "box": {
+      "x": 80,
+      "y": 539,
+      "w": 954,
+      "h": 153
+     },
+     "segs": [
+      {
+       "t": "Stock, salaries, supplier paym",
+       "font": "Inter Medium",
+       "size": 42,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 3
+    }
+   ],
+   "renders": [
+    {
+     "x": 190,
+     "y": 925,
+     "w": 1010,
+     "h": 377
+    }
+   ],
+   "infos": [],
+   "hiddenText": [],
+   "outside": []
+  },
+  {
+   "id": "826:2663",
+   "name": "03",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 80,
+      "y": 1387,
+      "w": 173,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#D20600"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "03",
+     "box": {
+      "x": 951,
+      "y": 1399,
+      "w": 53,
+      "h": 29
+     },
+     "segs": [
+      {
+       "t": "03",
+       "font": "Inter Semi Bold",
+       "size": 40,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "/10",
+     "box": {
+      "x": 1008,
+      "y": 1405,
+      "w": 48,
+      "h": 23
+     },
+     "segs": [
+      {
+       "t": "/10",
+       "font": "Inter Medium",
+       "size": 32,
+       "fill": "#4B5675"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "A term loan builds",
+     "box": {
+      "x": 80,
+      "y": 319,
+      "w": 776,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "A term loan builds",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#071437"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "things that last",
+     "box": {
+      "x": 80,
+      "y": 419,
+      "w": 634,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "things that last",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "A new unit, bigger premises or long-term expansion. You repay it in fixed EMIs, usually over one to seven years.",
+     "box": {
+      "x": 80,
+      "y": 539,
+      "w": 954,
+      "h": 153
+     },
+     "segs": [
+      {
+       "t": "A new unit, bigger premises or",
+       "font": "Inter Medium",
+       "size": 42,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 3
+    }
+   ],
+   "renders": [],
+   "infos": [],
+   "hiddenText": [],
+   "outside": []
+  },
+  {
+   "id": "826:2686",
+   "name": "04",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 80,
+      "y": 1387,
+      "w": 173,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#D20600"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "04",
+     "box": {
+      "x": 950,
+      "y": 1399,
+      "w": 54,
+      "h": 29
+     },
+     "segs": [
+      {
+       "t": "04",
+       "font": "Inter Semi Bold",
+       "size": 40,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "/10",
+     "box": {
+      "x": 1008,
+      "y": 1405,
+      "w": 48,
+      "h": 23
+     },
+     "segs": [
+      {
+       "t": "/10",
+       "font": "Inter Medium",
+       "size": 32,
+       "fill": "#4B5675"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Match the tenure",
+     "box": {
+      "x": 80,
+      "y": 319,
+      "w": 725,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "Match the tenure",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#071437"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "to what it pays for",
+     "box": {
+      "x": 80,
+      "y": 419,
+      "w": 760,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "to what it pays for",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Short-term needs belong on short-term credit. Funding stock with a five-year loan means paying interest long after it is sold.",
+     "box": {
+      "x": 80,
+      "y": 539,
+      "w": 954,
+      "h": 153
+     },
+     "segs": [
+      {
+       "t": "Short-term needs belong on sho",
+       "font": "Inter Medium",
+       "size": 42,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 3
+    }
+   ],
+   "renders": [
+    {
+     "x": 297,
+     "y": 925,
+     "w": 605,
+     "h": 428
+    }
+   ],
+   "infos": [],
+   "hiddenText": [],
+   "outside": []
+  },
+  {
+   "id": "826:2712",
+   "name": "05",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 80,
+      "y": 1387,
+      "w": 173,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#D20600"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "05",
+     "box": {
+      "x": 952,
+      "y": 1399,
+      "w": 52,
+      "h": 29
+     },
+     "segs": [
+      {
+       "t": "05",
+       "font": "Inter Semi Bold",
+       "size": 40,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "/10",
+     "box": {
+      "x": 1008,
+      "y": 1405,
+      "w": 48,
+      "h": 23
+     },
+     "segs": [
+      {
+       "t": "/10",
+       "font": "Inter Medium",
+       "size": 32,
+       "fill": "#4B5675"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Cash credit moves",
+     "box": {
+      "x": 80,
+      "y": 319,
+      "w": 764,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "Cash credit moves",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#071437"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "with your cash flow",
+     "box": {
+      "x": 80,
+      "y": 419,
+      "w": 830,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "with your cash flow",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Draw what you need and pay interest only on what you use. Useful when sales rise and fall with the seasons.",
+     "box": {
+      "x": 80,
+      "y": 539,
+      "w": 954,
+      "h": 153
+     },
+     "segs": [
+      {
+       "t": "Draw what you need and pay int",
+       "font": "Inter Medium",
+       "size": 42,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 3
+    }
+   ],
+   "renders": [],
+   "infos": [],
+   "hiddenText": [],
+   "outside": []
+  },
+  {
+   "id": "826:2735",
+   "name": "06",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 80,
+      "y": 1387,
+      "w": 173,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#D20600"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "06",
+     "box": {
+      "x": 951,
+      "y": 1399,
+      "w": 53,
+      "h": 29
+     },
+     "segs": [
+      {
+       "t": "06",
+       "font": "Inter Semi Bold",
+       "size": 40,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "/10",
+     "box": {
+      "x": 1008,
+      "y": 1405,
+      "w": 48,
+      "h": 23
+     },
+     "segs": [
+      {
+       "t": "/10",
+       "font": "Inter Medium",
+       "size": 32,
+       "fill": "#4B5675"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Invoice discounting",
+     "box": {
+      "x": 80,
+      "y": 319,
+      "w": 827,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "Invoice discounting",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#071437"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "unlocks unpaid bills",
+     "box": {
+      "x": 80,
+      "y": 419,
+      "w": 852,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "unlocks unpaid bills",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "If buyers pay in 60 or 90 days, a lender can advance most of that invoice today. Your receivables become working capital.",
+     "box": {
+      "x": 80,
+      "y": 539,
+      "w": 954,
+      "h": 153
+     },
+     "segs": [
+      {
+       "t": "If buyers pay in 60 or 90 days",
+       "font": "Inter Medium",
+       "size": 42,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 3
+    }
+   ],
+   "renders": [],
+   "infos": [],
+   "hiddenText": [],
+   "outside": []
+  },
+  {
+   "id": "826:2766",
+   "name": "07",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 80,
+      "y": 1387,
+      "w": 173,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#D20600"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "07",
+     "box": {
+      "x": 954,
+      "y": 1399,
+      "w": 50,
+      "h": 29
+     },
+     "segs": [
+      {
+       "t": "07",
+       "font": "Inter Semi Bold",
+       "size": 40,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "/10",
+     "box": {
+      "x": 1008,
+      "y": 1405,
+      "w": 48,
+      "h": 23
+     },
+     "segs": [
+      {
+       "t": "/10",
+       "font": "Inter Medium",
+       "size": 32,
+       "fill": "#4B5675"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Equipment finance",
+     "box": {
+      "x": 80,
+      "y": 319,
+      "w": 804,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "Equipment finance",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#071437"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "is backed by the asset",
+     "box": {
+      "x": 80,
+      "y": 419,
+      "w": 904,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "is backed by the asset",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "The machine itself is the security, so approval can be simpler. It starts earning while you repay.",
+     "box": {
+      "x": 80,
+      "y": 539,
+      "w": 954,
+      "h": 153
+     },
+     "segs": [
+      {
+       "t": "The machine itself is the secu",
+       "font": "Inter Medium",
+       "size": 42,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 3
+    }
+   ],
+   "renders": [
+    {
+     "x": 235,
+     "y": 877,
+     "w": 1005,
+     "h": 518
+    }
+   ],
+   "infos": [],
+   "hiddenText": [],
+   "outside": []
+  },
+  {
+   "id": "826:2792",
+   "name": "08",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 80,
+      "y": 1387,
+      "w": 173,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#D20600"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "08",
+     "box": {
+      "x": 951,
+      "y": 1399,
+      "w": 53,
+      "h": 29
+     },
+     "segs": [
+      {
+       "t": "08",
+       "font": "Inter Semi Bold",
+       "size": 40,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "/10",
+     "box": {
+      "x": 1008,
+      "y": 1405,
+      "w": 48,
+      "h": 23
+     },
+     "segs": [
+      {
+       "t": "/10",
+       "font": "Inter Medium",
+       "size": 32,
+       "fill": "#4B5675"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Growing businesses",
+     "box": {
+      "x": 80,
+      "y": 319,
+      "w": 831,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "Growing businesses",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#071437"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "often need both",
+     "box": {
+      "x": 80,
+      "y": 419,
+      "w": 667,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "often need both",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "A term loan to expand, and a credit line to run the bigger operation. Planning both together avoids a cash squeeze later.",
+     "box": {
+      "x": 80,
+      "y": 539,
+      "w": 954,
+      "h": 153
+     },
+     "segs": [
+      {
+       "t": "A term loan to expand, and a c",
+       "font": "Inter Medium",
+       "size": 42,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 3
+    }
+   ],
+   "renders": [
+    {
+     "x": 319,
+     "y": 989,
+     "w": 621,
+     "h": 355
+    }
+   ],
+   "infos": [],
+   "hiddenText": [],
+   "outside": []
+  },
+  {
+   "id": "826:2818",
+   "name": "09",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 80,
+      "y": 1387,
+      "w": 173,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#D20600"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "09",
+     "box": {
+      "x": 951,
+      "y": 1399,
+      "w": 53,
+      "h": 29
+     },
+     "segs": [
+      {
+       "t": "09",
+       "font": "Inter Semi Bold",
+       "size": 40,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "/10",
+     "box": {
+      "x": 1008,
+      "y": 1405,
+      "w": 48,
+      "h": 23
+     },
+     "segs": [
+      {
+       "t": "/10",
+       "font": "Inter Medium",
+       "size": 32,
+       "fill": "#4B5675"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Compare the total cost,",
+     "box": {
+      "x": 80,
+      "y": 319,
+      "w": 981,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "Compare the total cost,",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#071437"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "not just the rate",
+     "box": {
+      "x": 80,
+      "y": 419,
+      "w": 660,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "not just the rate",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "A lower rate can still cost more once fees are added. Always compare the full amount you will pay back.",
+     "box": {
+      "x": 80,
+      "y": 539,
+      "w": 954,
+      "h": 153
+     },
+     "segs": [
+      {
+       "t": "A lower rate can still cost mo",
+       "font": "Inter Medium",
+       "size": 42,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 3
+    },
+    {
+     "chars": "₹10 lakh loan · 3 years",
+     "box": {
+      "x": 80,
+      "y": 800,
+      "w": 341,
+      "h": 39
+     },
+     "segs": [
+      {
+       "t": "₹10 lakh loan · 3 years",
+       "font": "Inter Semi Bold",
+       "size": 32,
+       "fill": "#4B5675"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Loan A",
+     "box": {
+      "x": 119,
+      "y": 892,
+      "w": 151,
+      "h": 58
+     },
+     "segs": [
+      {
+       "t": "Loan A",
+       "font": "Addington CF Demi Bold",
+       "size": 48,
+       "fill": "#071437"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Cheaper",
+     "box": {
+      "x": 432,
+      "y": 907,
+      "w": 100,
+      "h": 29
+     },
+     "segs": [
+      {
+       "t": "Cheaper",
+       "font": "Inter Semi Bold",
+       "size": 24,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "11.5% interest",
+     "box": {
+      "x": 119,
+      "y": 968,
+      "w": 223,
+      "h": 41
+     },
+     "segs": [
+      {
+       "t": "11.5% interest",
+       "font": "Inter Medium",
+       "size": 34,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "0.5% processing fee",
+     "box": {
+      "x": 119,
+      "y": 1027,
+      "w": 329,
+      "h": 41
+     },
+     "segs": [
+      {
+       "t": "0.5% processing fee",
+       "font": "Inter Medium",
+       "size": 34,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Total cost",
+     "box": {
+      "x": 119,
+      "y": 1110,
+      "w": 132,
+      "h": 34
+     },
+     "segs": [
+      {
+       "t": "Total cost",
+       "font": "Inter Medium",
+       "size": 28,
+       "fill": "#4B5675"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "₹1,92,136",
+     "box": {
+      "x": 119,
+      "y": 1162,
+      "w": 254,
+      "h": 77
+     },
+     "segs": [
+      {
+       "t": "₹1,92,136",
+       "font": "Addington CF Bold",
+       "size": 64,
+       "fill": "#D20600"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Loan B",
+     "box": {
+      "x": 651,
+      "y": 891,
+      "w": 150,
+      "h": 58
+     },
+     "segs": [
+      {
+       "t": "Loan B",
+       "font": "Addington CF Demi Bold",
+       "size": 48,
+       "fill": "#071437"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "11% interest",
+     "box": {
+      "x": 651,
+      "y": 967,
+      "w": 194,
+      "h": 41
+     },
+     "segs": [
+      {
+       "t": "11% interest",
+       "font": "Inter Medium",
+       "size": 34,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "2% processing fee",
+     "box": {
+      "x": 651,
+      "y": 1026,
+      "w": 299,
+      "h": 41
+     },
+     "segs": [
+      {
+       "t": "2% processing fee",
+       "font": "Inter Medium",
+       "size": 34,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Total cost",
+     "box": {
+      "x": 651,
+      "y": 1109,
+      "w": 132,
+      "h": 34
+     },
+     "segs": [
+      {
+       "t": "Total cost",
+       "font": "Inter Medium",
+       "size": 28,
+       "fill": "#4B5675"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "₹1,98,594",
+     "box": {
+      "x": 651,
+      "y": 1161,
+      "w": 273,
+      "h": 77
+     },
+     "segs": [
+      {
+       "t": "₹1,98,594",
+       "font": "Addington CF Bold",
+       "size": 64,
+       "fill": "#071437"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Illustrative example. Total cost = interest + processing fee.",
+     "box": {
+      "x": 80,
+      "y": 1292,
+      "w": 782,
+      "h": 34
+     },
+     "segs": [
+      {
+       "t": "Illustrative example. Total co",
+       "font": "Inter Medium",
+       "size": 28,
+       "fill": "#4B5675"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    }
+   ],
+   "renders": [],
+   "infos": [
+    {
+     "x": 80,
+     "y": 800,
+     "w": 1040,
+     "h": 526
+    }
+   ],
+   "hiddenText": [],
+   "outside": []
+  },
+  {
+   "id": "826:2865",
+   "name": "10",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 514,
+      "y": 1387,
+      "w": 173,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#D20600"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "If you're an MSME owner, picking the right type of loan matters as much as getting approved. We look at how your business earns and spends, then match you to the loans and lenders that fit.",
+     "box": {
+      "x": 80,
+      "y": 319,
+      "w": 1040,
+      "h": 204
+     },
+     "segs": [
+      {
+       "t": "If you're an ",
+       "font": "Inter Medium",
+       "size": 42,
+       "fill": "#252F4A"
+      },
+      {
+       "t": "MSME owner",
+       "font": "Inter Semi Bold",
+       "size": 42,
+       "fill": "#FA4028"
+      },
+      {
+       "t": ", picking the right type of lo",
+       "font": "Inter Medium",
+       "size": 42,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 4
+    },
+    {
+     "chars": "Which do you need more right now:\nworking capital or a term loan?",
+     "box": {
+      "x": 126,
+      "y": 651,
+      "w": 930,
+      "h": 95
+     },
+     "segs": [
+      {
+       "t": "Which do you need more right n",
+       "font": "Addington CF Demi Bold",
+       "size": 52,
+       "fill": "#071437"
+      },
+      {
+       "t": "working capital or a term loan",
+       "font": "Addington CF Demi Bold",
+       "size": 52,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 2
+    },
+    {
+     "chars": "Save this for your next loan application.",
+     "box": {
+      "x": 80,
+      "y": 874,
+      "w": 685,
+      "h": 44
+     },
+     "segs": [
+      {
+       "t": "Save this for your next loan a",
+       "font": "Inter Semi Bold",
+       "size": 36,
+       "fill": "#4B5675"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Capnix is not a lender. Loans are offered by partner banks and NBFCs, subject to their approval.",
+     "box": {
+      "x": 80,
+      "y": 978,
+      "w": 1040,
+      "h": 68
+     },
+     "segs": [
+      {
+       "t": "Capnix is not a lender. Loans ",
+       "font": "Inter Medium",
+       "size": 28,
+       "fill": "#4B5675"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 2
+    }
+   ],
+   "renders": [
+    {
+     "x": 363,
+     "y": 1086,
+     "w": 474,
+     "h": 274
+    }
+   ],
+   "infos": [],
+   "hiddenText": [],
+   "outside": []
+  },
+  {
+   "id": "826:2889",
+   "name": "Single · Loan eligibility",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 514,
+      "y": 1387,
+      "w": 173,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "How to check your",
+     "box": {
+      "x": 103,
+      "y": 333,
+      "w": 996,
+      "h": 47
+     },
+     "segs": [
+      {
+       "t": "How to check your",
+       "font": "Inter Semi Bold",
+       "size": 64,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "loan eligibility\nwithout a hard pull",
+     "box": {
+      "x": 103,
+      "y": 420,
+      "w": 996,
+      "h": 168
+     },
+     "segs": [
+      {
+       "t": "loan eligibility\n",
+       "font": "Addington CF Bold",
+       "size": 114,
+       "fill": "#FA4028"
+      },
+      {
+       "t": "without a hard pull",
+       "font": "Addington CF Bold",
+       "size": 114,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "before you apply, and what\nto fix first",
+     "box": {
+      "x": 290,
+      "y": 638,
+      "w": 622,
+      "h": 93
+     },
+     "segs": [
+      {
+       "t": "before you apply, and what\nto ",
+       "font": "Inter Medium",
+       "size": 48,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 2
+    }
+   ],
+   "renders": [],
+   "infos": [],
+   "hiddenText": [],
+   "outside": []
+  },
+  {
+   "id": "826:2908",
+   "name": "Single · Loan tenure",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 514,
+      "y": 1387,
+      "w": 173,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "How to choose",
+     "box": {
+      "x": 197,
+      "y": 333,
+      "w": 807,
+      "h": 47
+     },
+     "segs": [
+      {
+       "t": "How to choose",
+       "font": "Inter Semi Bold",
+       "size": 64,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "the right tenure\nfor your loan",
+     "box": {
+      "x": 197,
+      "y": 420,
+      "w": 807,
+      "h": 168
+     },
+     "segs": [
+      {
+       "t": "the right tenure\n",
+       "font": "Addington CF Bold",
+       "size": 114,
+       "fill": "#FA4028"
+      },
+      {
+       "t": "for your loan",
+       "font": "Addington CF Bold",
+       "size": 114,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "so the EMI fits your cash flow,\nnot the other way round",
+     "box": {
+      "x": 259,
+      "y": 638,
+      "w": 684,
+      "h": 93
+     },
+     "segs": [
+      {
+       "t": "so the EMI fits your cash flow",
+       "font": "Inter Medium",
+       "size": 48,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 2
+    },
+    {
+     "chars": "₹10 lakh loan at 12%",
+     "box": {
+      "x": 445,
+      "y": 830,
+      "w": 310,
+      "h": 39
+     },
+     "segs": [
+      {
+       "t": "₹10 lakh loan at 12%",
+       "font": "Inter Semi Bold",
+       "size": 32,
+       "fill": "#DFE3EC"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "3 years",
+     "box": {
+      "x": 184,
+      "y": 923,
+      "w": 145,
+      "h": 58
+     },
+     "segs": [
+      {
+       "t": "3 years",
+       "font": "Addington CF Demi Bold",
+       "size": 48,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "EMI ₹33,214",
+     "box": {
+      "x": 184,
+      "y": 995,
+      "w": 200,
+      "h": 41
+     },
+     "segs": [
+      {
+       "t": "EMI ₹33,214",
+       "font": "Inter Medium",
+       "size": 34,
+       "fill": "#DFE3EC"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Total interest",
+     "box": {
+      "x": 184,
+      "y": 1050,
+      "w": 164,
+      "h": 31
+     },
+     "segs": [
+      {
+       "t": "Total interest",
+       "font": "Inter Medium",
+       "size": 26,
+       "fill": "#DFE3EC"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "₹1,95,715",
+     "box": {
+      "x": 184,
+      "y": 1095,
+      "w": 232,
+      "h": 70
+     },
+     "segs": [
+      {
+       "t": "₹1,95,715",
+       "font": "Addington CF Bold",
+       "size": 58,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "5 years",
+     "box": {
+      "x": 646,
+      "y": 923,
+      "w": 146,
+      "h": 58
+     },
+     "segs": [
+      {
+       "t": "5 years",
+       "font": "Addington CF Demi Bold",
+       "size": 48,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "EMI ₹22,244",
+     "box": {
+      "x": 646,
+      "y": 995,
+      "w": 205,
+      "h": 41
+     },
+     "segs": [
+      {
+       "t": "EMI ₹22,244",
+       "font": "Inter Medium",
+       "size": 34,
+       "fill": "#DFE3EC"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Total interest",
+     "box": {
+      "x": 646,
+      "y": 1050,
+      "w": 164,
+      "h": 31
+     },
+     "segs": [
+      {
+       "t": "Total interest",
+       "font": "Inter Medium",
+       "size": 26,
+       "fill": "#DFE3EC"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "₹3,34,667",
+     "box": {
+      "x": 646,
+      "y": 1095,
+      "w": 248,
+      "h": 70
+     },
+     "segs": [
+      {
+       "t": "₹3,34,667",
+       "font": "Addington CF Bold",
+       "size": 58,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Lower EMI, but ₹1.39 lakh more interest.",
+     "box": {
+      "x": 273,
+      "y": 1245,
+      "w": 654,
+      "h": 41
+     },
+     "segs": [
+      {
+       "t": "Lower EMI, but ₹1.39 lakh more",
+       "font": "Inter Semi Bold",
+       "size": 34,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    }
+   ],
+   "renders": [],
+   "infos": [
+    {
+     "x": 150,
+     "y": 830,
+     "w": 900,
+     "h": 456
+    }
+   ],
+   "hiddenText": [],
+   "outside": []
+  }
+ ],
+ "ref": [
+  {
+   "id": "790:983",
+   "name": "3",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 80,
+      "y": 1387,
+      "w": 176,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "03",
+     "box": {
+      "x": 951,
+      "y": 1399,
+      "w": 53,
+      "h": 29
+     },
+     "segs": [
+      {
+       "t": "03",
+       "font": "Inter Semi Bold",
+       "size": 40,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "/10",
+     "box": {
+      "x": 1008,
+      "y": 1405,
+      "w": 48,
+      "h": 23
+     },
+     "segs": [
+      {
+       "t": "/10",
+       "font": "Inter Medium",
+       "size": 32,
+       "fill": "#78829D"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Match your Gst filings ",
+     "box": {
+      "x": 80,
+      "y": 319,
+      "w": 931,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "Match your ",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#071437"
+      },
+      {
+       "t": "Gst filings ",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "to your actual sales",
+     "box": {
+      "x": 80,
+      "y": 419,
+      "w": 807,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "to your actual sales",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#071437"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Lenders check GST returns closely. If your filed numbers don't match what you're claiming as revenue, that gap raises questions before you even explain anything.\r",
+     "box": {
+      "x": 80,
+      "y": 539,
+      "w": 954,
+      "h": 204
+     },
+     "segs": [
+      {
+       "t": "Lenders check GST returns clos",
+       "font": "Inter Medium",
+       "size": 42,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 4
+    },
+    {
+     "chars": "DPDP Compliance partner",
+     "box": {
+      "x": 816,
+      "y": 106,
+      "w": 280,
+      "h": 14
+     },
+     "segs": [
+      {
+       "t": "DPDP Compliance partner",
+       "font": "DM Sans SemiBold",
+       "size": 20,
+       "fill": "#1B2238"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    }
+   ],
+   "renders": [
+    {
+     "x": 253,
+     "y": 948,
+     "w": 738,
+     "h": 359
+    }
+   ],
+   "infos": [],
+   "hiddenText": [],
+   "outside": []
+  },
+  {
+   "id": "790:1043",
+   "name": "6",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 80,
+      "y": 1387,
+      "w": 176,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "06",
+     "box": {
+      "x": 951,
+      "y": 1399,
+      "w": 53,
+      "h": 29
+     },
+     "segs": [
+      {
+       "t": "06",
+       "font": "Inter Semi Bold",
+       "size": 40,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "/10",
+     "box": {
+      "x": 1008,
+      "y": 1405,
+      "w": 48,
+      "h": 23
+     },
+     "segs": [
+      {
+       "t": "/10",
+       "font": "Inter Medium",
+       "size": 32,
+       "fill": "#78829D"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Check your CIBIL Score",
+     "box": {
+      "x": 80,
+      "y": 319,
+      "w": 989,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "Check your ",
+       "font": "Addington CF Demi Bold",
+       "size": 92,
+       "fill": "#071437"
+      },
+      {
+       "t": "CIBIL Score",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "before a lender does",
+     "box": {
+      "x": 80,
+      "y": 419,
+      "w": 813,
+      "h": 58
+     },
+     "segs": [
+      {
+       "t": "before a lender does",
+       "font": "Addington CF Demi Bold",
+       "size": 92,
+       "fill": "#071437"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "A low score isn't always disqualifying, but a surprise low score during review looks worse than one you already know about and can explain",
+     "box": {
+      "x": 80,
+      "y": 537,
+      "w": 954,
+      "h": 204
+     },
+     "segs": [
+      {
+       "t": "A low score isn't always disqu",
+       "font": "Inter Medium",
+       "size": 42,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 4
+    },
+    {
+     "chars": "DPDP Compliance partner",
+     "box": {
+      "x": 816,
+      "y": 104,
+      "w": 280,
+      "h": 14
+     },
+     "segs": [
+      {
+       "t": "DPDP Compliance partner",
+       "font": "DM Sans SemiBold",
+       "size": 20,
+       "fill": "#1B2238"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    }
+   ],
+   "renders": [
+    {
+     "x": 205,
+     "y": 898,
+     "w": 995,
+     "h": 456
+    }
+   ],
+   "infos": [],
+   "hiddenText": [],
+   "outside": []
+  },
+  {
+   "id": "823:813",
+   "name": "52",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 80,
+      "y": 1387,
+      "w": 176,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "02",
+     "box": {
+      "x": 952,
+      "y": 1399,
+      "w": 52,
+      "h": 29
+     },
+     "segs": [
+      {
+       "t": "02",
+       "font": "Inter Semi Bold",
+       "size": 40,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "/10",
+     "box": {
+      "x": 1008,
+      "y": 1405,
+      "w": 48,
+      "h": 23
+     },
+     "segs": [
+      {
+       "t": "/10",
+       "font": "Inter Medium",
+       "size": 32,
+       "fill": "#78829D"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "DPDP Compliance partner",
+     "box": {
+      "x": 816,
+      "y": 106,
+      "w": 280,
+      "h": 14
+     },
+     "segs": [
+      {
+       "t": "DPDP Compliance partner",
+       "font": "DM Sans SemiBold",
+       "size": 20,
+       "fill": "#1B2238"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Before 3 Months",
+     "box": {
+      "x": 152,
+      "y": 338,
+      "w": 297,
+      "h": 36
+     },
+     "segs": [
+      {
+       "t": "Before",
+       "font": "Inter Semi Bold",
+       "size": 36,
+       "fill": "#FA4028"
+      },
+      {
+       "t": " ",
+       "font": "Inter Medium",
+       "size": 36,
+       "fill": "#FA4028"
+      },
+      {
+       "t": "3",
+       "font": "Addington CF Bold",
+       "size": 57.599998474121094,
+       "fill": "#FA4028"
+      },
+      {
+       "t": " ",
+       "font": "Inter Medium",
+       "size": 36,
+       "fill": "#FA4028"
+      },
+      {
+       "t": "Months",
+       "font": "Inter Semi Bold",
+       "size": 36,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Check your",
+     "box": {
+      "x": 80,
+      "y": 433,
+      "w": 484,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "Check your",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#071437"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "CIBIL score first",
+     "box": {
+      "x": 80,
+      "y": 533,
+      "w": 690,
+      "h": 60
+     },
+     "segs": [
+      {
+       "t": "CIBIL score first",
+       "font": "Addington CF Demi Bold",
+       "size": 96,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Before anything else, know where you stand. If it needs fixing, three months is enough time. Three days isn't.",
+     "box": {
+      "x": 80,
+      "y": 653,
+      "w": 954,
+      "h": 153
+     },
+     "segs": [
+      {
+       "t": "Before anything else, know whe",
+       "font": "Inter Medium",
+       "size": 42,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 3
+    }
+   ],
+   "renders": [
+    {
+     "x": 234,
+     "y": 884,
+     "w": 678,
+     "h": 507
+    }
+   ],
+   "infos": [],
+   "hiddenText": [],
+   "outside": []
+  },
+  {
+   "id": "823:1050",
+   "name": "58",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "DPDP Compliance partner",
+     "box": {
+      "x": 816,
+      "y": 104,
+      "w": 280,
+      "h": 14
+     },
+     "segs": [
+      {
+       "t": "DPDP Compliance partner",
+       "font": "DM Sans SemiBold",
+       "size": 20,
+       "fill": "#1B2238"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 512,
+      "y": 1387,
+      "w": 176,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "If you're an MSME owner, this is exactly what being loan-ready means, preparing well before the need shows up, not scrambling when it does. We help businesses get to that point, and stay with them until they're actually funded, not just until the application goes in.",
+     "box": {
+      "x": 80,
+      "y": 319,
+      "w": 1040,
+      "h": 306
+     },
+     "segs": [
+      {
+       "t": "If you're an ",
+       "font": "Inter Medium",
+       "size": 42,
+       "fill": "#252F4A"
+      },
+      {
+       "t": "MSME owner",
+       "font": "Inter Semi Bold",
+       "size": 42,
+       "fill": "#FA4028"
+      },
+      {
+       "t": ", this is exactly what being l",
+       "font": "Inter Medium",
+       "size": 42,
+       "fill": "#252F4A"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 6
+    },
+    {
+     "chars": "When did you last plan something \n3 months ahead, instead of reacting when it became urgent?",
+     "box": {
+      "x": 126,
+      "y": 722,
+      "w": 930,
+      "h": 157
+     },
+     "segs": [
+      {
+       "t": "When did you last plan somethi",
+       "font": "Addington CF Demi Bold",
+       "size": 52,
+       "fill": "#071437"
+      },
+      {
+       "t": "3 months ahead, ",
+       "font": "Addington CF Demi Bold",
+       "size": 52,
+       "fill": "#FA4028"
+      },
+      {
+       "t": "instead of reacting when it be",
+       "font": "Addington CF Demi Bold",
+       "size": 52,
+       "fill": "#071437"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 2
+    }
+   ],
+   "renders": [
+    {
+     "x": 319,
+     "y": 989,
+     "w": 621,
+     "h": 355
+    }
+   ],
+   "infos": [],
+   "hiddenText": [],
+   "outside": []
+  },
+  {
+   "id": "790:963",
+   "name": "1",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 80,
+      "y": 1387,
+      "w": 176,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Swipe to explore",
+     "box": {
+      "x": 737,
+      "y": 1401,
+      "w": 319,
+      "h": 29
+     },
+     "segs": [
+      {
+       "t": "Swipe to explore",
+       "font": "Inter Medium",
+       "size": 40,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "DPDP Compliance partner",
+     "box": {
+      "x": 816,
+      "y": 109,
+      "w": 280,
+      "h": 14
+     },
+     "segs": [
+      {
+       "t": "DPDP Compliance partner",
+       "font": "DM Sans SemiBold",
+       "size": 20,
+       "fill": "#1B2238"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "How to make your",
+     "box": {
+      "x": 80,
+      "y": 319,
+      "w": 1040,
+      "h": 47
+     },
+     "segs": [
+      {
+       "t": "How to make your",
+       "font": "Inter Semi Bold",
+       "size": 64,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "business loan file",
+     "box": {
+      "x": 80,
+      "y": 416,
+      "w": 846,
+      "h": 69
+     },
+     "segs": [
+      {
+       "t": "business loan file",
+       "font": "Addington CF Bold",
+       "size": 110,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "look strong",
+     "box": {
+      "x": 80,
+      "y": 530,
+      "w": 561,
+      "h": 69
+     },
+     "segs": [
+      {
+       "t": "look strong",
+       "font": "Addington CF Bold",
+       "size": 110,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "before you even walk into a bank",
+     "box": {
+      "x": 80,
+      "y": 649,
+      "w": 1040,
+      "h": 38
+     },
+     "segs": [
+      {
+       "t": "before you even walk into a ba",
+       "font": "Inter Regular",
+       "size": 52,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 1
+    }
+   ],
+   "renders": [],
+   "infos": [],
+   "hiddenText": [],
+   "outside": []
+  },
+  {
+   "id": "823:862",
+   "name": "53",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 80,
+      "y": 1387,
+      "w": 176,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "Swipe to explore",
+     "box": {
+      "x": 737,
+      "y": 1401,
+      "w": 319,
+      "h": 29
+     },
+     "segs": [
+      {
+       "t": "Swipe to explore",
+       "font": "Inter Medium",
+       "size": 40,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "DPDP Compliance partner",
+     "box": {
+      "x": 816,
+      "y": 109,
+      "w": 280,
+      "h": 14
+     },
+     "segs": [
+      {
+       "t": "DPDP Compliance partner",
+       "font": "DM Sans SemiBold",
+       "size": 20,
+       "fill": "#1B2238"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "How to prepare for a",
+     "box": {
+      "x": 80,
+      "y": 318,
+      "w": 1040,
+      "h": 47
+     },
+     "segs": [
+      {
+       "t": "How to prepare for a",
+       "font": "Inter Semi Bold",
+       "size": 64,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "loan 3 months before  ",
+     "box": {
+      "x": 80,
+      "y": 415,
+      "w": 1036,
+      "h": 69
+     },
+     "segs": [
+      {
+       "t": "loan 3 months before  ",
+       "font": "Addington CF Bold",
+       "size": 110,
+       "fill": "#FA4028"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "you actually need the money",
+     "box": {
+      "x": 80,
+      "y": 534,
+      "w": 707,
+      "h": 38
+     },
+     "segs": [
+      {
+       "t": "you actually need the money",
+       "font": "Inter Regular",
+       "size": 52,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    }
+   ],
+   "renders": [],
+   "infos": [],
+   "hiddenText": [],
+   "outside": []
+  },
+  {
+   "id": "790:1186",
+   "name": "Post",
+   "w": 1200,
+   "h": 1500,
+   "texts": [
+    {
+     "chars": "capnix.ai",
+     "box": {
+      "x": 512,
+      "y": 1387,
+      "w": 176,
+      "h": 53
+     },
+     "segs": [
+      {
+       "t": "capnix.ai",
+       "font": "Addington CF Regular",
+       "size": 44,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "DPDP Compliance partner",
+     "box": {
+      "x": 816,
+      "y": 106,
+      "w": 280,
+      "h": 14
+     },
+     "segs": [
+      {
+       "t": "DPDP Compliance partner",
+       "font": "DM Sans SemiBold",
+       "size": 20,
+       "fill": "#1B2238"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "How to compare",
+     "box": {
+      "x": 234,
+      "y": 328,
+      "w": 733,
+      "h": 47
+     },
+     "segs": [
+      {
+       "t": "How to compare",
+       "font": "Inter Semi Bold",
+       "size": 64,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "interest rates \nproperly",
+     "box": {
+      "x": 234,
+      "y": 415,
+      "w": 733,
+      "h": 177
+     },
+     "segs": [
+      {
+       "t": "interest rates \n",
+       "font": "Addington CF Bold",
+       "size": 120,
+       "fill": "#FA4028"
+      },
+      {
+       "t": "properly",
+       "font": "Addington CF Bold",
+       "size": 120,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 1
+    },
+    {
+     "chars": "instead of just picking \nthe lowest number you see",
+     "box": {
+      "x": 291,
+      "y": 642,
+      "w": 620,
+      "h": 93
+     },
+     "segs": [
+      {
+       "t": "instead of just picking \nthe l",
+       "font": "Inter Medium",
+       "size": 48,
+       "fill": "#FFFFFF"
+      }
+     ],
+     "autoResize": "WIDTH_AND_HEIGHT",
+     "lines": 2
+    }
+   ],
+   "renders": [],
+   "infos": [],
+   "hiddenText": [],
+   "outside": []
+  }
+ ]
+}

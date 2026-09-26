@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Webority Partners</title>
+<meta name="description" content="Join the Webority Partner Program and earn commission by sharing project opportunities.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:ital,opsz,wght@1,9..144,400..600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #071437;
+    --ink-2: #252f4a;
+    --muted: #4b5675;
+    --muted-2: #78829d;
+    --line: #ebedf3;
+    --brand: #466efa;
+    --brand-deep: #2563eb;
+    --brand-ink: #1b1464;
+    --green: #0a8f3c;
+    --page: #ffffff;
+    --soft: #f9faff;
+    --dark: #040404;
+    --radius: 20px;
+    --shell: 1240px;
+    --gutter: clamp(16px, 4vw, 100px);
+    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    overflow-x: hidden;
+    background: var(--page);
+    color: var(--ink);
+    font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  img, svg { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  .shell { width: min(100% - (var(--gutter) * 2), var(--shell)); margin-inline: auto; }
+  .eyebrow { font-size: 14px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--brand); margin: 0 0 12px; }
+  h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.03em; line-height: 1.16; }
+  h1 { font-size: clamp(30px, 6vw, 64px); }
+  h2 { font-size: clamp(26px, 4vw, 42px); }
+  h3 { font-size: clamp(18px, 2.2vw, 24px); }
+  p { margin: 0; color: var(--muted); }
+  .accent { color: var(--brand-deep); }
+  .serif { font-family: "Fraunces", Georgia, serif; font-style: italic; font-weight: 500; }
+  section { padding-block: clamp(56px, 8vw, 104px); }
+
+  /* Buttons */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 26px; border-radius: 999px; font-weight: 600; font-size: 16px; transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease), background 0.25s var(--ease), color 0.25s var(--ease); }
+  .btn-primary { background: var(--brand); color: #fff; box-shadow: 0 10px 24px rgba(70, 110, 250, 0.28); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 34px rgba(70, 110, 250, 0.36); }
+  .btn-ghost { border: 1px solid #c9d4ff; color: var(--brand-deep); background: #fff; }
+  .btn-ghost:hover { transform: translateY(-2px); border-color: var(--brand); background: #f3f6ff; }
+  .btn:focus-visible, a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid rgba(70, 110, 250, 0.45); outline-offset: 3px; border-radius: 12px; }
+
+  /* Header */
+  header { position: sticky; top: 0; z-index: 40; background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(14px); border-bottom: 1px solid transparent; transition: border-color 0.3s var(--ease), box-shadow 0.3s var(--ease); }
+  header.scrolled { border-color: var(--line); box-shadow: 0 8px 24px rgba(7, 20, 55, 0.05); }
+  .bar { display: flex; align-items: center; gap: 24px; min-height: 76px; }
+  .logo img { height: 30px; width: auto; }
+  .nav { display: flex; gap: clamp(16px, 2vw, 28px); margin-inline: auto; white-space: nowrap; }
+  .nav a { font-weight: 500; color: var(--ink-2); position: relative; padding: 6px 2px; }
+  .nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--brand); transform: scaleX(0); transform-origin: left; transition: transform 0.3s var(--ease); }
+  .nav a:hover::after, .nav a[aria-current="true"]::after { transform: scaleX(1); }
+  .bar-actions { display: flex; align-items: center; gap: 16px; white-space: nowrap; }
+  .link-out { font-weight: 600; color: var(--brand-deep); }
+  .burger { display: none; width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--line); align-items: center; justify-content: center; }
+  .burger span, .burger span::before, .burger span::after { content: ""; display: block; width: 18px; height: 2px; background: var(--ink); border-radius: 2px; transition: transform 0.3s var(--ease), opacity 0.2s var(--ease); }
+  .burger span::before { transform: translateY(-6px); }
+  .burger span::after { transform: translateY(4px); }
+  header.open .burger span { background: transparent; }
+  header.open .burger span::before { transform: rotate(45deg); }
+  header.open .burger span::after { transform: rotate(-45deg) translateY(-1px); }
+  .mobile-nav { display: grid; gap: 4px; overflow: hidden; max-height: 0; transition: max-height 0.4s var(--ease); }
+  header.open .mobile-nav { max-height: 360px; }
+  .mobile-nav a { padding: 14px 4px; border-bottom: 1px solid var(--line); font-weight: 500; }
+
+  /* Hero */
+  .hero { position: relative; overflow: hidden; padding-top: clamp(40px, 6vw, 72px); padding-bottom: 0; text-align: center; background: radial-gradient(120% 80% at 50% 0%, #f4f6ff 0%, #ffffff 55%); }
+  .hero h1 { max-width: 14ch; margin-inline: auto; }
+  .hero p { max-width: 62ch; margin: 20px auto 0; font-size: clamp(15px, 1.4vw, 18px); }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-top: 30px; }
+  .hero-stage { position: relative; margin-top: clamp(32px, 5vw, 56px); display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; gap: clamp(12px, 2vw, 28px); }
+  .hero-phone { justify-self: center; width: clamp(200px, 26vw, 280px); filter: drop-shadow(0 30px 60px rgba(7, 20, 55, 0.22)); }
+  .stat-stack { display: grid; gap: 16px; justify-items: stretch; }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 16px 18px; box-shadow: 0 18px 44px rgba(7, 20, 55, 0.08); text-align: left; }
+  .card-title { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--ink-2); }
+  .dot { width: 20px; height: 20px; border-radius: 50%; background: #e8faee; display: grid; place-items: center; color: var(--green); font-size: 11px; }
+  .card-value { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-top: 8px; }
+  .card-value strong { font-size: 20px; }
+  .delta { color: var(--green); font-size: 12px; font-weight: 600; }
+  .chart { display: flex; align-items: flex-end; gap: 10px; height: 120px; margin-top: 14px; }
+  .chart i { flex: 1; background: linear-gradient(180deg, #7d97ff, var(--brand)); border-radius: 6px; display: block; transform-origin: bottom; animation: grow 1s var(--ease) both; }
+  @keyframes grow { from { transform: scaleY(0.05); opacity: 0; } to { transform: scaleY(1); opacity: 1; } }
+  .chart-legend { display: flex; gap: 18px; font-size: 12px; color: var(--muted-2); }
+  .chart-legend b { display: block; color: var(--ink); font-size: 13px; }
+
+  /* Marquee strip */
+  .strip { background: var(--brand); color: #fff; overflow: hidden; padding: 18px 0; }
+  .strip-track { display: flex; gap: 48px; width: max-content; animation: slide 26s linear infinite; }
+  .strip-track span { display: flex; align-items: center; gap: 48px; font-size: clamp(15px, 1.8vw, 22px); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; }
+  @keyframes slide { to { transform: translateX(-50%); } }
+  .strip:hover .strip-track { animation-play-state: paused; }
+
+  /* Split section */
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 5vw, 72px); align-items: center; }
+  .split img { border-radius: var(--radius); }
+  .prose p + p { margin-top: 14px; }
+
+  /* Process */
+  .process { background: var(--dark); color: #fff; }
+  .process h2, .process .eyebrow { color: #fff; }
+  .process .eyebrow { color: #93a9ff; }
+  .process-head { text-align: center; max-width: 720px; margin: 0 auto clamp(28px, 4vw, 48px); }
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .step { position: relative; border-radius: var(--radius); overflow: hidden; min-height: 420px; display: flex; align-items: flex-end; color: #fff; isolation: isolate; }
+  .step img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transition: transform 0.6s var(--ease); }
+  .step::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(4, 4, 4, 0) 35%, rgba(4, 4, 4, 0.88) 100%); z-index: -1; }
+  .step:hover img { transform: scale(1.06); }
+  .step-body { padding: 22px; }
+  .step-num { font-size: 22px; font-weight: 700; color: rgba(255, 255, 255, 0.55); }
+  .step-body h3 { margin: 4px 0 8px; }
+  .step-body p { color: rgba(255, 255, 255, 0.78); font-size: 14px; }
+
+  /* Services */
+  .services { display: grid; grid-template-columns: 1fr 1.5fr; gap: clamp(24px, 5vw, 64px); align-items: start; }
+  .service-grid { display: grid; grid-template-columns: 1fr 1fr; }
+  .service { padding: clamp(18px, 2.4vw, 32px); border-bottom: 1px solid var(--line); }
+  .service:nth-child(odd) { border-right: 1px solid var(--line); }
+  .service:nth-last-child(-n+2) { border-bottom: 0; }
+  .service span { display: block; font-size: 26px; font-weight: 600; color: #c4cada; }
+  .service h3 { margin: 10px 0 8px; font-weight: 500; }
+  .service h3 b { font-weight: 700; }
+  .service p { font-size: 15px; }
+
+  /* Benefits */
+  .benefit { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 5vw, 64px); align-items: center; padding-block: clamp(28px, 4vw, 48px); }
+  .benefit:nth-child(even) .benefit-media { order: -1; }
+  .benefit h3 { font-size: clamp(22px, 2.6vw, 32px); }
+  .benefit > div > p { margin-top: 12px; max-width: 52ch; }
+  .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 26px; }
+  .fact h4 { margin: 10px 0 6px; font-size: 18px; font-weight: 600; }
+  .fact p { font-size: 14px; }
+  .fact i { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: #eef2ff; color: var(--brand); font-style: normal; font-weight: 700; }
+  .benefit-media { border-radius: var(--radius); overflow: hidden; background: linear-gradient(140deg, #eef2ff, #f8fafe); border: 1px solid var(--line); padding: 22px; }
+
+  /* Partner app */
+  .app { background: var(--dark); color: #fff; }
+  .app h2 { color: #fff; }
+  .app .eyebrow { color: #93a9ff; }
+  .app-wrap { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(24px, 5vw, 64px); align-items: center; margin-top: clamp(24px, 4vw, 44px); }
+  .app-list { display: grid; gap: 14px; }
+  .app-item { display: flex; align-items: center; gap: 14px; background: #fff; color: var(--ink); border-radius: 14px; padding: 16px 20px; font-weight: 600; transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease); }
+  .app-item:hover { transform: translateX(6px); box-shadow: 0 16px 34px rgba(0, 0, 0, 0.25); }
+  .app-item img { width: 28px; height: 28px; }
+
+  /* Testimonials */
+  .rail { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+  .rail + .rail { margin-top: 20px; }
+  .rail-track { display: flex; gap: 20px; width: max-content; animation: slide var(--speed, 52s) linear infinite; }
+  .rail:hover .rail-track, .rail:focus-within .rail-track { animation-play-state: paused; }
+  .rail.reverse .rail-track { animation-direction: reverse; }
+  .quote { width: min(76vw, 336px); background: var(--soft); border: 1px solid var(--line); border-radius: 16px; padding: 22px; }
+  .quote p { font-size: 15px; color: var(--ink-2); }
+  .quote footer { margin-top: 16px; }
+  .quote b { display: block; font-size: 18px; font-weight: 600; }
+  .quote small { color: var(--muted-2); font-size: 13px; }
+
+  /* FAQ */
+  .faq-wrap { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: clamp(24px, 5vw, 64px); align-items: start; }
+  .faq { display: grid; gap: 12px; }
+  .qa { border: 1px solid var(--line); border-radius: 16px; background: #fff; overflow: hidden; transition: border-color 0.3s var(--ease), box-shadow 0.3s var(--ease); }
+  .qa[data-open="true"] { border-color: #c9d4ff; box-shadow: 0 16px 34px rgba(7, 20, 55, 0.07); }
+  .qa button { display: flex; align-items: center; gap: 16px; width: 100%; padding: 20px 22px; text-align: left; }
+  .qa .n { font-size: 15px; font-weight: 700; color: var(--muted-2); min-width: 26px; }
+  .qa[data-open="true"] .n { color: var(--brand); }
+  .qa h3 { flex: 1; font-size: clamp(16px, 1.6vw, 20px); font-weight: 600; }
+  .qa .sign { position: relative; width: 28px; height: 28px; border-radius: 50%; background: var(--ink); flex: none; transition: background 0.3s var(--ease), transform 0.3s var(--ease); }
+  .qa .sign::before, .qa .sign::after { content: ""; position: absolute; inset: 50% 8px; height: 2px; margin-top: -1px; background: #fff; border-radius: 2px; transition: transform 0.3s var(--ease); }
+  .qa .sign::after { transform: rotate(90deg); }
+  .qa[data-open="true"] .sign { background: var(--brand); transform: rotate(135deg); }
+  .qa .answer { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.4s var(--ease); }
+  .qa[data-open="true"] .answer { grid-template-rows: 1fr; }
+  .qa .answer > div { overflow: hidden; }
+  .qa .answer p { padding: 0 22px 22px 64px; font-size: 15px; }
+
+  /* CTA */
+  .cta { background: linear-gradient(120deg, #0a1b8f 0%, var(--brand-deep) 45%, #6d8cff 100%); color: #fff; overflow: hidden; }
+  .cta-wrap { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(24px, 5vw, 48px); align-items: center; }
+  .cta h2 { color: #fff; }
+  .cta p { color: rgba(255, 255, 255, 0.85); margin-top: 16px; max-width: 46ch; }
+  .cta-badges { margin-top: 28px; max-width: 420px; }
+  .cta-phone { justify-self: center; width: clamp(180px, 22vw, 245px); filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.35)); }
+
+  /* Footer */
+  footer.site { background: var(--dark); color: #fff; padding-block: clamp(40px, 6vw, 72px); }
+  .foot-top { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: clamp(20px, 4vw, 48px); }
+  .foot-top h2 { font-size: clamp(22px, 3vw, 42px); max-width: 16ch; }
+  .foot-col h4 { margin: 0 0 14px; font-size: 16px; font-weight: 600; }
+  .foot-col a { display: block; padding: 6px 0; color: rgba(255, 255, 255, 0.72); font-size: 14px; transition: color 0.25s var(--ease), transform 0.25s var(--ease); }
+  .foot-col a:hover { color: #fff; transform: translateX(4px); }
+  .foot-bottom { display: flex; flex-wrap: wrap; gap: 16px 28px; justify-content: space-between; align-items: center; margin-top: clamp(28px, 5vw, 56px); padding-top: 22px; border-top: 1px solid rgba(255, 255, 255, 0.14); font-size: 14px; color: rgba(255, 255, 255, 0.66); }
+  .tagline { font-size: clamp(18px, 2.4vw, 42px); }
+
+  /* Reveal on scroll */
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 1080px) {
+    .steps { grid-template-columns: 1fr 1fr; }
+    .services, .faq-wrap, .app-wrap, .cta-wrap { grid-template-columns: 1fr; }
+    .benefit, .split { grid-template-columns: 1fr; }
+    .benefit:nth-child(even) .benefit-media { order: 0; }
+    .hero-stage { grid-template-columns: 1fr; justify-items: center; }
+    .stat-stack { width: min(100%, 420px); }
+    .hero-phone { order: -1; }
+  }
+  @media (max-width: 980px) {
+    .nav, .bar-actions .btn, .bar-actions .link-out { display: none; }
+    .burger { display: inline-flex; margin-left: auto; }
+  }
+  @media (max-width: 760px) {
+    .burger { display: inline-flex; margin-left: auto; }
+    .steps, .service-grid, .facts, .foot-top { grid-template-columns: 1fr; }
+    .service:nth-child(odd) { border-right: 0; }
+    .service:nth-last-child(2) { border-bottom: 1px solid var(--line); }
+    .step { min-height: 320px; }
+    .qa .answer p { padding-left: 22px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<header id="top">
+  <div class="shell">
+    <div class="bar">
+      <a class="logo" href="#top" aria-label="Webority Partners home"><img src="assets/frame-1321314858-3626_23409.svg" alt="Webority Partners" width="173" height="30"></a>
+      <nav class="nav" aria-label="Main">
+        <a href="#how">How it Works</a>
+        <a href="#services">Services</a>
+        <a href="#benefits">Benefits</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <div class="bar-actions">
+        <a class="link-out" href="https://webority.com" target="_blank" rel="noopener">Visit Webority</a>
+        <a class="btn btn-ghost" href="#cta">Contact Us</a>
+        <button class="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="mobile-nav"><span></span></button>
+      </div>
+    </div>
+    <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile">
+      <a href="#how">How it Works</a>
+      <a href="#services">Services</a>
+      <a href="#benefits">Benefits</a>
+      <a href="#faq">FAQ</a>
+      <a href="#cta">Contact Us</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="shell">
+      <h1 class="reveal">Turn your Network<br>into <span class="serif accent">Earnings</span></h1>
+      <p class="reveal">Join the Webority Partner Program and earn commission by sharing project opportunities.</p>
+      <div class="hero-actions reveal">
+        <a class="btn btn-primary" href="#cta">Get the App</a>
+        <a class="btn btn-ghost" href="#how">Learn More</a>
+      </div>
+      <div class="hero-stage">
+        <div class="stat-stack reveal">
+          <div class="card">
+            <div class="card-title"><span class="dot">$</span> Earned this Month</div>
+            <div class="card-value"><strong>$18.4K</strong> <span class="delta">&uarr; 4.2% vs last month</span></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Trusted by</div>
+            <div class="card-value"><strong>8,915+</strong> <span>Users</span></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Credited <small style="color:var(--muted-2);font-weight:500">29 Aug 2024</small></div>
+            <div class="card-value"><strong style="color:var(--green)">$450.00</strong></div>
+          </div>
+        </div>
+        <img class="hero-phone reveal" src="assets/m-3626_23442.png" alt="Webority Partner app on a phone" width="280" height="677" loading="eager">
+        <div class="card reveal" style="align-self:end">
+          <div class="card-value" style="margin:0"><strong style="font-size:16px">Earnings Overview</strong> <span style="font-size:12px;color:var(--muted-2)">Month</span></div>
+          <div class="card-value" style="margin-top:6px"><strong>$25,800</strong></div>
+          <div class="chart-legend"><span><b>$20,000</b>My earnings</span><span><b>$5,800</b>Referral Rewards</span></div>
+          <div class="chart" aria-hidden="true">
+            <i style="height:40%;animation-delay:0.05s"></i><i style="height:58%;animation-delay:0.12s"></i>
+            <i style="height:46%;animation-delay:0.19s"></i><i style="height:72%;animation-delay:0.26s"></i>
+            <i style="height:60%;animation-delay:0.33s"></i><i style="height:88%;animation-delay:0.4s"></i>
+            <i style="height:76%;animation-delay:0.47s"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="strip" aria-label="Programme highlights">
+    <div class="strip-track">
+      <span>Free to join <em>&#10038;</em> No investment needed <em>&#10038;</em> Earn commission on projects <em>&#10038;</em></span>
+      <span aria-hidden="true">Free to join <em>&#10038;</em> No investment needed <em>&#10038;</em> Earn commission on projects <em>&#10038;</em></span>
+    </div>
+  </div>
+
+  <section id="about">
+    <div class="shell split">
+      <img class="reveal" src="assets/a-3626_23449.png" alt="Webority partners at work" width="640" height="586" loading="lazy">
+      <div class="prose reveal">
+        <p class="eyebrow">About the Program</p>
+        <h2>What is the Webority <span class="accent">Partner Program?</span></h2>
+        <p style="margin-top:18px">The Webority Partner Program allows individuals and professionals to earn commission by referring business opportunities and project leads.</p>
+        <p>If you know a business that needs services like web development, mobile app development, AI solutions, or digital marketing, you can submit the lead through the Webority Partner App. Once the project is successfully closed, you earn a commission.</p>
+        <p>Our partner platform makes it simple to share leads, track project status, and monitor your earnings all in one place.</p>
+        <p>Whether you are a freelancer, consultant, or business professional, the Webority Partner Program gives you the opportunity to turn your connections into income.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="process" id="how">
+    <div class="shell">
+      <div class="process-head reveal">
+        <p class="eyebrow">Simple Process</p>
+        <h2>How the Partner Program Works?</h2>
+      </div>
+      <div class="steps">
+        <article class="step reveal">
+          <img src="assets/frame-1984080815-3626_23460.png" alt="" loading="lazy">
+          <div class="step-body"><div class="step-num">01</div><h3>Download Our App</h3><p>Install the Webority Partner App from Google Play or the App Store.</p></div>
+        </article>
+        <article class="step reveal">
+          <img src="assets/frame-1984080815-3626_23470.png" alt="" loading="lazy">
+          <div class="step-body"><div class="step-num">02</div><h3>Register as a Partner</h3><p>Complete your partner registration and start accessing tools to submit and track leads.</p></div>
+        </article>
+        <article class="step reveal">
+          <img src="assets/frame-1984080816-3626_23479.png" alt="" loading="lazy">
+          <div class="step-body"><div class="step-num">03</div><h3>Share Project Leads</h3><p>Submit project opportunities from businesses that need digital solutions.</p></div>
+        </article>
+        <article class="step reveal">
+          <img src="assets/frame-1984080816-3626_23488.png" alt="" loading="lazy">
+          <div class="step-body"><div class="step-num">04</div><h3>Earn Commission</h3><p>When the project is successfully delivered, you receive your commission.</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="shell services">
+      <div class="reveal">
+        <p class="eyebrow">What You Can Refer</p>
+        <h2>We do what we <span class="accent">love</span>, and we love what we <span class="accent">do</span>.</h2>
+        <p style="margin-top:18px">Refer project opportunities in the following areas and earn commission when the project is completed.</p>
+      </div>
+      <div class="service-grid reveal">
+        <article class="service"><span>01.</span><h3><b>Web</b> Development</h3><p>Custom websites, e-commerce platforms, and scalable web applications for businesses.</p></article>
+        <article class="service"><span>02.</span><h3><b>Mobile App</b> Development</h3><p>Android and iOS applications designed for startups and enterprises.</p></article>
+        <article class="service"><span>03.</span><h3><b>AI &amp; Automation</b> Solutions</h3><p>AI-powered solutions, chatbots, automation systems, and smart digital tools.</p></article>
+        <article class="service"><span>04.</span><h3><b>UI/UX</b> Design</h3><p>Modern user experience and interface design for web and mobile products.</p></article>
+        <article class="service"><span>05.</span><h3><b>Digital</b> Marketing</h3><p>SEO, paid advertising, and growth marketing strategies for businesses.</p></article>
+        <article class="service"><span>06.</span><h3><b>Custom Software</b> Development</h3><p>Tailored software solutions to improve business operations and productivity.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="benefits" style="background:var(--soft)">
+    <div class="shell">
+      <div class="reveal" style="text-align:center;max-width:720px;margin-inline:auto">
+        <p class="eyebrow">Why Join</p>
+        <h2>Benefits of <span class="accent">Joining</span> Webority Partners</h2>
+      </div>
+      <article class="benefit reveal">
+        <div>
+          <h3>Earn Commission</h3>
+          <p>Refer businesses to Webority and earn attractive commissions whenever your referred project lead converts successfully.</p>
+          <div class="facts">
+            <div class="fact"><i>&#8593;</i><h4>High Referral Earnings</h4><p>Start speeding up all your workflows processes.</p></div>
+            <div class="fact"><i>&#8250;</i><h4>Fast &amp; Transparent Payouts</h4><p>Track your earnings and receive payouts quickly once projects are closed.</p></div>
+          </div>
+        </div>
+        <div class="benefit-media"><img src="assets/frame-1984080815-3626_23470.png" alt="Earnings dashboard" loading="lazy"></div>
+      </article>
+      <article class="benefit reveal">
+        <div>
+          <h3>Simple &amp; Hassle-Free Partnership</h3>
+          <p>Joining the Webority Partner Network is simple, with no financial commitment and a quick onboarding process.</p>
+          <div class="facts">
+            <div class="fact"><i>&#10003;</i><h4>No Investment Required</h4><p>Completely free to join with no registration fee or hidden costs.</p></div>
+            <div class="fact"><i>&#9993;</i><h4>Easy Lead Submission</h4><p>Quickly submit client leads via our partner portal.</p></div>
+          </div>
+        </div>
+        <div class="benefit-media"><img src="assets/frame-1984080816-3626_23479.png" alt="Lead submission screen" loading="lazy"></div>
+      </article>
+      <article class="benefit reveal">
+        <div>
+          <h3>Track and Grow Your Opportunities</h3>
+          <p>Stay informed about your referrals and manage opportunities easily through the partner dashboard.</p>
+          <div class="facts">
+            <div class="fact"><i>&#9673;</i><h4>Real-Time Lead Tracking</h4><p>Start speeding up all your workflows processes.</p></div>
+            <div class="fact"><i>&#9788;</i><h4>Dedicated Partner Support</h4><p>We assist you in the referral process for successful collaboration.</p></div>
+          </div>
+        </div>
+        <div class="benefit-media"><img src="assets/m-3626_23978.png" alt="Partner dashboard on mobile" loading="lazy"></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="app">
+    <div class="shell">
+      <div class="reveal" style="text-align:center">
+        <p class="eyebrow">Partner App</p>
+        <h2>Everything in your Pocket</h2>
+      </div>
+      <div class="app-wrap">
+        <img class="reveal" src="assets/m-3626_23978.png" alt="Webority Partner app screens" loading="lazy">
+        <div class="app-list reveal">
+          <div class="app-item"><img src="assets/a-3626_23990.svg" alt=""> Register as Partner</div>
+          <div class="app-item"><img src="assets/a-3626_23995.svg" alt=""> Submit Leads</div>
+          <div class="app-item"><img src="assets/a-3626_24001.svg" alt=""> Track Lead Status</div>
+          <div class="app-item"><img src="assets/a-3626_24006.svg" alt=""> View Earnings</div>
+          <div class="app-item"><img src="assets/a-3626_24011.svg" alt=""> Manage Profile</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="testimonials">
+    <div class="shell reveal" style="text-align:center;max-width:720px;margin-inline:auto;margin-bottom:clamp(24px,4vw,44px)">
+      <p class="eyebrow">Testimonials</p>
+      <h2>Built for <span class="accent">Growth</span>, Proven by <span class="accent">Partners</span></h2>
+      <p style="margin-top:14px">Hear from partners who are already earning with Webority.</p>
+    </div>
+    <div class="rail" data-rail>
+      <div class="rail-track">
+        <figure class="quote"><p>"The transparency is what won me over. I can see exactly where my lead is in the pipeline and when my payout is coming."</p><footer><b>Laura Mitchell</b><small>Business Consultant</small></footer></figure>
+        <figure class="quote"><p>"I've earned over &#8377;2 lakhs in 4 months just by connecting my network with Webority's services. Highly recommend!"</p><footer><b>Sarah Lopez</b><small>Business Consultant</small></footer></figure>
+        <figure class="quote"><p>"I shared a lead for a government project and earned my first commission in 3 weeks. The app makes tracking easy."</p><footer><b>Michael Zhang</b><small>IT Freelancer</small></footer></figure>
+        <figure class="quote"><p>"As a freelance consultant, I come across clients needing software all the time. I refer them to Webority for passive income."</p><footer><b>Emily Carter</b><small>Finance Manager</small></footer></figure>
+        <figure class="quote"><p>"The transparency is what won me over. I can see exactly where my lead is in the pipeline and when my payout is coming."</p><footer><b>James William</b><small>Entrepreneur</small></footer></figure>
+      </div>
+    </div>
+    <div class="rail reverse" data-rail style="--speed:62s">
+      <div class="rail-track">
+        <figure class="quote"><p>"The app dashboard is really clean. I can see my leads, their status, and my earnings all in one place. Great user experience."</p><footer><b>Anna Roberts</b><small>VP Finance @ AtlasBank</small></footer></figure>
+        <figure class="quote"><p>"I love the zero investment. I share leads and Webority handles everything else. Payouts are fast."</p><footer><b>Laura Mitchell</b><small>Business Consultant</small></footer></figure>
+        <figure class="quote"><p>"Partnering with a CMMI Level 5 company gives me confidence when I refer clients. They always deliver quality work."</p><footer><b>Daniel Kim</b><small>Finance Manager</small></footer></figure>
+        <figure class="quote"><p>"Partnering with a CMMI Level 5 company gives me confidence when I refer clients. They always deliver quality work."</p><footer><b>Marcus Lee</b><small>Business Consultant</small></footer></figure>
+        <figure class="quote"><p>"The app dashboard is really clean. I can see my leads, their status, and my earnings all in one place."</p><footer><b>Alex Romero</b><small>Marketing Manager</small></footer></figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" style="background:var(--soft)">
+    <div class="shell faq-wrap">
+      <div class="reveal">
+        <p class="eyebrow">FAQ</p>
+        <h2>Got <span class="accent">Questions?</span><br>We've Got <span class="accent">Answers</span></h2>
+        <p style="margin-top:16px">Find quick solutions to the most asked topics about our partner program.</p>
+      </div>
+      <div class="faq reveal" id="faq-list">
+        <div class="qa" data-open="false">
+          <button type="button" aria-expanded="false"><span class="n">01</span><h3>Is the Webority Partner Program free to join?</h3><span class="sign" aria-hidden="true"></span></button>
+          <div class="answer"><div><p>Yes. Joining is completely free, with no registration fee and no hidden costs. You only need the Webority Partner App to submit leads.</p></div></div>
+        </div>
+        <div class="qa" data-open="false">
+          <button type="button" aria-expanded="false"><span class="n">02</span><h3>Who can become a partner?</h3><span class="sign" aria-hidden="true"></span></button>
+          <div class="answer"><div><p>Freelancers, consultants, marketers, business professionals, and anyone with business connections can join.</p></div></div>
+        </div>
+        <div class="qa" data-open="false">
+          <button type="button" aria-expanded="false"><span class="n">03</span><h3>How do I earn commission?</h3><span class="sign" aria-hidden="true"></span></button>
+          <div class="answer"><div><p>Submit a project lead through the app. When that project is successfully closed and delivered, you receive your commission.</p></div></div>
+        </div>
+        <div class="qa" data-open="false">
+          <button type="button" aria-expanded="false"><span class="n">04</span><h3>How do I submit leads?</h3><span class="sign" aria-hidden="true"></span></button>
+          <div class="answer"><div><p>Use the partner portal in the app: add the business details and what they need, and track the status from the same screen.</p></div></div>
+        </div>
+        <div class="qa" data-open="false">
+          <button type="button" aria-expanded="false"><span class="n">05</span><h3>Is the partner app available for Android and iOS?</h3><span class="sign" aria-hidden="true"></span></button>
+          <div class="answer"><div><p>Yes. The Webority Partner App is available on both Google Play and the App Store.</p></div></div>
+        </div>
+        <div class="qa" data-open="false">
+          <button type="button" aria-expanded="false"><span class="n">06</span><h3>Can I track my leads and earnings in one place?</h3><span class="sign" aria-hidden="true"></span></button>
+          <div class="answer"><div><p>Yes. The dashboard shows every referral, its current stage, and your earnings, updated in real time.</p></div></div>
+        </div>
+        <div class="qa" data-open="false">
+          <button type="button" aria-expanded="false"><span class="n">07</span><h3>When do partners receive payouts?</h3><span class="sign" aria-hidden="true"></span></button>
+          <div class="answer"><div><p>Payouts are released once the referred project is closed, and you can follow each payment from the earnings screen.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta" id="cta">
+    <div class="shell cta-wrap">
+      <div class="reveal">
+        <p class="eyebrow" style="color:#c9d4ff">Get the App</p>
+        <h2>Start Earning Today<br>Become a Partner</h2>
+        <p>Download our Partner App and begin sharing project leads to earn commission. Your network is your greatest asset.</p>
+        <img class="cta-badges" src="assets/a-3626_24128.svg" alt="Scan the QR code, or download on the App Store and Google Play" loading="lazy">
+      </div>
+      <img class="cta-phone reveal" src="assets/m-3626_24181.png" alt="Hand holding a phone with the Webority Partner app" loading="lazy">
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="shell">
+    <div class="foot-top">
+      <div>
+        <img src="assets/a-3626_24192.svg" alt="Webority Partners" width="276" height="48" style="margin-bottom:22px">
+        <h2>Where connections turn into earnings.</h2>
+      </div>
+      <div class="foot-col">
+        <h4>Quick Links</h4>
+        <a href="#how">How It Works</a>
+        <a href="#services">Services You Can Refer</a>
+        <a href="#benefits">Benefits</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div class="foot-col">
+        <h4>Company</h4>
+        <a href="#cta">Contact Us</a>
+        <a href="https://webority.com" target="_blank" rel="noopener">Visit Webority Website</a>
+      </div>
+      <div class="foot-col">
+        <h4>Download</h4>
+        <a href="#cta">App Store</a>
+        <a href="#cta">Google Play Store</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span class="tagline serif">Your network, your income.</span>
+      <span><a href="#">Privacy Policy</a> &nbsp; <a href="#">Terms &amp; Conditions</a></span>
+      <span>&copy; 2026 Webority Technologies Private Limited. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Header state and mobile menu
+  const header = document.querySelector("header");
+  const burger = document.querySelector(".burger");
+  addEventListener("scroll", () => header.classList.toggle("scrolled", scrollY > 8), { passive: true });
+  burger.addEventListener("click", () => {
+    const open = header.classList.toggle("open");
+    burger.setAttribute("aria-expanded", String(open));
+  });
+  document.querySelectorAll(".mobile-nav a").forEach((a) =>
+    a.addEventListener("click", () => {
+      header.classList.remove("open");
+      burger.setAttribute("aria-expanded", "false");
+    })
+  );
+
+  // FAQ accordion: one panel open at a time, height animated by a CSS grid row
+  document.querySelectorAll(".qa").forEach((qa) => {
+    const btn = qa.querySelector("button");
+    btn.addEventListener("click", () => {
+      const open = qa.dataset.open === "true";
+      document.querySelectorAll('.qa[data-open="true"]').forEach((other) => {
+        other.dataset.open = "false";
+        other.querySelector("button").setAttribute("aria-expanded", "false");
+      });
+      qa.dataset.open = String(!open);
+      btn.setAttribute("aria-expanded", String(!open));
+    });
+  });
+
+  // Testimonial rails: duplicate the cards so the loop never shows a gap, and allow drag to scrub
+  document.querySelectorAll("[data-rail]").forEach((rail) => {
+    const track = rail.querySelector(".rail-track");
+    track.append(...[...track.children].map((n) => n.cloneNode(true)));
+    let down = false, startX = 0, shift = 0, paused = false;
+    const pause = (on) => {
+      paused = on;
+      track.style.animationPlayState = on ? "paused" : "running";
+    };
+    rail.addEventListener("pointerdown", (e) => {
+      down = true; startX = e.clientX; pause(true); rail.setPointerCapture(e.pointerId); rail.style.cursor = "grabbing";
+    });
+    rail.addEventListener("pointermove", (e) => {
+      if (!down) return;
+      shift += e.clientX - startX; startX = e.clientX;
+      track.style.transform = "translateX(" + shift + "px)";
+    });
+    const release = () => { down = false; rail.style.cursor = ""; pause(false); };
+    rail.addEventListener("pointerup", release);
+    rail.addEventListener("pointercancel", release);
+  });
+
+  // Reveal on scroll
+  const io = new IntersectionObserver(
+    (entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }),
+    { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
+  );
+  document.querySelectorAll(".reveal").forEach((el, i) => {
+    el.style.transitionDelay = (i % 4) * 70 + "ms";
+    io.observe(el);
+  });
+
+  // Highlight the section the reader is in
+  const links = [...document.querySelectorAll(".nav a")];
+  const spy = new IntersectionObserver(
+    (entries) => entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      links.forEach((l) => l.setAttribute("aria-current", String(l.getAttribute("href") === "#" + e.target.id)));
+    }),
+    { rootMargin: "-45% 0px -50% 0px" }
+  );
+  ["how", "services", "benefits", "faq"].forEach((id) => { const el = document.getElementById(id); if (el) spy.observe(el); });
+</script>
+<script>
+ setTimeout(()=>{
+  const bad=[...document.querySelectorAll("*")].map(el=>({el,r:el.getBoundingClientRect()})).filter(x=>x.r.right>innerWidth+1).slice(0,5);
+  document.title = "vw"+innerWidth+" scrollW"+document.documentElement.scrollWidth+" :: "+bad.map(x=>x.el.tagName+"."+(String(x.el.className)||"-")+"@"+Math.round(x.r.right)+"/"+Math.round(x.r.width)).join(" | ");
+ }, 1200);
+</script></body>
+</html>

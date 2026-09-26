@@ -1,0 +1,36 @@
+{
+  "name": "Webority Figma MCP",
+  "id": "webority-figma-write",
+  "api": "1.0.0",
+  "main": "code.js",
+  "ui": "ui.html",
+  "editorType": [
+    "figma",
+    "dev"
+  ],
+  "capabilities": [
+    "inspect",
+    "codegen"
+  ],
+  "codegenLanguages": [
+    {
+      "label": "Webority code map",
+      "value": "webority-code-map"
+    }
+  ],
+  "documentAccess": "dynamic-page",
+  "permissions": [],
+  "networkAccess": {
+    "allowedDomains": [
+      "ws://localhost:3692",
+      "ws://localhost:3693",
+      "ws://localhost:3694",
+      "ws://localhost:3695",
+      "ws://localhost:3696",
+      "ws://localhost:3697",
+      "ws://localhost:3698",
+      "ws://localhost:3699"
+    ],
+    "reasoning": "Connects only to the local Webority Figma MCP server on this machine (port 3692, or 3693-3699 when FIGMA_WRITE_PORT is set)."
+  }
+}

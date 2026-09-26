@@ -1,0 +1,30 @@
+{
+  "id": "lumex-mesh",
+  "name": "Lumex mesh",
+  "description": "Keystone-style silky blue mesh gradient in the Lumex palette (navy #071437, pressed #193EE4, primary #2F50E4, hover #4764E4, tint #97A8F2) with domain-warped folds and fine grain.",
+  "version": 4,
+  "pixel": {
+    "code": "if (params.flip) u = 1 - u;\nconst ar = width/height;\nlet px = u*ar, py = v;\nconst s = params.seed;\nconst w1 = noise(px*params.scale + s, py*params.scale + 1.7) + 0.5*noise(px*params.scale*2.1 + 3.1, py*params.scale*2.1 - s);\nconst w2 = noise(px*params.scale + 5.2, py*params.scale + 9.1 + s) + 0.5*noise(px*params.scale*2.1 - 2.3, py*params.scale*2.1 + 4.4);\npx += (w1/1.5-0.5)*params.warp; py += (w2/1.5-0.5)*params.warp;\nconst P = [[0.02*ar,0.02,0.024,0.059,0.2,0.36],[0.10*ar,0.95,0.027,0.078,0.216,0.30],[0.55*ar,0.20,0.071,0.141,0.541,0.30],[0.95*ar,0.08,0.184,0.314,0.894,0.20],[0.70*ar,0.65,0.102,0.2,0.722,0.25],[0.98*ar,0.95,0.082,0.149,0.604,0.25],[0.85*ar,0.40,0.212,0.329,0.878,0.09]];\nlet r=0,g=0,b=0,ws=0;\nfor (let i=0;i<7;i++){ const q=P[i]; const dx=px-q[0], dy=py-q[1]; const w=Math.exp(-(dx*dx+dy*dy)/q[5]); r+=q[2]*w; g+=q[3]*w; b+=q[4]*w; ws+=w; }\nr/=ws; g/=ws; b/=ws;\nconst f = noise(px*1.1 + 3.3, py*1.1 - s);\nconst band = Math.sin((px*1.4 + py*2.0 + f*2.6) * params.freq);\nconst soft = smoothstep(0.2, 1.0, band);\nconst hl = soft*soft * params.sheen * smoothstep(0.25, 1.0, u);\nr += (0.278-r)*hl; g += (0.392-g)*hl; b += (0.894-b)*hl;\nconst gl = smoothstep(0.92, 1.0, band); const glint = gl*gl*gl * params.glint * smoothstep(0.35, 1.0, u);\nr += (0.592-r)*glint; g += (0.659-g)*glint; b += (0.949-b)*glint;\nconst n = (hash(x, y) - 0.5) * params.grain;\nreturn [clamp(r+n,0,1), clamp(g+n,0,1), clamp(b+n,0,1)];",
+    "width": 1280,
+    "height": 720
+  },
+  "effects": [],
+  "fill": {
+    "scaleMode": "FILL",
+    "blendMode": "NORMAL",
+    "opacity": 1,
+    "mode": "replace"
+  },
+  "params": {
+    "seed": 2.4,
+    "scale": 1.2,
+    "warp": 0.5,
+    "freq": 1.8,
+    "sheen": 0.55,
+    "glint": 0.35,
+    "grain": 0.025,
+    "flip": 0
+  },
+  "createdAt": "2026-09-25T12:46:08.734Z",
+  "updatedAt": "2026-09-25T12:49:01.500Z"
+}

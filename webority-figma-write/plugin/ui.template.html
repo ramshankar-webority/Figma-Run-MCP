@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      /* Zalando Sans (variable, latin) embedded as base64: the plugin iframe has no
+         network access beyond the local bridge, so the font cannot be linked from Google. */
+      @font-face {
+        font-family: "Zalando Sans";
+        font-style: normal;
+        font-display: block;
+        font-weight: 200 900;
+        src: url(data:font/woff2;base64,__FONT_B64__) format("woff2-variations");
+      }
+      /* Webority palette: primary blue, slate text scale, and the success/warning/error sets. */
+      :root {
+        --bg: #f5f6fa; --card: #ffffff; --line: #ebedf3;
+        --ink: #071437; --muted: #78829d; --faint: #99a1b7;
+        --blue: #2f50e4; --blue-soft: #ebeefd; --blue-hover: #4764e4; --blue-pressed: #193ee4;
+        --ok: #04b440; --ok-soft: #e8faee;
+        --bad: #e82646; --bad-soft: #ffeaef;
+        --warn: #dfa000; --warn-soft: #fff8e6;
+        --wait: #78829d; --wait-soft: #ebedf3;
+        --off: #c4cada;
+        --r-lg: 24px; --r-md: 24px; --r-sm: 12px;
+      }
+      * { box-sizing: border-box; }
+      /* Corner smoothing 100% (Figma squircle). corner-shape is ignored by older engines,
+         which then simply render the plain 20px radius. */
+      #status, .card, .stat, #log {
+        corner-shape: squircle;
+      }
+      /* The switch and its knob stay true pills: radius 999px, no corner smoothing. */
+      .switch, .track, .track::after, button { corner-shape: round; }
+      body {
+        font-family: "Zalando Sans", Inter, -apple-system, system-ui, sans-serif;
+        margin: 0; padding: 12px 12px 14px; background: var(--bg); color: var(--ink);
+        font-size: 12px; line-height: 1.4; -webkit-font-smoothing: antialiased;
+      }
+      .grow { flex: 1; min-width: 0; }
+      .trunc { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      svg { flex: none; width: 16px; height: 16px; fill: none; stroke: currentColor;
+            stroke-linecap: round; stroke-linejoin: round; }
+      /* Iconsax Bulk: two-tone fills, no stroke. Used for the card rows. */
+      svg.bulk { fill: currentColor; stroke: none; width: 19px; height: 19px; }
+
+      header { display: flex; align-items: center; gap: 8px; padding: 0 4px; margin-bottom: 12px; }
+      header h1 { font-size: 15px; font-weight: 700; letter-spacing: -.01em; margin: 0; }
+      .ver { font-size: 11px; font-weight: 600; color: var(--faint); font-variant-numeric: tabular-nums; }
+
+      /* Connection banner */
+      #status {
+        display: flex; align-items: center; gap: 9px; padding: 12px 13px;
+        border-radius: var(--r-lg); font-weight: 700; background: var(--wait-soft); color: var(--wait);
+        text-transform: uppercase; letter-spacing: .03em; font-size: 11px;
+      }
+      /* Connected is the one solid state: success-active fill, light text. Every other
+         state keeps a light tint with dark text. */
+      #status.ok { background: var(--ok); color: #ffffff; }
+      #status.bad { background: var(--bad-soft); color: var(--bad); }
+      #status.warn { background: var(--warn-soft); color: var(--warn); }
+      #status.wait svg { animation: spin 2.4s linear infinite; }
+      #status.warn svg, #status.bad svg { animation: none; }
+      @keyframes spin { to { transform: rotate(360deg); } }
+
+      /* Cards */
+      .card { background: var(--card); border-radius: var(--r-lg); padding: 4px 0; margin-top: 10px; }
+      .rowitem { display: flex; align-items: center; gap: 12px; padding: 11px 13px; }
+      .rowitem + .rowitem { border-top: 1px solid var(--line); }
+      .rowitem .ic { color: var(--muted); }
+      #allowRow.on .ic { color: var(--blue); }
+      .title { font-weight: 600; }
+      .desc { color: var(--muted); font-size: 11px; margin-top: 1px; }
+      .chip {
+        flex: none; font-size: 10px; font-weight: 700; padding: 4px 9px; border-radius: 999px;
+        background: var(--wait-soft); color: var(--muted);
+      }
+      .chip.dev { background: var(--warn-soft); color: var(--warn); }
+
+      /* One UI switch */
+      .switch { flex: none; position: relative; width: 44px; height: 26px; }
+      .switch input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; z-index: 2; }
+      .track {
+        position: absolute; inset: 0; border-radius: 999px; background: var(--off);
+        transition: background .2s ease;
+      }
+      .track::after {
+        content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px;
+        border-radius: 999px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.22);
+        transition: transform .2s cubic-bezier(.2,.8,.3,1);
+      }
+      .switch input:checked + .track { background: var(--blue); }
+      .switch input:checked + .track::after { transform: translateX(18px); }
+      .switch input:focus-visible + .track { box-shadow: 0 0 0 3px var(--blue-soft); }
+      #allowRow.on .title { color: var(--blue); }
+
+      /* Counters */
+      .stats { display: flex; gap: 8px; margin-top: 10px; }
+      .stat { flex: 1; background: var(--card); border-radius: var(--r-md); padding: 9px 6px; text-align: center; }
+      .stat b { display: block; font-family: "Zalando Sans", Inter, sans-serif; font-size: 17px; font-weight: 700; font-variant-numeric: proportional-nums; line-height: 1.15; }
+      .stat span { font-size: 9.5px; font-weight: 700; color: var(--faint); text-transform: uppercase; letter-spacing: .06em; }
+      .stat.err b { color: var(--bad); }
+
+      /* Activity */
+      .head svg { width: 17px; height: 17px; }
+      .head { display: flex; align-items: center; gap: 7px; margin: 13px 6px 6px; color: var(--muted); }
+      .head .lbl { font-size: 11px; font-weight: 700; letter-spacing: .01em; }
+      .head .when { margin-left: auto; font-size: 10px; color: var(--faint); font-variant-numeric: tabular-nums; }
+      #log { background: var(--card); border-radius: var(--r-lg); max-height: 250px; overflow-y: auto; padding: 4px 0; }
+      #log::-webkit-scrollbar { width: 6px; }
+      #log::-webkit-scrollbar-thumb { background: var(--off); border-radius: 999px; }
+      #log .empty { padding: 18px 14px; text-align: center; color: var(--faint); font-size: 11px; }
+      .item { padding: 9px 14px; cursor: pointer; }
+      .item + .item { border-top: 1px solid var(--line); }
+      .item:hover { background: var(--bg); }
+      .item .top { display: flex; align-items: center; gap: 10px; }
+      .item .sub { margin: 2px 0 0 17px; color: var(--muted); font-size: 10.5px; }
+      .item .more { display: none; margin: 8px 0 2px 17px; }
+      .item.open .more { display: block; }
+      .item.open { background: var(--bg); }
+      .layer { background: var(--card); border-radius: var(--r-sm); padding: 7px 9px; margin-top: 5px; }
+      .layer .ln { display: flex; gap: 6px; align-items: baseline; }
+      .layer .nm { font-weight: 600; font-size: 11px; }
+      .layer .tp { flex: none; font-size: 9px; font-weight: 700; color: var(--blue); background: var(--blue-soft); border-radius: 999px; padding: 1px 6px; }
+      .layer .sz { flex: none; margin-left: auto; font-size: 10px; color: var(--faint); font-variant-numeric: tabular-nums; }
+      .layer .wh { color: var(--muted); font-size: 10px; margin-top: 2px; }
+      .tags { display: flex; flex-wrap: wrap; gap: 5px; }
+      .tag { font-size: 10px; font-weight: 700; border-radius: 999px; padding: 2px 8px; background: var(--wait-soft); color: var(--muted); }
+      .tag.c { background: var(--ok-soft); color: var(--ok); }
+      .tag.e { background: var(--blue-soft); color: var(--blue); }
+      .tag.d { background: var(--bad-soft); color: var(--bad); }
+      .note { color: var(--muted); font-size: 10px; margin-top: 6px; word-break: break-word; }
+      .item.err .note { color: var(--bad); }
+      .dot { flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--ok); }
+      .item.err .dot { background: var(--bad); }
+      .item.run .dot { background: var(--blue); animation: blink 1s ease-in-out infinite; }
+      @keyframes blink { 0%, 100% { opacity: .3; } 50% { opacity: 1; } }
+      .cmd { font-weight: 600; font-size: 11px; }
+      .item.err .cmd { color: var(--bad); }
+      .meta { flex: none; color: var(--faint); font-size: 10px; font-variant-numeric: tabular-nums; }
+
+      .hint { display: flex; gap: 8px; color: var(--faint); font-size: 10px; line-height: 1.35; margin: 10px 6px 0; }
+      .hint svg { width: 14px; height: 14px; margin-top: 1px; }
+      button {
+        margin-top: 10px; width: 100%; font: inherit; font-weight: 600; padding: 11px 12px;
+        border: 0; border-radius: 999px; background: var(--blue); color: #fff; cursor: pointer;
+      }
+      button:hover { background: var(--blue-hover); }
+      button:active { background: var(--blue-pressed); }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1 class="grow">Figma MCP</h1>
+      <span class="ver">v__VERSION__</span>
+    </header>
+
+    <div id="status" class="wait">
+      <svg viewBox="0 0 24 24" id="statusIcon"><path d="M14.55 21.67C18.84 20.54 22 16.64 22 12c0-5.52-4.44-10-10-10C5.33 2 2 7.56 2 7.56m0 0V3m0 4.56H6.44" stroke-width="1.5"/><path d="M2 12c0 5.52 4.48 10 10 10" stroke-width="1.5"/></svg>
+      <span class="grow" id="statusText">Waiting for Claude…</span>
+    </div>
+
+    <div class="card">
+      <div class="rowitem">
+        <svg class="ic bulk" viewBox="0 0 24 24"><path d="M20.5 10.19h-2.89c-2.37 0-4.3-1.93-4.3-4.3V3c0-.55-.45-1-1-1H8.07C4.99 2 2.5 4 2.5 7.57v8.86C2.5 20 4.99 22 8.07 22h7.86c3.08 0 5.57-2 5.57-5.57v-5.24c0-.55-.45-1-1-1Z" opacity=".4"/><path d="M15.8 2.21c-.41-.41-1.12-.13-1.12.44v3.49c0 1.46 1.24 2.67 2.75 2.67.95.01 2.27.01 3.4.01.57 0 .87-.67.47-1.07-1.44-1.45-4.02-4.06-5.5-5.54ZM13.5 13.75h-6c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h6c.41 0 .75.34.75.75s-.34.75-.75.75ZM11.5 17.75h-4c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h4c.41 0 .75.34.75.75s-.34.75-.75.75Z"/></svg>
+        <span class="grow">
+          <div class="title trunc" id="file">Reading File…</div>
+          <div class="desc trunc" id="page"></div>
+        </span>
+        <span class="chip" id="mode">Design</span>
+      </div>
+
+      <div class="rowitem" id="allowRow">
+        <svg class="ic bulk" viewBox="0 0 24 24" id="allowIcon"><path d="M18.75 8v2.1c-.44-.06-.94-.09-1.5-.1V8c0-3.15-.89-5.25-5.25-5.25S6.75 4.85 6.75 8v2c-.56.01-1.06.04-1.5.1V8c0-2.9.7-6.75 6.75-6.75S18.75 5.1 18.75 8Z"/><path d="M22 15v2c0 4-1 5-5 5H7c-4 0-5-1-5-5v-2c0-3.34.7-4.59 3.25-4.9.44-.06.94-.09 1.5-.1h10.5c.56.01 1.06.04 1.5.1C21.3 10.41 22 11.66 22 15Z" opacity=".4"/><path d="M8 16.999c-.13 0-.26-.03-.38-.08-.13-.05-.23-.12-.33-.21-.18-.19-.29-.45-.29-.71 0-.13.03-.26.08-.38s.12-.23.21-.33c.1-.09.2-.16.33-.21.37-.16.81-.07 1.09.21.09.1.16.21.21.33.05.12.08.25.08.38 0 .26-.11.52-.29.71-.19.18-.45.29-.71.29ZM12 17c-.27 0-.52-.11-.71-.29-.09-.1-.16-.21-.21-.33A.995.995 0 0 1 11 16c0-.27.11-.52.29-.71.37-.37 1.04-.37 1.42 0 .18.19.29.44.29.71 0 .13-.03.26-.08.38s-.12.23-.21.33c-.19.18-.45.29-.71.29ZM16 17c-.26 0-.52-.11-.71-.29-.18-.19-.29-.44-.29-.71 0-.27.11-.52.29-.71.38-.37 1.05-.37 1.42 0 .04.05.08.1.12.16.04.05.07.11.09.17.03.06.05.12.06.18.01.07.02.14.02.2 0 .26-.11.52-.29.71-.19.18-.45.29-.71.29Z"/></svg>
+        <span class="grow">
+          <div class="title" id="allowText">Allow Edits</div>
+          <div class="desc" id="allowWhy">Claude can read this file, but not change it.</div>
+        </span>
+        <span class="switch">
+          <input type="checkbox" id="allow" aria-label="Allow edits" />
+          <span class="track"></span>
+        </span>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><b id="nCalls">0</b><span>Calls</span></div>
+      <div class="stat"><b id="nWrites">0</b><span>Edits</span></div>
+      <div class="stat err"><b id="nErrors">0</b><span>Errors</span></div>
+    </div>
+
+    <div class="head">
+      <svg class="bulk" viewBox="0 0 24 24"><path d="M16.19 2H7.81C4.17 2 2 4.17 2 7.81v8.37C2 19.83 4.17 22 7.81 22h8.37c3.64 0 5.81-2.17 5.81-5.81V7.81C22 4.17 19.83 2 16.19 2Z" opacity=".4"/><path d="M7.33 15.238c-.16 0-.32-.05-.46-.16a.749.749 0 0 1-.14-1.05l2.38-3.09c.29-.37.7-.61 1.17-.67.46-.06.93.07 1.3.36l1.83 1.44c.07.06.14.06.19.05.04 0 .11-.02.17-.1l2.31-2.98a.74.74 0 0 1 1.05-.13c.33.25.39.72.13 1.05l-2.31 2.98c-.29.37-.7.61-1.17.66-.47.06-.93-.07-1.3-.36l-1.83-1.44a.22.22 0 0 0-.19-.05c-.04 0-.11.02-.17.1l-2.38 3.09c-.13.2-.35.3-.58.3Z"/></svg>
+      <span class="lbl">Recent Activity</span>
+      <span class="when" id="lastSeen"></span>
+    </div>
+    <div id="log"><div class="empty">Nothing yet. Claude's calls appear here.</div></div>
+
+    <button id="reconnect" hidden>Reconnect</button>
+
+    <div class="hint">
+      <svg viewBox="0 0 24 24"><path d="M20.75 13.25c0 4.83-3.92 8.75-8.75 8.75s-8.75-3.92-8.75-8.75S7.17 4.5 12 4.5s8.75 3.92 8.75 8.75ZM12 8v5" stroke-width="1.5"/><path d="M9 2h6" stroke-width="1.5"/></svg>
+      <span>Every call is one undo step (Ctrl+Z). Turn off "Allow edits" to lock the file.</span>
+    </div>
+
+    <script>
+      // Stamped by the server at startup. Keep this file private: the token is what
+      // stops other programs on this PC from driving your Figma file.
+      var PORT = "__BRIDGE_PORT__";
+      var TOKEN = "__BRIDGE_TOKEN__";
+      var VERSION = "__VERSION__";
+      var WRITE_COMMANDS = { execute: 1, render_frame: 1, set_text: 1, create_from_spec: 1, apply_effect: 1, apply_shader: 1, code_map_set: 1, code_map_remove: 1 };
+
+      // Iconsax (linear) paths, inlined: the iframe cannot fetch an icon font or sprite.
+      var ICONS = {
+        refresh: '<path d="M14.55 21.67C18.84 20.54 22 16.64 22 12c0-5.52-4.44-10-10-10C5.33 2 2 7.56 2 7.56m0 0V3m0 4.56H6.44" stroke-width="1.5"/><path d="M2 12c0 5.52 4.48 10 10 10" stroke-width="1.5"/>',
+        link: '<path d="M13.06 10.94a5.74 5.74 0 0 1 0 8.13c-2.25 2.24-5.89 2.25-8.13 0-2.24-2.25-2.25-5.89 0-8.13" stroke-width="1.5"/><path d="M10.59 13.41c-2.34-2.34-2.34-6.14 0-8.49 2.34-2.35 6.14-2.34 8.49 0 2.35 2.34 2.34 6.14 0 8.49" stroke-width="1.5"/>',
+        warn: '<path d="M12 7.75V13M21.08 8.58v6.84c0 1.12-.6 2.16-1.57 2.73l-5.94 3.43c-.97.56-2.17.56-3.15 0l-5.94-3.43a3.15 3.15 0 0 1-1.57-2.73V8.58c0-1.12.6-2.16 1.57-2.73l5.94-3.43c.97-.56 2.17-.56 3.15 0l5.94 3.43c.97.57 1.57 1.6 1.57 2.73Z" stroke-width="1.5"/><path d="M12 16.2v.1" stroke-width="2"/>',
+        lock: '<path d="M18.75 8v2.1c-.44-.06-.94-.09-1.5-.1V8c0-3.15-.89-5.25-5.25-5.25S6.75 4.85 6.75 8v2c-.56.01-1.06.04-1.5.1V8c0-2.9.7-6.75 6.75-6.75S18.75 5.1 18.75 8Z"/><path d="M22 15v2c0 4-1 5-5 5H7c-4 0-5-1-5-5v-2c0-3.34.7-4.59 3.25-4.9.44-.06.94-.09 1.5-.1h10.5c.56.01 1.06.04 1.5.1C21.3 10.41 22 11.66 22 15Z" opacity=".4"/><path d="M8 16.999c-.13 0-.26-.03-.38-.08-.13-.05-.23-.12-.33-.21-.18-.19-.29-.45-.29-.71 0-.13.03-.26.08-.38s.12-.23.21-.33c.1-.09.2-.16.33-.21.37-.16.81-.07 1.09.21.09.1.16.21.21.33.05.12.08.25.08.38 0 .26-.11.52-.29.71-.19.18-.45.29-.71.29ZM12 17c-.27 0-.52-.11-.71-.29-.09-.1-.16-.21-.21-.33A.995.995 0 0 1 11 16c0-.27.11-.52.29-.71.37-.37 1.04-.37 1.42 0 .18.19.29.44.29.71 0 .13-.03.26-.08.38s-.12.23-.21.33c-.19.18-.45.29-.71.29ZM16 17c-.26 0-.52-.11-.71-.29-.18-.19-.29-.44-.29-.71 0-.27.11-.52.29-.71.38-.37 1.05-.37 1.42 0 .04.05.08.1.12.16.04.05.07.11.09.17.03.06.05.12.06.18.01.07.02.14.02.2 0 .26-.11.52-.29.71-.19.18-.45.29-.71.29Z"/>',
+        edit: '<path d="M21 22H3c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h18c.41 0 .75.34.75.75s-.34.75-.75.75ZM19.02 3.482c-1.94-1.94-3.84-1.99-5.83 0l-1.21 1.21c-.1.1-.14.26-.1.4a8.129 8.129 0 0 0 5.53 5.53.4.4 0 0 0 .41-.1l1.2-1.21c.99-.98 1.47-1.93 1.47-2.89.01-.99-.47-1.95-1.47-2.94Z" opacity=".4"/><path d="M15.61 11.53c-.29-.14-.57-.28-.84-.44a8.8 8.8 0 0 1-.64-.42c-.17-.11-.37-.27-.56-.43a1.22 1.22 0 0 1-.17-.15c-.33-.28-.7-.64-1.03-1.04-.03-.02-.08-.09-.15-.18-.1-.12-.27-.32-.42-.55a5.49 5.49 0 0 1-.39-.59c-.16-.27-.3-.54-.44-.82-.14-.3-.25-.59-.35-.86l-6.28 6.28c-.13.13-.25.38-.28.55l-.54 3.83c-.1.68.09 1.32.51 1.75.36.35.86.54 1.4.54.12 0 .24-.01.36-.03l3.84-.54c.18-.03.43-.15.55-.28l6.28-6.28c-.28-.1-.55-.21-.85-.34Z"/>',
+      };
+      function icon(el, name) { el.innerHTML = ICONS[name]; }
+
+      // HMAC-SHA256 in plain JS: the plugin iframe may not be a secure context, so crypto.subtle is not
+      // guaranteed. Used only for the bridge handshake (a few hashes per connection).
+      function sha256(bytes) {
+        var K = [0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+        var H = [0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
+        var len = bytes.length, total = ((len + 9 + 63) >> 6) << 6, m = new Uint8Array(total);
+        m.set(bytes); m[len] = 0x80;
+        var bits = len * 8;
+        m[total - 4] = (bits >>> 24) & 255; m[total - 3] = (bits >>> 16) & 255; m[total - 2] = (bits >>> 8) & 255; m[total - 1] = bits & 255;
+        m[total - 5] = Math.floor(bits / 4294967296) & 255;
+        var w = new Array(64), rotr = function (x, n) { return (x >>> n) | (x << (32 - n)); };
+        for (var off = 0; off < total; off += 64) {
+          for (var i = 0; i < 16; i++) w[i] = (m[off + 4 * i] << 24) | (m[off + 4 * i + 1] << 16) | (m[off + 4 * i + 2] << 8) | m[off + 4 * i + 3];
+          for (i = 16; i < 64; i++) {
+            var s0 = rotr(w[i - 15], 7) ^ rotr(w[i - 15], 18) ^ (w[i - 15] >>> 3), s1 = rotr(w[i - 2], 17) ^ rotr(w[i - 2], 19) ^ (w[i - 2] >>> 10);
+            w[i] = (w[i - 16] + s0 + w[i - 7] + s1) | 0;
+          }
+          var a = H[0], b = H[1], c = H[2], d = H[3], e = H[4], f = H[5], g = H[6], h = H[7];
+          for (i = 0; i < 64; i++) {
+            var t1 = (h + (rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + w[i]) | 0;
+            var t2 = ((rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;
+            h = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;
+          }
+          H[0] = (H[0] + a) | 0; H[1] = (H[1] + b) | 0; H[2] = (H[2] + c) | 0; H[3] = (H[3] + d) | 0;
+          H[4] = (H[4] + e) | 0; H[5] = (H[5] + f) | 0; H[6] = (H[6] + g) | 0; H[7] = (H[7] + h) | 0;
+        }
+        var out = new Uint8Array(32);
+        for (i = 0; i < 8; i++) { out[4 * i] = H[i] >>> 24; out[4 * i + 1] = (H[i] >>> 16) & 255; out[4 * i + 2] = (H[i] >>> 8) & 255; out[4 * i + 3] = H[i] & 255; }
+        return out;
+      }
+      function utf8(s) { return new TextEncoder().encode(s); }
+      function toHex(b) { var s = ""; for (var i = 0; i < b.length; i++) s += (b[i] < 16 ? "0" : "") + b[i].toString(16); return s; }
+      function hmacHex(key, msg) {
+        var k = utf8(key); if (k.length > 64) k = sha256(k);
+        var ipad = new Uint8Array(64), opad = new Uint8Array(64);
+        for (var i = 0; i < 64; i++) { ipad[i] = (k[i] || 0) ^ 0x36; opad[i] = (k[i] || 0) ^ 0x5c; }
+        var m = utf8(msg), inner = new Uint8Array(64 + m.length); inner.set(ipad); inner.set(m, 64);
+        var ih = sha256(inner), outer = new Uint8Array(96); outer.set(opad); outer.set(ih, 64);
+        return toHex(sha256(outer));
+      }
+      function sameHex(a, b) { if (typeof a !== "string" || a.length !== b.length) return false; var d = 0; for (var i = 0; i < a.length; i++) d |= a.charCodeAt(i) ^ b.charCodeAt(i); return d === 0; }
+      function randomHex(n) { var b = new Uint8Array(n); crypto.getRandomValues(b); return toHex(b); }
+
+      var ws = null, retryTimer = null, everConnected = false, authed = false, myNonce = null;
+      var pending = {}, logRows = [], counts = { calls: 0, writes: 0, errors: 0 };
+
+      var statusEl = document.getElementById("status");
+      var statusText = document.getElementById("statusText");
+      var fileEl = document.getElementById("file");
+      var pageEl = document.getElementById("page");
+      var modeEl = document.getElementById("mode");
+      var allow = document.getElementById("allow");
+      var allowRow = document.getElementById("allowRow");
+      var allowText = document.getElementById("allowText");
+      var allowWhy = document.getElementById("allowWhy");
+      var logEl = document.getElementById("log");
+      var lastSeenEl = document.getElementById("lastSeen");
+      var reconnectBtn = document.getElementById("reconnect");
+
+      var statusIcon = document.getElementById("statusIcon");
+      function setStatus(text, cls) {
+        statusText.textContent = text;
+        statusEl.className = cls || "";
+        icon(statusIcon, cls === "ok" ? "link" : (cls === "bad" || cls === "warn") ? "warn" : "refresh");
+      }
+      function send(obj) { if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(obj)); }
+      function clock(d) { return d.toTimeString().slice(0, 8); }
+      function dur(ms) { return ms < 1000 ? ms + "ms" : (ms / 1000).toFixed(1) + "s"; }
+
+      function paintCounts() {
+        document.getElementById("nCalls").textContent = counts.calls;
+        document.getElementById("nWrites").textContent = counts.writes;
+        document.getElementById("nErrors").textContent = counts.errors;
+      }
+
+      function el(tag, cls, text) {
+        var e = document.createElement(tag);
+        if (cls) e.className = cls;
+        if (text != null) e.textContent = text;
+        return e;
+      }
+
+      // One line under the name: where the work happened.
+      function whereLine(r) {
+        var a = r.act;
+        if (!a) return r.state === "run" ? "Working…" : "";
+        var l = a.layers && a.layers[0];
+        if (l) {
+          var extra = a.layers.length > 1 ? " +" + (a.layers.length - 1) + " more" : "";
+          return (l.where ? l.where + " › " : "") + l.name + extra;
+        }
+        return "Page: " + a.page;
+      }
+
+      function paintLog() {
+        if (!logRows.length) { logEl.innerHTML = '<div class="empty">Nothing yet. Claude’s calls appear here.</div>'; return; }
+        logEl.innerHTML = "";
+        logRows.forEach(function (r) {
+          var row = el("div", "item " + r.state + (r.open ? " open" : ""));
+          var top = el("div", "top");
+          top.appendChild(el("span", "dot"));
+          top.appendChild(el("span", "cmd grow trunc", r.act ? r.act.label : r.command));
+          top.appendChild(el("span", "meta", (r.state === "run" ? "running" : (r.state === "err" ? "failed" : dur(r.ms))) + " · " + r.at));
+          row.appendChild(top);
+          var where = whereLine(r);
+          if (where) { var sub = el("div", "sub trunc", where); sub.title = where; row.appendChild(sub); }
+
+          var more = el("div", "more");
+          var a = r.act;
+          if (a) {
+            var tags = el("div", "tags");
+            tags.appendChild(el("span", "tag", a.command));
+            tags.appendChild(el("span", "tag", "Page: " + a.page));
+            if (a.changes) {
+              if (a.changes.created) tags.appendChild(el("span", "tag c", a.changes.created + " created"));
+              if (a.changes.edited) tags.appendChild(el("span", "tag e", a.changes.edited + " edited"));
+              if (a.changes.deleted) tags.appendChild(el("span", "tag d", a.changes.deleted + " deleted"));
+            }
+            more.appendChild(tags);
+            (a.layers || []).forEach(function (l) {
+              var box = el("div", "layer");
+              var ln = el("div", "ln");
+              ln.appendChild(el("span", "nm grow trunc", l.name));
+              ln.appendChild(el("span", "tp", l.type));
+              if (l.size) ln.appendChild(el("span", "sz", l.size));
+              box.appendChild(ln);
+              box.appendChild(el("div", "wh trunc", (l.where || a.page) + " · id " + l.id));
+              more.appendChild(box);
+            });
+          }
+          var note = (a && a.note) || r.error;
+          if (note) more.appendChild(el("div", "note", note));
+          if (more.childNodes.length) row.appendChild(more);
+          row.onclick = function () { r.open = !r.open; paintLog(); };
+          logEl.appendChild(row);
+        });
+      }
+
+      function startCall(id, command) {
+        counts.calls++;
+        if (WRITE_COMMANDS[command]) counts.writes++;
+        var row = { id: id, command: command, state: "run", at: clock(new Date()), t0: Date.now(), ms: 0 };
+        pending[id] = row;
+        logRows.unshift(row);
+        logRows = logRows.slice(0, 20);
+        lastSeenEl.textContent = "last " + row.at;
+        paintCounts(); paintLog();
+      }
+
+      function endCall(msg) {
+        var row = pending[msg.id];
+        if (!row) return;
+        delete pending[msg.id];
+        row.ms = Date.now() - row.t0;
+        row.state = msg.error ? "err" : "ok";
+        if (msg.error) { counts.errors++; row.error = String(msg.error); }
+        paintCounts(); paintLog();
+      }
+
+      function connect() {
+        clearTimeout(retryTimer);
+        reconnectBtn.hidden = true;
+        ws = new WebSocket("ws://localhost:" + PORT);
+        authed = false;
+        ws.onopen = function () {
+          // Never send the token itself: whoever holds the port must prove it knows it first.
+          myNonce = randomHex(32);
+          send({ hello: true, nonce: myNonce, version: VERSION });
+        };
+        ws.onclose = function (ev) {
+          if (ev.code === 4000) { setStatus("Another Figma window took over", "warn"); reconnectBtn.hidden = false; return; }
+          if (ev.code === 4401) { setStatus("Rejected: token mismatch · reopen the plugin", "bad"); reconnectBtn.hidden = false; return; }
+          setStatus(everConnected ? "Claude session ended · waiting" : "Waiting for Claude…", "wait");
+          retryTimer = setTimeout(connect, 2000);
+        };
+        ws.onerror = function () { setStatus("Waiting for Claude…", "wait"); };
+        ws.onmessage = function (ev) {
+          var m;
+          try { m = JSON.parse(ev.data); } catch (e) { return; }
+          if (!m || typeof m !== "object") return;
+          if (!authed) {
+            if (m.type !== "auth-challenge" || typeof m.nonce !== "string" || !sameHex(m.proof, hmacHex(TOKEN, "server|" + myNonce))) {
+              // Something other than your Claude session is on this port. Tell it nothing, run nothing.
+              setStatus("Rejected: port " + PORT + " is not your Claude session", "bad");
+              var bad = ws; ws = null; bad.onclose = null; bad.close();
+              retryTimer = setTimeout(connect, 5000);
+              return;
+            }
+            send({ auth: hmacHex(TOKEN, "plugin|" + m.nonce) });
+            authed = true;
+            everConnected = true;
+            setStatus("Connected to Claude · port " + PORT, "ok");
+            parent.postMessage({ pluginMessage: { type: "request-state" } }, "*");
+            return;
+          }
+          // Only commands go to the plugin. Anything else (an "allow-edits" message, say) is dropped,
+          // so the bridge can never tick Allow edits; only the checkbox can.
+          if (typeof m.id !== "string" || typeof m.command !== "string" || m.type !== undefined) return;
+          startCall(m.id, m.command);
+          parent.postMessage({ pluginMessage: { id: m.id, command: m.command, params: m.params || {} } }, "*");
+        };
+      }
+
+      window.onmessage = function (event) {
+        var m = event.data && event.data.pluginMessage;
+        if (!m) return;
+        if (m.type === "activity") {
+          var r = pending[m.id] || logRows.filter(function (x) { return x.id === m.id; })[0];
+          if (r) { r.act = m; paintLog(); }
+          return; // panel only, never sent to the server
+        }
+        if (m.type === "state" && m.state) {
+          var dev = m.state.editorType === "dev";
+          fileEl.textContent = m.state.fileName || "(unnamed file)";
+          fileEl.title = m.state.fileName || "";
+          pageEl.textContent = !m.state.currentPage ? "" : (/^page\b/i.test(m.state.currentPage) ? m.state.currentPage : "Page: " + m.state.currentPage);
+          modeEl.textContent = dev ? "Dev Mode" : "Design";
+          modeEl.className = dev ? "chip dev" : "chip";
+          if (dev) { allowWhy.textContent = "Dev Mode is read-only. Press Shift+D, then reopen the plugin."; allowWhy.style.color = "var(--warn)"; }
+          else { allowWhy.style.color = ""; }
+          // Keep the checkbox showing the plugin's real Allow edits state.
+          if (typeof m.state.editsAllowed === "boolean" && allow.checked !== m.state.editsAllowed) { allow.checked = m.state.editsAllowed; paintAllow(); }
+          send(m); // the server reads this for figma_write_status
+          return;
+        }
+        if (m && m.id) endCall(m);
+        send(m);
+      };
+
+      function paintAllow() {
+        allowRow.className = "rowitem" + (allow.checked ? " on" : "");
+        icon(document.getElementById("allowIcon"), allow.checked ? "edit" : "lock");
+        allowText.textContent = allow.checked ? "Allow Edits · On" : "Allow Edits";
+        if (modeEl.textContent !== "Dev Mode") {
+          allowWhy.textContent = allow.checked
+            ? "Claude can create, change and delete layers here."
+            : "Claude can read this file, but not change it.";
+        }
+      }
+      allow.onchange = function () {
+        paintAllow();
+        parent.postMessage({ pluginMessage: { type: "allow-edits", value: allow.checked } }, "*");
+      };
+
+      reconnectBtn.onclick = connect;
+      paintCounts();
+      connect();
+    </script>
+  </body>
+</html>
