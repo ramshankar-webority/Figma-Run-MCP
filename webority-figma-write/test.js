@@ -11,12 +11,13 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import crypto from "node:crypto";
-import { FigmaWriteBridge, CLOSE_BAD_TOKEN, CLOSE_REPLACED, hmac } from "./bridge.js";
+import { FigmaWriteBridge, CLOSE_BAD_TOKEN, CLOSE_REPLACED, CLOSE_BUSY, hmac } from "./bridge.js";
 import { encodePng, pngSize } from "./lib/png.js";
 import { BUILT_IN_SHADERS, renderPixelShader } from "./lib/shaders.js";
 import { scanComponents, suggestMappings, addLayaPicks } from "./lib/code-scan.js";
 import { reviewTree, contrast } from "./lib/design-review.js";
 import { COLOR_TOKENS, resolveColor, resolveSpecColors, isTokenColor } from "./lib/color-tokens.js";
+import { openCreativeBrowser, listInbox, readInboxFile, saveInboxFile, handlePanelRequest, sniff } from "./lib/creative.js";
 import http from "node:http";
 
 // Paths resolve from this file, so npm test works from any folder.
@@ -45,7 +46,7 @@ const freePort = () =>
 
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
-function openSocket(port, { origin = "null", host, token } = {}) {
+function openSocket(port, { origin = "null", host, token, claim } = {}) {
   return new Promise((resolve) => {
     const headers = {};
     if (host) headers.Host = host;
@@ -59,7 +60,7 @@ function openSocket(port, { origin = "null", host, token } = {}) {
       ws.once("message", (data) => {
         const m = JSON.parse(String(data));
         outcome.bridgeProved = m.type === "auth-challenge" && m.proof === hmac(token, "server|" + nonce);
-        ws.send(JSON.stringify({ auth: hmac(token, "plugin|" + m.nonce) }));
+        ws.send(JSON.stringify({ auth: hmac(token, "plugin|" + m.nonce), ...(claim ? { claim } : {}) }));
         resolve(outcome);
       });
       ws.send(JSON.stringify({ hello: true, nonce }));
@@ -152,6 +153,27 @@ await test("a second plugin window replaces the first (4000) and gets the traffi
   assert.equal(bridge.status().connected, false);
 });
 
+await test("panel requests reach the server hook and get answers; a failing one keeps the socket", async () => {
+  bridge.onPanelRequest = (action, params) => {
+    if (action === "ping") return { pong: params.x };
+    throw new Error("Unknown panel request '" + action + "'.");
+  };
+  const p = await openSocket(port, { token: TOKEN });
+  await wait(100);
+  const replies = [];
+  p.ws.on("message", (d) => { const m = JSON.parse(String(d)); if (m.type === "panel-reply") replies.push(m); });
+  p.ws.send(JSON.stringify({ type: "panel", id: "p1", action: "ping", params: { x: 7 } }));
+  p.ws.send(JSON.stringify({ type: "panel", id: "p2", action: "rm -rf", params: {} }));
+  await wait(200);
+  assert.deepEqual(replies.find((r) => r.id === "p1").result, { pong: 7 });
+  assert.match(replies.find((r) => r.id === "p2").error, /Unknown panel request/);
+  assert.equal(p.closeCode, null, "a bad request must not drop the socket");
+  assert.equal(bridge.status().connected, true);
+  p.ws.close();
+  await wait(100);
+  delete bridge.onPanelRequest;
+});
+
 await test("plain HTTP gets no API (404)", async () => {
   const res = await fetch(`http://127.0.0.1:${port}/rpc`, { method: "POST", body: "{}" });
   assert.equal(res.status, 404);
@@ -161,6 +183,33 @@ await test("second bridge on a busy port reports it clearly", async () => {
   const rival = new FigmaWriteBridge({ port, token: TOKEN });
   assert.equal(await rival.start(), false);
   assert.match(rival.bindError, /already in use/);
+});
+
+await test("several sessions: a bridge takes the next free port when the first is busy", async () => {
+  const next = await freePort();
+  const rival = new FigmaWriteBridge({ ports: [port, next], token: TOKEN, label: "Session 2" });
+  assert.equal(await rival.start(), true);
+  assert.equal(rival.port, next);
+  assert.equal(rival.status().port, next);
+  assert.equal(rival.status().session, "Session 2");
+  await rival.stop();
+});
+
+await test("a panel asking for a free session is turned away (4409); the file keeps its session", async () => {
+  const a = await openSocket(port, { token: TOKEN, claim: "free" });
+  const welcome = await new Promise((resolve) => a.ws.once("message", (d) => resolve(JSON.parse(String(d)))));
+  assert.equal(welcome.type, "welcome");
+  assert.equal(welcome.port, port);
+  fakePlugin(a.ws, "File A");
+  await wait(100);
+  const b = await openSocket(port, { token: TOKEN, claim: "free" });
+  await wait(200);
+  assert.equal(b.closeCode, CLOSE_BUSY);
+  assert.equal(a.closeCode, null, "the paired file must not be dropped");
+  assert.equal((await bridge.request("status", {}, 2000)).fileName, "File A");
+  a.ws.close();
+  await wait(100);
+  assert.equal(bridge.status().connected, false);
 });
 
 await bridge.stop();
@@ -326,6 +375,9 @@ const EXPECTED_TOOLS = [
   "figma_create_from_spec",
   "figma_create_generative_plugin",
   "figma_create_shader",
+  "figma_creative_inbox",
+  "figma_creative_place",
+  "figma_draw_style",
   "figma_execute",
   "figma_export",
   "figma_export_many",
@@ -358,6 +410,8 @@ const EXPECTED_TOOLS = [
   "figma_save_image",
   "figma_save_snapshot",
   "figma_send_code_connect_mappings",
+  "figma_set_motion",
+  "figma_set_prototype",
   "figma_set_repo_code_map",
   "figma_set_text",
   "figma_snapshot_code_map",
@@ -382,8 +436,10 @@ await test(`MCP server starts over stdio, binds lazily, lists ${EXPECTED_TOOLS.l
     assert.deepEqual(list.result.tools.map((t) => t.name).sort(), EXPECTED_TOOLS);
     assert.match(init.result.instructions || "", /Laya decision rules/, "server instructions must teach the Laya policy");
     assert.match(init.result.instructions || "", /Default colour tokens/, "server instructions must teach the colour tokens");
+    assert.match(init.result.instructions || "", /Creative tab/, "server instructions must teach the Creative tab");
     const tokens = toolJson(await s.tool("figma_color_tokens", {}));
-    assert.equal(tokens.count, 39);
+    assert.equal(tokens.count, 46);
+    assert.equal(tokens.groups.primary["primary-100"], "#2F50E4");
     assert.equal(tokens.groups.info["info-100"], "#1B84FF");
     const prompts = await s.rpc("prompts/list", {});
     assert.deepEqual(prompts.result.prompts.map((p) => p.name).sort(), ["design_panel", "persona_accessibility", "persona_critic", "persona_interaction", "persona_researcher", "persona_strategist", "persona_systems", "persona_visual", "persona_writer"]);
@@ -402,7 +458,9 @@ await test("shaders, generative plugins, code connect and video work end to end 
   const mcpPort = await freePort();
   const libDir = fs.mkdtempSync(path.join(os.tmpdir(), "wfw-lib-"));
   const outDir = fs.mkdtempSync(path.join(os.tmpdir(), "wfw-out-"));
-  const s = startServer({ FIGMA_WRITE_PORT: String(mcpPort), FIGMA_WRITE_LIBRARY_DIR: libDir });
+  const creativeDir = fs.mkdtempSync(path.join(os.tmpdir(), "wfw-creative-"));
+  fs.writeFileSync(path.join(creativeDir, "gemini-hero.png"), encodePng(4, 4, new Uint8Array((4 * 4 + 1) * 4)));
+  const s = startServer({ FIGMA_WRITE_PORT: String(mcpPort), FIGMA_WRITE_LIBRARY_DIR: libDir, FIGMA_CREATIVE_DIR: creativeDir });
   const seen = [];
   try {
     await s.rpc("initialize", { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "test", version: "0" } });
@@ -464,6 +522,18 @@ await test("shaders, generative plugins, code connect and video work end to end 
           return reply({ echo: msg.command, params: msg.params });
       }
     });
+
+    // Creative inbox: Claude lists what the person made and places it at a social size.
+    const inbox = toolJson(await s.tool("figma_creative_inbox", {}));
+    assert.deepEqual(inbox.files.map((f) => f.name), ["gemini-hero.png"]);
+    const placedCreative = toolJson(await s.tool("figma_creative_place", { name: "gemini-hero.png", size: "ig-portrait" }));
+    assert.equal(placedCreative.echo, "place_media");
+    assert.equal(placedCreative.params.kind, "image");
+    assert.deepEqual(placedCreative.params.size, { label: "Instagram portrait 4:5", width: 1080, height: 1350 });
+    assert.ok(placedCreative.params.base64.length > 20);
+    const escape = await s.tool("figma_creative_place", { name: "../secret.png" });
+    assert.equal(escape.isError, true);
+    assert.match(escape.content[0].text, /Bad file name/);
 
     // Colour token names resolve to hex before the spec reaches the plugin.
     const spec = toolJson(await s.tool("figma_create_from_spec", { spec: { type: "FRAME", fill: "info-100", stroke: "#123456", children: [{ type: "TEXT", text: { characters: "Hi", color: "heading" } }] } }));
@@ -592,6 +662,87 @@ await test("figma_generate_image generates through the provider and places the i
 
 
 // ---- A developer on a free, view-only seat: no plugin, no token, no Figma ----
+
+await test("Draw, Prototype and Motion tools validate input and forward one plugin command each (fake plugin)", async () => {
+  const mcpPort = await freePort();
+  const s = startServer({ FIGMA_WRITE_PORT: String(mcpPort) });
+  const seen = [];
+  try {
+    await s.rpc("initialize", { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "test", version: "0" } });
+    s.send({ jsonrpc: "2.0", method: "notifications/initialized" });
+    await s.tool("figma_write_status"); // the first tool call binds the port (lazy bind)
+    const token = fs.readFileSync(TEST_TOKEN_FILE, "utf8").trim();
+    const sock = await openSocket(mcpPort, { token });
+    sock.ws.on("message", (data) => {
+      const msg = JSON.parse(String(data));
+      if (!msg.command) return;
+      seen.push(msg);
+      sock.ws.send(JSON.stringify({ id: msg.id, result: { ok: true, command: msg.command } }));
+    });
+    sock.ws.send(JSON.stringify({ type: "state", state: { fileName: "Fake", editsAllowed: true } }));
+    await wait(150);
+    const last = () => seen[seen.length - 1];
+
+    // figma_draw_style
+    const brush = await s.tool("figma_draw_style", { nodeIds: ["1-2"], stroke: { brush: { type: "STRETCH", name: "NOIR", direction: "BACKWARD" }, width: { profile: "TAPER" } }, effects: [{ type: "noise", noiseType: "DUOTONE", secondaryColor: "#ffffff40" }, { type: "glass" }] });
+    assert.equal(brush.isError, undefined, JSON.stringify(brush));
+    assert.equal(last().command, "draw_style");
+    assert.deepEqual(last().params.nodeIds, ["1:2"], "ids are normalised");
+    assert.equal(last().params.effects[0].density, 0.5, "effect defaults fill in");
+    assert.equal(last().params.effects[1].refraction, 0.8);
+    const badBrush = await s.tool("figma_draw_style", { nodeIds: ["1:2"], stroke: { brush: { type: "SCATTER", name: "NOIR" } } });
+    assert.equal(badBrush.isError, true);
+    assert.match(badBrush.content[0].text, /Unknown SCATTER brush 'NOIR'/);
+    const badShader = await s.tool("figma_draw_style", { nodeIds: ["1:2"], effects: [{ type: "shader" }] });
+    assert.match(badShader.content[0].text, /needs id or copyFromNodeId/);
+    const badColour = await s.tool("figma_draw_style", { nodeIds: ["1:2"], stroke: { color: "blue" } });
+    assert.equal(badColour.isError, true);
+
+    // figma_set_prototype
+    const link = await s.tool("figma_set_prototype", {
+      links: [{ sourceId: "2:1", actions: [{ type: "navigate", destinationId: "3-1" }], transition: { type: "SLIDE_IN", direction: "LEFT", easing: { spring: { mass: 1, stiffness: 200, damping: 15 } } } }],
+      flows: [{ nodeId: "2:0", name: "Onboarding" }],
+      scroll: [{ frameId: "3:1", overflow: "VERTICAL", fixedChildren: 1 }],
+    });
+    assert.equal(link.isError, undefined, JSON.stringify(link));
+    assert.equal(last().command, "set_prototype");
+    assert.equal(last().params.links[0].trigger, "ON_CLICK", "click is the default trigger");
+    assert.equal(last().params.links[0].actions[0].destinationId, "3:1");
+    assert.equal(last().params.links[0].transition.duration, 0.3);
+    const badUrl = await s.tool("figma_set_prototype", { links: [{ sourceId: "2:1", actions: [{ type: "url", url: "not a url" }] }] });
+    assert.equal(badUrl.isError, true);
+    const badTransition = await s.tool("figma_set_prototype", { links: [{ sourceId: "2:1", actions: [{ type: "back" }], transition: { type: "ZOOM" } }] });
+    assert.equal(badTransition.isError, true);
+
+    // figma_set_motion
+    const presets = await s.tool("figma_set_motion", { listPresets: true });
+    assert.equal(presets.isError, undefined);
+    assert.equal(last().params.listPresets, true);
+    const motion = await s.tool("figma_set_motion", {
+      nodeIds: ["4:1"],
+      presets: [{ preset: "Position", settings: { type: "slide_in", direction: "bottom" } }],
+      keyframes: [
+        { property: "SCALE_XY", keys: [{ time: 0, value: { x: 1, y: 1 } }, { time: 1, value: { x: 1.4, y: 1.4 }, easing: "BOUNCY" }] },
+        { fillIndex: 0, keys: [{ time: 0, value: "#2f50e4" }, { time: 2, value: "#c62a2a" }] },
+        { effect: { index: 0, field: "RADIUS" }, keys: [{ time: 0, value: 20 }, { time: 1.5, value: 0 }] },
+      ],
+      timelineSeconds: 3,
+    });
+    assert.equal(motion.isError, undefined, JSON.stringify(motion));
+    assert.equal(last().command, "set_motion");
+    assert.equal(last().params.keyframes.length, 3);
+    const twoTargets = await s.tool("figma_set_motion", { nodeIds: ["4:1"], keyframes: [{ property: "OPACITY", fillIndex: 0, keys: [{ time: 0, value: 1 }] }] });
+    assert.match(twoTargets.content[0].text, /exactly one of property, fillIndex or effect/);
+    const noTarget = await s.tool("figma_set_motion", {});
+    assert.match(noTarget.content[0].text, /Give nodeIds, or listPresets/);
+    const badProp = await s.tool("figma_set_motion", { nodeIds: ["4:1"], keyframes: [{ property: "BOUNCE", keys: [{ time: 0, value: 1 }] }] });
+    assert.equal(badProp.isError, true);
+    assert.equal(seen.length, 4, "invalid calls never reach the plugin");
+    sock.ws.close();
+  } finally {
+    s.child.kill();
+  }
+});
 
 await test("view-only seat reads the design and the code map from a snapshot, with no plugin", async () => {
   const project = fs.mkdtempSync(path.join(os.tmpdir(), "wfw-viewer-"));
@@ -781,7 +932,8 @@ await test("design review scores a screen and ties findings to layers and person
 });
 
 await test("colour tokens resolve by name and leave hex specs untouched", async () => {
-  assert.equal(Object.keys(COLOR_TOKENS).length, 39);
+  assert.equal(Object.keys(COLOR_TOKENS).length, 46);
+  assert.equal(resolveColor("primary-active"), "#193EE4");
   assert.equal(resolveColor("Warning-5"), "#FEFBF2");
   assert.equal(resolveColor(" heading "), "#071437");
   for (const v of ["#fff", "#FF5733", "#FF573380", "none"]) assert.equal(resolveColor(v), v);
@@ -794,9 +946,44 @@ await test("colour tokens resolve by name and leave hex specs untouched", async 
   assert.equal(out.fill, "#F9FBFC");
   assert.equal(out.children[0].children[0].text.color, "#04B440");
   assert.equal(tokenSpec.fill, "bg-light", "input is not mutated");
-  assert.ok(isTokenColor("#1b84ff") && isTokenColor("#1B84FF80") && !isTokenColor("#2f50e4"));
-  const r = reviewTree({ id: "1:1", name: "S", type: "FRAME", width: 100, height: 100, abs: { x: 0, y: 0, width: 100, height: 100 }, fills: [{ type: "SOLID", color: "#2f50e4" }], children: [{ id: "1:2", name: "B", type: "FRAME", width: 10, height: 10, abs: { x: 0, y: 0, width: 10, height: 10 }, fills: [{ type: "SOLID", color: "#1b84ff" }] }] });
-  assert.deepEqual(r.offTokenColors, ["#2f50e4"]);
+  assert.ok(isTokenColor("#1b84ff") && isTokenColor("#1B84FF80") && !isTokenColor("#466efa"));
+  const r = reviewTree({ id: "1:1", name: "S", type: "FRAME", width: 100, height: 100, abs: { x: 0, y: 0, width: 100, height: 100 }, fills: [{ type: "SOLID", color: "#466efa" }], children: [{ id: "1:2", name: "B", type: "FRAME", width: 10, height: 10, abs: { x: 0, y: 0, width: 10, height: 10 }, fills: [{ type: "SOLID", color: "#1b84ff" }] }] });
+  assert.deepEqual(r.offTokenColors, ["#466efa"]);
+});
+
+await test("Creative: isolated browser launch, inbox listing, safe reads and saves", async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "wfw-cr-"));
+  const env = { FIGMA_CREATIVE_DIR: path.join(dir, "inbox"), FIGMA_CREATIVE_PROFILE: path.join(dir, "profile"), FIGMA_CREATIVE_BROWSER: path.join(dir, "chrome.exe") };
+  fs.writeFileSync(env.FIGMA_CREATIVE_BROWSER, "");
+  const calls = [];
+  const spawn = (cmd, args, opts) => { calls.push({ cmd, args, opts }); return { on() {}, unref() {} }; };
+  const r = openCreativeBrowser("gemini", { env, spawn });
+  assert.equal(r.url, "https://gemini.google.com/app");
+  assert.equal(r.newProfile, true);
+  assert.deepEqual(calls[0].args, [`--user-data-dir=${env.FIGMA_CREATIVE_PROFILE}`, "--no-first-run", "--no-default-browser-check", "--new-window", "https://gemini.google.com/app"]);
+  assert.ok(!calls[0].args.some((a) => /remote-debugging|headless|automation/.test(a)), "no automation flags: Google refuses sign-in with them");
+  assert.equal(calls[0].opts.detached, true);
+  const prefs = JSON.parse(fs.readFileSync(path.join(env.FIGMA_CREATIVE_PROFILE, "Default", "Preferences"), "utf8"));
+  assert.equal(prefs.download.default_directory, env.FIGMA_CREATIVE_DIR);
+  assert.equal(openCreativeBrowser("chatgpt", { env, spawn }).newProfile, false, "an existing profile is left alone");
+  assert.throws(() => openCreativeBrowser("evil", { env, spawn }), /Unknown site/);
+
+  const png = encodePng(2, 2, new Uint8Array((2 * 4 + 1) * 2));
+  const saved = saveInboxFile("../../My Post!.png", png, { env });
+  assert.equal(saved.name, "My Post.png");
+  assert.equal(saveInboxFile("My Post.png", png, { env }).name, "My Post-2.png");
+  assert.throws(() => saveInboxFile("x.png", Buffer.from("not an image"), { env }), /Not a PNG/);
+  assert.equal(sniff(png), "png");
+  fs.writeFileSync(path.join(env.FIGMA_CREATIVE_DIR, "half.png.crdownload"), "x");
+  fs.writeFileSync(path.join(env.FIGMA_CREATIVE_DIR, "notes.txt"), "x");
+  const later = new Date(Date.now() + 5000);
+  fs.utimesSync(path.join(env.FIGMA_CREATIVE_DIR, "My Post-2.png"), later, later);
+  assert.deepEqual(listInbox({ env }).files.map((f) => f.name), ["My Post-2.png", "My Post.png"]);
+  assert.equal(readInboxFile("My Post.png", { env }).kind, "image");
+  for (const bad of ["../x.png", "..\\x.png", "sub/x.png", ""]) assert.throws(() => readInboxFile(bad, { env }), /Bad file name/);
+  assert.throws(() => readInboxFile("notes.txt", { env }), /Not an image or video/);
+  assert.throws(() => handlePanelRequest("creative_delete", {}, { env }), /Unknown panel request/);
+  assert.ok(handlePanelRequest("creative_list", {}, { env }).sizes["ig-square"]);
 });
 
 for (const r of results) console.log(r.join("  "));

@@ -1,6 +1,6 @@
-// Webority Figma Write MCP (v1.3.0): MCP server over stdio.
+// Webority Figma Write MCP (v1.6.0): MCP server over stdio.
 // Lets Claude read and write the Figma file open in Figma desktop, through the
-// "Webority Figma Write" plugin. Local only: port 3692, per-machine token, no Figma rate limits.
+// "Webority Figma Write" plugin. Local only: ports 3692-3699 (first free), per-machine token, no Figma rate limits.
 // stdout is the MCP protocol; every log line goes to stderr.
 
 import fs from "node:fs";
@@ -17,26 +17,41 @@ import { registerOpenTools } from "./lib/tools-open.js";
 import { registerLayaTools } from "./lib/tools-laya.js";
 import { registerDesignTools } from "./lib/tools-design.js";
 import { registerImageTools } from "./lib/tools-image.js";
+import { registerCreativeTools } from "./lib/tools-creative.js";
+import { registerFeatureTools } from "./lib/tools-figma-features.js";
+import { CREATIVE_RULES, handlePanelRequest } from "./lib/creative.js";
 import { LAYA_RULES } from "./lib/laya.js";
 import { COLOR_TOKENS, COLOR_TOKEN_GROUPS, COLOR_TOKEN_RULES, resolveSpecColors } from "./lib/color-tokens.js";
 import { normId, prepareSavePath } from "./lib/util.js";
 import { ensureToken, restrictToOwner } from "./lib/token.js";
 
-export const VERSION = "1.3.0";
+export const VERSION = "1.6.0";
 const here = path.dirname(fileURLToPath(import.meta.url));
-const PORT = Number(process.env.FIGMA_WRITE_PORT || 3692);
 const log = (line) => process.stderr.write(line + "\n");
 
-// Figma only lets the plugin reach the ports its manifest lists. A FIGMA_WRITE_PORT outside that list
-// would leave the panel on "Waiting for Claude" forever, so say so up front.
-function manifestPortWarning() {
+// Figma only lets the plugin reach the ports its manifest lists.
+function manifestPorts() {
   try {
     const manifest = JSON.parse(fs.readFileSync(path.join(here, "plugin", "manifest.json"), "utf8"));
-    const allowed = (manifest.networkAccess?.allowedDomains || []).map((d) => Number(String(d).split(":").pop()));
-    return allowed.includes(PORT) ? null : `Port ${PORT} is not in plugin/manifest.json allowedDomains (${allowed.join(", ")}), so Figma will block the plugin. Use one of those ports, or add ws://localhost:${PORT} to the manifest and re-import it.`;
+    const ports = (manifest.networkAccess?.allowedDomains || []).map((d) => Number(String(d).split(":").pop())).filter(Boolean);
+    return ports.length ? ports : null;
   } catch {
     return null;
   }
+}
+const MANIFEST_PORTS = manifestPorts();
+// Several sessions at once: with no FIGMA_WRITE_PORT, a session binds the first free manifest port,
+// and each Figma file's panel pairs with one session that has no file yet.
+const PORTS = process.env.FIGMA_WRITE_PORT
+  ? [Number(process.env.FIGMA_WRITE_PORT)]
+  : MANIFEST_PORTS ?? [3692, 3693, 3694, 3695, 3696, 3697, 3698, 3699];
+const PORT = PORTS[0];
+
+// A FIGMA_WRITE_PORT outside the manifest list would leave the panel on "Waiting for Claude" forever,
+// so say so up front.
+function manifestPortWarning() {
+  if (!MANIFEST_PORTS || MANIFEST_PORTS.includes(PORT)) return null;
+  return `Port ${PORT} is not in plugin/manifest.json allowedDomains (${MANIFEST_PORTS.join(", ")}), so Figma will block the plugin. Use one of those ports, or add ws://localhost:${PORT} to the manifest and re-import it.`;
 }
 const PORT_WARNING = manifestPortWarning();
 if (PORT_WARNING) log("[server] " + PORT_WARNING);
@@ -47,7 +62,7 @@ function stampPluginUi(token) {
   const font = fs.readFileSync(path.join(here, "plugin", "zalando-sans-latin.woff2")).toString("base64");
   const html = template
     .replaceAll("__BRIDGE_TOKEN__", token)
-    .replaceAll("__BRIDGE_PORT__", String(PORT))
+    .replaceAll("__BRIDGE_PORTS__", JSON.stringify(MANIFEST_PORTS ?? PORTS))
     .replaceAll("__VERSION__", VERSION)
     .replaceAll("__FONT_B64__", font);
   const target = path.join(here, "plugin", "ui.html");
@@ -63,14 +78,16 @@ const token = ensureToken({ legacyDir: here, log });
 if (!process.env.FIGMA_WRITE_NO_STAMP) stampPluginUi(token);
 
 // Lazy bind: the port is claimed on the first tool call, so several Claude sessions can have this
-// MCP registered and only the session that actually uses Figma owns the plugin connection.
-const bridge = new FigmaWriteBridge({ port: PORT, token, log });
+// MCP registered and only the sessions that actually use Figma hold a port (the first free one).
+const bridge = new FigmaWriteBridge({ ports: PORTS, token, label: path.basename(process.cwd()) || "Claude", log });
+// The panel's Creative tab asks the server to open the isolated browser and read the inbox.
+bridge.onPanelRequest = (action, params) => handlePanelRequest(action, params);
 if (process.env.FIGMA_WRITE_EAGER === "1") await bridge.start();
 
-// Server instructions reach every client model on connect: this is where the Laya policy and the default colour tokens are taught.
+// Server instructions reach every client model on connect: this is where the Laya policy, the default colour tokens and the Creative tab are taught.
 const server = new McpServer(
   { name: "webority-figma-write", version: VERSION },
-  { instructions: "Webority Figma MCP: read and write the open Figma file through the local plugin, plus Code Connect, shaders, generative plugins, video and no-seat snapshot reads. Call figma_write_status first and whenever a write fails. For design critique, run design_review on the frame, then the design_panel or persona_<id> prompts (or design_personas) for judgement.\n\n" + LAYA_RULES + "\n\n" + COLOR_TOKEN_RULES }
+  { instructions: "Webority Figma MCP: read and write the open Figma file through the local plugin, plus Code Connect, shaders, generative plugins, video and no-seat snapshot reads. Call figma_write_status first and whenever a write fails. For design critique, run design_review on the frame, then the design_panel or persona_<id> prompts (or design_personas) for judgement.\n\n" + LAYA_RULES + "\n\n" + COLOR_TOKEN_RULES + "\n\n" + CREATIVE_RULES }
 );
 
 const text = (value) => ({ content: [{ type: "text", text: typeof value === "string" ? value : JSON.stringify(value) }] });
@@ -94,7 +111,7 @@ server.registerTool(
     await bridge.ensureConnected();
     const status = { server: VERSION, ...bridge.status(), ...(PORT_WARNING ? { portWarning: PORT_WARNING } : {}) };
     if (!status.connected) {
-      return text({ ...status, hint: bridge.bound ? "Open the 'Webority Figma MCP' plugin in Figma desktop (design editor) and keep it open." : status.bridge });
+      return text({ ...status, hint: bridge.bound ? `Open the 'Webority Figma MCP' plugin in the Figma file you want this session to drive (design editor) and keep it open. Each open file pairs with one Claude session; this one is '${bridge.label}' on port ${bridge.port}. If another file's panel took this session, click Switch session in that panel.` : status.bridge });
     }
     if (status.version && status.version !== VERSION) status.warning = `Plugin build ${status.version} differs from server ${VERSION}. Close and reopen the plugin in Figma.`;
     try {
@@ -312,8 +329,12 @@ registerDesignTools({ server, bridge, text, fail });
 // figma_generate_image (lib/tools-image.js)
 registerImageTools({ server, bridge, text, fail });
 
+// figma_creative_inbox, figma_creative_place (the Creative tab's inbox)
+registerCreativeTools({ server, bridge, text, fail });
+registerFeatureTools({ server, bridge, text, fail });
+
 await server.connect(new StdioServerTransport());
-log(`[webority-figma-write ${VERSION}] MCP server ready (bridge port ${PORT}, binds on first use)`);
+log(`[webority-figma-write ${VERSION}] MCP server ready (bridge ports ${PORTS.join(",")}, binds the first free one on first use)`);
 
 const shutdown = async () => {
   await bridge.stop();

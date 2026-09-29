@@ -19,7 +19,7 @@ Use the full path to `server.js` on your machine:
 claude mcp add -s user Figma-MCP-Webority -- node "C:/path/to/webority-figma-write/server.js"
 ```
 
-`-s user` registers it for every project on your machine. Restart Claude Code so the tools load, then check with `/mcp`: you should see **Figma-MCP-Webority** connected with 49 tools.
+`-s user` registers it for every project on your machine. Restart Claude Code so the tools load, then check with `/mcp`: you should see **Figma-MCP-Webority** connected with 52 tools. Updating from an older version: replace the folder, run `npm install`, restart Claude Code, then close and reopen the plugin in Figma.
 
 ## 3. Import the Figma plugin (once)
 
@@ -58,7 +58,7 @@ In Claude: `figma_write_status` reports whether the plugin is connected, which f
 ## Notes
 
 - **Image generation (optional):** `figma_generate_image` works with no setup. Images carry a small logo until you save a free token from auth.pollinations.ai as one line in `%LOCALAPPDATA%\webority-figma-mcp\image-gen-token`.
-- **Nothing leaves your PC except image prompts.** `figma_generate_image` sends its prompt to pollinations.ai; everything else stays local. The bridge listens on `127.0.0.1:3692` only, checks the Host and Origin headers, and both sides prove they know a per-user token without ever sending it.
+- **Nothing leaves your PC except image prompts.** `figma_generate_image` sends its prompt to pollinations.ai; everything else stays local. The bridge listens on `127.0.0.1` only (first free port of 3692-3699), checks the Host and Origin headers, and both sides prove they know a per-user token without ever sending it.
 - **The bridge token is a secret.** It is created on first run in `%LOCALAPPDATA%webority-figma-mcpridge-token`, readable only by you. It is not in this package and must not be shared. `plugin/ui.html` is generated from it and is locked to you too.
 - **REST token:** set `FIGMA_TOKEN`, or save it in `%LOCALAPPDATA%webority-figma-mcpigma-token`. A repo's `.figma/token` is used only when git ignores it.
 - **Port already in use** means another Claude session on your machine is using the plugin. Use that session, or close it.

@@ -10,8 +10,14 @@
 //      {type:"auth-challenge", proof: HMAC(token, "server|"+pluginNonce), nonce}; the plugin checks the
 //      proof (so a program squatting on the port learns nothing and cannot drive the file) and replies
 //      {auth: HMAC(token, "plugin|"+bridgeNonce)}. A wrong or missing answer closes with 4401.
-//   5. One plugin at a time: a newly authenticated plugin replaces the old one, which is closed
-//      with 4000 so writes never silently land in a different file.
+//   5. One plugin at a time: writes must never silently land in a different file. A panel that asks
+//      for a free session ({auth, claim:"free"}) is closed with 4409 when this bridge already has a
+//      plugin, and moves on to the next port. Without a claim, a newly authenticated plugin replaces
+//      the old one, which is closed with 4000.
+//   7. Several sessions at once: each bridge binds the first free port of its list (3692-3699 by
+//      default), and each Figma file's panel pairs with one session that has no file yet.
+//   6. Panel requests ({type:"panel", id, action, params}) come only from the authenticated current
+//      plugin and go to the server's onPanelRequest hook, which allows a fixed set of actions.
 
 import http from "node:http";
 import crypto from "node:crypto";
@@ -19,10 +25,13 @@ import { WebSocketServer } from "ws";
 
 export const CLOSE_REPLACED = 4000;
 export const CLOSE_BAD_TOKEN = 4401;
+export const CLOSE_BUSY = 4409;
 
 export class FigmaWriteBridge {
-  constructor({ port, token, allowedOrigins = ["null"], log = () => {} }) {
-    this.port = port;
+  constructor({ port, ports, token, label = "Claude", allowedOrigins = ["null"], log = () => {} }) {
+    this.ports = ports?.length ? [...ports] : [port];
+    this.port = this.ports[0];
+    this.label = label;
     this.token = token;
     this.allowedOrigins = allowedOrigins;
     this.log = log;
@@ -35,9 +44,9 @@ export class FigmaWriteBridge {
     this.waiters = new Set(); // resolvers waiting for a plugin to authenticate
   }
 
-  // Binds if needed, then waits up to waitMs for a plugin. The plugin retries every 2s, so right
+  // Binds if needed, then waits up to waitMs for a plugin. The panel rescans its ports every 2s, so right
   // after a lazy bind it has not said hello yet; deciding "offline" before then is wrong.
-  async ensureConnected(waitMs = 2500) {
+  async ensureConnected(waitMs = 4500) {
     if (!this.bound && !(await this.start())) return false;
     if (this.plugin) return true;
     if (waitMs <= 0) return false;
@@ -69,7 +78,23 @@ export class FigmaWriteBridge {
     return this.starting;
   }
 
+  // Tries each port in order and keeps the first that is free, so several sessions can run at once.
   async #bind() {
+    for (const port of this.ports) {
+      this.port = port;
+      if (await this.#bindPort()) return true;
+      if (!this.lastBindBusy) break;
+    }
+    this.port = this.ports[0];
+    if (this.lastBindBusy) {
+      const range = this.ports.length > 1 ? `Ports ${this.ports[0]}-${this.ports[this.ports.length - 1]} are all` : `Port ${this.ports[0]} is already`;
+      this.bindError = `${range} in use (other Claude sessions are probably using Webority Figma Write). Use one of those sessions, or close one and retry.`;
+    }
+    return false;
+  }
+
+  async #bindPort() {
+    this.lastBindBusy = false;
     const wss = new WebSocketServer({ noServer: true, maxPayload: 64 * 1024 * 1024 });
     this.wss = wss;
     const make = () => {
@@ -99,7 +124,8 @@ export class FigmaWriteBridge {
       return true;
     } catch (e) {
       await this.stop();
-      this.bindError = e.code === "EADDRINUSE"
+      this.lastBindBusy = e.code === "EADDRINUSE";
+      this.bindError = this.lastBindBusy
         ? `Port ${this.port} is already in use (another Claude session is probably using Webority Figma Write). Use that session, or close it and retry.`
         : `Could not start the bridge on port ${this.port}: ${e.message}`;
       return false;
@@ -164,15 +190,21 @@ export class FigmaWriteBridge {
           return;
         }
         if (tokenMatches(msg?.auth, hmac(this.token, "plugin|" + bridgeNonce))) {
-          authed = true;
           clearTimeout(helloTimer);
           const previous = this.plugin;
+          // A panel looking for a free session never takes one that already drives a file.
+          if (msg.claim === "free" && previous && previous.socket !== ws) {
+            ws.close(CLOSE_BUSY, "session busy");
+            return;
+          }
+          authed = true;
           this.plugin = { socket: ws, state: { origin: origin ?? "(none)", version: helloVersion } };
           if (previous && previous.socket !== ws) {
             previous.socket.close(CLOSE_REPLACED, "replaced by another plugin window");
             this.log("[bridge] plugin replaced by a newer window");
           }
           this.log("[bridge] plugin authenticated");
+          ws.send(JSON.stringify({ type: "welcome", session: this.label, port: this.port }));
           for (const w of [...this.waiters]) w(true);
         } else {
           ws.close(CLOSE_BAD_TOKEN, "bad token");
@@ -181,6 +213,17 @@ export class FigmaWriteBridge {
       }
       if (msg?.type === "state") {
         if (this.plugin?.socket === ws) this.plugin.state = { ...this.plugin.state, ...msg.state };
+        return;
+      }
+      // The panel's own requests (the person's clicks in the Creative tab). Only the current plugin
+      // may ask; a failing handler answers with an error and never drops the socket.
+      if (msg?.type === "panel") {
+        if (this.plugin?.socket !== ws || typeof msg.id !== "string") return;
+        const answer = (body) => { try { ws.send(JSON.stringify({ type: "panel-reply", id: msg.id, ...body })); } catch { /* socket gone */ } };
+        if (!this.onPanelRequest) return answer({ error: "This server does not take panel requests." });
+        Promise.resolve()
+          .then(() => this.onPanelRequest(String(msg.action || ""), msg.params && typeof msg.params === "object" ? msg.params : {}))
+          .then((result) => answer({ result }), (e) => answer({ error: e instanceof Error ? e.message : String(e) }));
         return;
       }
       if (typeof msg?.id === "string" && this.pending.has(msg.id)) {
@@ -208,6 +251,8 @@ export class FigmaWriteBridge {
   status() {
     return {
       bridge: this.bound ? `listening on localhost:${this.port}` : this.bindError ?? "not started",
+      port: this.bound ? this.port : null,
+      session: this.label,
       connected: !!this.plugin,
       ...(this.plugin ? this.plugin.state : {}),
     };

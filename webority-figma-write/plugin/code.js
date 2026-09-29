@@ -1,4 +1,4 @@
-// Webority Figma Write (v1.3.0): plugin sandbox.
+// Webority Figma Write (v1.6.0): plugin sandbox.
 // Runs Figma Plugin API calls sent by the local MCP server (via ui.html, which owns the socket).
 // Writes are refused unless the user ticks "Allow edits" in the panel. Commands run one at a time.
 
@@ -10,7 +10,7 @@ const CODE_KEY = "codeMap";
 if (figma.mode === "codegen") {
   figma.codegen.on("generate", async (event) => await generateCode(event.node, event.language));
 } else {
-  figma.showUI(__html__, { width: 340, height: 640, title: "Webority Figma MCP" });
+  figma.showUI(__html__, { width: 340, height: 620, title: "Webority Figma MCP" });
 }
 
 let editsAllowed = false;
@@ -39,8 +39,43 @@ if (figma.mode !== "codegen") figma.ui.onmessage = (msg) => {
     pushState();
     return;
   }
+  // Minimise to a floating round button, or back to the full panel.
+  if (msg.type === "ui-mini") {
+    try {
+      if (msg.value) figma.ui.resize(72, 72);
+      else figma.ui.resize(340, 620);
+    } catch (e) {
+      figma.notify("Could not resize the panel: " + (e instanceof Error ? e.message : String(e)));
+    }
+    return;
+  }
   if (msg.type === "request-state") {
     pushState();
+    return;
+  }
+  // The person's own click in the Creative tab. Not a Claude command, so it needs the design editor
+  // but not "Allow edits". Queued like commands so it never interleaves with one.
+  if (msg.type === "creative-place") {
+    queue = queue.then(async () => {
+      try {
+        if (figma.editorType === "dev") throw new Error("Dev Mode is read-only. Switch to the design editor to place files.");
+        const sel = figma.currentPage.selection.filter((n) => "fills" in n && n.type !== "TEXT");
+        const result = await placeMedia({
+          kind: msg.kind, base64: msg.base64, name: msg.name, size: msg.size || null,
+          nodeIds: msg.size || msg.newLayer ? [] : sel.map((n) => n.id),
+          meta: { source: "creative-tab", file: msg.name, placedAt: new Date().toISOString() },
+        });
+        figma.ui.postMessage({ type: "creative-placed", reqId: msg.reqId, result });
+      } catch (e) {
+        figma.ui.postMessage({ type: "creative-placed", reqId: msg.reqId, error: e instanceof Error ? e.message : String(e) });
+      }
+    });
+    return;
+  }
+  // Fallback when no Claude session is running: open the site in the default browser (not isolated).
+  if (msg.type === "open-external") {
+    const urls = { chatgpt: "https://chatgpt.com/", gemini: "https://gemini.google.com/app" };
+    if (urls[msg.site]) figma.openExternal(urls[msg.site]);
     return;
   }
   const { id, command, params } = msg;
@@ -75,6 +110,8 @@ const ACTIVITY_NAMES = {
   get_metadata: "Read file info", get_document: "Read page tree", get_node: "Read layer",
   find_nodes: "Searched layers", get_text: "Read text", get_styles: "Read styles",
   get_variable_defs: "Read variables", get_image: "Read image fill", place_image: "Placed generated image",
+  place_media: "Placed creative file", draw_style: "Applied Draw style", set_prototype: "Set prototype links",
+  set_motion: "Set motion",
 };
 
 // Records layers created, changed or deleted on the current page while one command runs.
@@ -162,7 +199,8 @@ async function postActivity(id, command, params, result, error, changes) {
   } catch (e) { /* the log is cosmetic; never fail the command over it */ }
 }
 
-const WRITE_COMMANDS = new Set(["execute", "set_text", "create_from_spec", "code_map_set", "code_map_remove", "apply_effect", "apply_shader", "render_frame", "place_image"]);
+// set_motion checks edits itself: listing the presets is read-only.
+const WRITE_COMMANDS = new Set(["execute", "set_text", "create_from_spec", "code_map_set", "code_map_remove", "apply_effect", "apply_shader", "render_frame", "place_image", "place_media", "draw_style", "set_prototype"]);
 
 async function handle(command, params) {
   if (WRITE_COMMANDS.has(command)) requireEdits();
@@ -201,6 +239,14 @@ async function handle(command, params) {
       return await applyShader(params);
     case "place_image":
       return await placeImage(params);
+    case "place_media":
+      return await placeMedia(params);
+    case "draw_style":
+      return await drawStyle(params);
+    case "set_prototype":
+      return await setPrototype(params);
+    case "set_motion":
+      return await setMotion(params);
     case "shader_usage":
       return await shaderUsage(params.pageId || null);
     case "render_frame":
@@ -850,6 +896,90 @@ async function placeImage(p) {
   return { created: nodeIds.length === 0, placed: done, imageHash: image.hash };
 }
 
+// ---- Creative files (Creative tab and figma_creative_place): images and videos ----
+
+// kind "image" or "video", base64 bytes. nodeIds get the file as their fill; otherwise a new layer is
+// made: a frame at size {width, height, label} (a social format), else a rectangle at the file's size.
+async function placeMedia(p) {
+  if (!p.base64) throw new Error("No file data.");
+  const bytes = figma.base64Decode(p.base64);
+  const scaleMode = (p.fill && p.fill.scaleMode) || "FILL";
+  let paint, natural = null;
+  if (p.kind === "video") {
+    let video;
+    try {
+      video = await figma.createVideoAsync(bytes);
+    } catch (e) {
+      throw new Error("Figma could not take this video (video fills need a paid plan, MP4/MOV/WEBM, under 100 MB): " + (e && e.message ? e.message : e));
+    }
+    paint = { type: "VIDEO", videoHash: video.hash, scaleMode };
+  } else {
+    let image;
+    try {
+      image = figma.createImage(bytes);
+    } catch (e) {
+      throw new Error("Figma could not take this image (PNG, JPG or GIF, at most 4096 px a side): " + (e && e.message ? e.message : e));
+    }
+    paint = { type: "IMAGE", imageHash: image.hash, scaleMode };
+    natural = await image.getSizeAsync();
+  }
+  const meta = JSON.stringify(p.meta || {});
+  const targets = [];
+  for (const id of p.nodeIds || []) {
+    const n = await figma.getNodeByIdAsync(id);
+    if (!n) throw new Error("Node not found: " + id);
+    if (!("fills" in n) || n.type === "TEXT") throw new Error("Layer can't take a fill: " + id + " (" + n.type + ")");
+    targets.push(n);
+  }
+  const created = !targets.length;
+  if (created) {
+    let node;
+    const label = String(p.name || (p.kind === "video" ? "Video" : "Image"));
+    if (p.size && p.size.width && p.size.height) {
+      node = figma.createFrame();
+      node.resize(p.size.width, p.size.height);
+      node.name = (p.size.label ? p.size.label + " · " : "") + label;
+    } else {
+      node = figma.createRectangle();
+      const w = natural ? natural.width : 1280, h = natural ? natural.height : 720;
+      const k = Math.min(1, 1024 / Math.max(w, h));
+      node.resize(Math.max(1, Math.round(w * k)), Math.max(1, Math.round(h * k)));
+      node.name = label;
+    }
+    node.fills = [paint];
+    let parent = null;
+    if (p.parentId) {
+      parent = await figma.getNodeByIdAsync(p.parentId);
+      if (!parent || !("appendChild" in parent) || parent.type === "INSTANCE") throw new Error("Can't place a layer inside: " + p.parentId);
+      parent.appendChild(node);
+    } else {
+      const sel = figma.currentPage.selection[0];
+      if (sel && "absoluteBoundingBox" in sel && sel.absoluteBoundingBox) {
+        const b = sel.absoluteBoundingBox;
+        node.x = b.x + b.width + 40;
+        node.y = b.y;
+      } else {
+        node.x = Math.round(figma.viewport.center.x - node.width / 2);
+        node.y = Math.round(figma.viewport.center.y - node.height / 2);
+      }
+      figma.currentPage.appendChild(node);
+    }
+    targets.push(node);
+    figma.currentPage.selection = [node];
+    figma.viewport.scrollAndZoomIntoView([node]);
+  } else {
+    for (const n of targets) {
+      const current = n.fills === figma.mixed ? [] : n.fills;
+      n.fills = p.fill && p.fill.mode === "add" ? current.concat([paint]) : [paint];
+    }
+  }
+  for (const n of targets) {
+    try { n.setSharedPluginData(CODE_NS, "creative", meta); } catch (e) { /* read-only library layer */ }
+  }
+  figma.commitUndo();
+  return { created, kind: p.kind === "video" ? "video" : "image", placed: targets.map(brief) };
+}
+
 async function pagesFor(pageId) {
   if (pageId === "all") {
     await figma.loadAllPagesAsync();
@@ -1360,4 +1490,292 @@ async function getImage(p) {
   const bytes = await image.getBytesAsync();
   const size = await image.getSizeAsync();
   return { imageHash: hash, width: size.width, height: size.height, base64: figma.base64Encode(bytes) };
+}
+
+// ---- Figma Draw, Prototype and Motion (figma_draw_style, figma_set_prototype, figma_set_motion) ----
+// Shapes probed live on 28-Sep-2026; tools/live-check-draw.mjs re-checks the raw API.
+
+function rgbaFrom(h, fallbackAlpha) {
+  const c = parseHex(String(h));
+  const hasAlpha = String(h).replace("#", "").length === 8;
+  return { r: c.color.r, g: c.color.g, b: c.color.b, a: hasAlpha ? c.opacity : (fallbackAlpha == null ? 1 : fallbackAlpha) };
+}
+
+// "EASE_OUT" | {bezier:[x1,y1,x2,y2]} | {spring:{mass,stiffness,damping}} -> Plugin API Easing.
+function toEasing(e) {
+  if (!e) return { type: "EASE_OUT" };
+  if (typeof e === "string") return { type: e };
+  if (e.bezier) return { type: "CUSTOM_CUBIC_BEZIER", easingFunctionCubicBezier: { x1: e.bezier[0], y1: e.bezier[1], x2: e.bezier[2], y2: e.bezier[3] } };
+  if (e.spring) return { type: "CUSTOM_SPRING", easingFunctionSpring: { mass: e.spring.mass, stiffness: e.spring.stiffness, damping: e.spring.damping } };
+  return e;
+}
+
+async function nodesOrThrow(ids) {
+  const out = [];
+  for (const id of ids || []) {
+    const n = await figma.getNodeByIdAsync(String(id));
+    if (!n) throw new Error("Node not found: " + id);
+    out.push(n);
+  }
+  return out;
+}
+
+function drawEffect(e, sourceShaders) {
+  switch (e.type) {
+    case "noise": {
+      const fx = { type: "NOISE", visible: true, noiseType: e.noiseType, density: e.density, noiseSize: e.size, color: rgbaFrom(e.color, 0.25) };
+      if (e.noiseType === "DUOTONE") fx.secondaryColor = rgbaFrom(e.secondaryColor || "#ffffff40", 0.25);
+      if (e.noiseType === "MULTITONE") fx.opacity = e.opacity == null ? 0.5 : e.opacity;
+      return fx;
+    }
+    case "texture":
+      return { type: "TEXTURE", visible: true, noiseSize: e.size, radius: e.radius, clipToShape: e.clipToShape };
+    case "glass":
+      return { type: "GLASS", visible: true, refraction: e.refraction, depth: e.depth, lightIntensity: e.lightIntensity, lightAngle: e.lightAngle, dispersion: e.dispersion, radius: e.radius };
+    case "progressive_blur":
+      return { type: "LAYER_BLUR", blurType: "PROGRESSIVE", visible: true, radius: e.radius, startRadius: e.startRadius, startOffset: e.start, endOffset: e.end };
+    case "shader": {
+      const base = e.copyFromNodeId ? sourceShaders[e.copyFromNodeId] : null;
+      if (e.copyFromNodeId && !base) throw new Error("Layer " + e.copyFromNodeId + " has no shader effect to copy. Apply one by hand first.");
+      const fx = base ? Object.assign({}, base) : { type: "SHADER", visible: true, id: e.id };
+      if (e.id) fx.id = e.id;
+      if (e.properties) fx.properties = Object.assign({}, fx.properties || {}, e.properties);
+      return fx;
+    }
+  }
+  throw new Error("Unknown effect type " + e.type);
+}
+
+async function drawStyle(p) {
+  const nodes = await nodesOrThrow(p.nodeIds);
+  const result = { styled: [], created: null, errors: [] };
+  const sourceShaders = {};
+  for (const e of p.effects || []) {
+    if (e.type === "shader" && e.copyFromNodeId && !(e.copyFromNodeId in sourceShaders)) {
+      const src = await figma.getNodeByIdAsync(e.copyFromNodeId);
+      sourceShaders[e.copyFromNodeId] = src && "effects" in src ? src.effects.find((x) => x.type === "SHADER") || null : null;
+    }
+  }
+  if (p.stroke && p.stroke.brush) await figma.loadBrushesAsync(p.stroke.brush.type);
+  const effects = (p.effects || []).map((e) => drawEffect(e, sourceShaders));
+
+  if (p.boolean) {
+    const parent = nodes[0].parent;
+    const made = p.boolean.op === "flatten" ? figma.flatten(nodes, parent) : figma[p.boolean.op](nodes, parent);
+    if (p.boolean.fill) made.fills = solid(p.boolean.fill);
+    if (p.boolean.name) made.name = p.boolean.name;
+    result.created = brief(made);
+    return result;
+  }
+  if (p.textPath) {
+    const v = nodes.find((n) => n.type === "VECTOR");
+    if (!v) throw new Error("textPath needs a VECTOR in nodeIds.");
+    const parent = v.parent;
+    const index = parent.children.indexOf(v);
+    const font = { family: p.textPath.fontFamily, style: p.textPath.fontStyle };
+    await figma.loadFontAsync(font);
+    const tp = figma.createTextPath(v, 0, 0);
+    // Figma puts a new text path on the page; return it to where the vector was.
+    if (tp.parent !== parent) parent.insertChild(Math.min(index, parent.children.length), tp);
+    tp.fontName = font;
+    tp.fontSize = p.textPath.fontSize;
+    tp.characters = p.textPath.text;
+    if (p.textPath.color) tp.fills = solid(p.textPath.color);
+    result.created = brief(tp);
+    return result;
+  }
+  for (const n of nodes) {
+    try {
+      const s = p.stroke;
+      if (s) {
+        if (!("strokes" in n)) throw new Error(n.type + " has no strokes");
+        if (s.color) n.strokes = solid(s.color);
+        if (s.weight != null) n.strokeWeight = s.weight;
+        if (s.brush) {
+          const b = { type: "BRUSH", brushType: s.brush.type, brushName: s.brush.name };
+          for (const k of ["direction", "gap", "wiggle", "angularJitter", "rotation", "sizeJitter"]) if (s.brush[k] != null) b[k] = s.brush[k];
+          n.complexStrokeProperties = b;
+        } else if (s.dynamic) n.complexStrokeProperties = { type: "DYNAMIC", frequency: s.dynamic.frequency, wiggle: s.dynamic.wiggle, smoothen: s.dynamic.smoothen };
+        else if (s.basic) n.complexStrokeProperties = { type: "BASIC" };
+        if (s.width) n.variableWidthStrokeProperties = s.width.profile === "CUSTOM" ? { widthProfile: "CUSTOM", variableWidthPoints: s.width.points || [] } : { widthProfile: s.width.profile };
+      }
+      if (effects.length) {
+        if (!("effects" in n)) throw new Error(n.type + " has no effects");
+        n.effects = p.effectsMode === "add" ? n.effects.concat(effects) : effects;
+      }
+      const out = brief(n);
+      if ("complexStrokeProperties" in n) out.stroke = n.complexStrokeProperties;
+      if (s && s.width && "variableWidthStrokeProperties" in n) out.width = n.variableWidthStrokeProperties.widthProfile;
+      if (effects.length) out.effects = n.effects.map((x) => x.type);
+      result.styled.push(out);
+    } catch (e) {
+      result.errors.push({ id: n.id, name: n.name, error: String(e.message || e) });
+    }
+  }
+  return result;
+}
+
+function protoTrigger(t) {
+  return typeof t === "string" ? { type: t } : t;
+}
+
+function protoAction(a, transition) {
+  if (a.type === "back") return { type: "BACK" };
+  if (a.type === "close") return { type: "CLOSE" };
+  if (a.type === "url") return { type: "URL", url: a.url, openInNewTab: a.openInNewTab };
+  const nav = { navigate: "NAVIGATE", overlay: "OVERLAY", swap: "SWAP", scroll_to: "SCROLL_TO", change_to: "CHANGE_TO" }[a.type];
+  let tr = null;
+  if (transition && transition.type !== "INSTANT") {
+    tr = { type: transition.type, easing: toEasing(transition.easing), duration: transition.duration };
+    if (["MOVE_IN", "MOVE_OUT", "PUSH", "SLIDE_IN", "SLIDE_OUT"].includes(transition.type)) {
+      tr.direction = transition.direction || "LEFT";
+      tr.matchLayers = !!transition.matchLayers;
+    }
+  }
+  const out = { type: "NODE", destinationId: a.destinationId, navigation: nav, transition: tr };
+  if (a.preserveScrollPosition != null) out.preserveScrollPosition = a.preserveScrollPosition;
+  return out;
+}
+
+async function setPrototype(p) {
+  const result = { linked: [], raw: [], cleared: [], scroll: [], flows: null, errors: [] };
+  for (const id of p.clear || []) {
+    try {
+      const n = await figma.getNodeByIdAsync(id);
+      await n.setReactionsAsync([]);
+      result.cleared.push(id);
+    } catch (e) {
+      result.errors.push({ id, error: String(e.message || e) });
+    }
+  }
+  for (const l of p.links || []) {
+    try {
+      const n = await figma.getNodeByIdAsync(l.sourceId);
+      if (!n) throw new Error("Node not found: " + l.sourceId);
+      const reaction = { trigger: protoTrigger(l.trigger), actions: l.actions.map((a) => protoAction(a, l.transition)) };
+      await n.setReactionsAsync(l.replace === false ? n.reactions.concat([reaction]) : [reaction]);
+      result.linked.push({ id: n.id, name: n.name, trigger: reaction.trigger.type, actions: reaction.actions.map((a) => a.navigation || a.type) });
+    } catch (e) {
+      const msg = String(e.message || e);
+      const hoverOrPress = /HOVER|PRESS/.test(JSON.stringify(l.trigger));
+      result.errors.push({ id: l.sourceId, error: hoverOrPress && /invalid/i.test(msg) ? msg + " (hover and press need change_to on a variant, or an overlay)" : msg });
+    }
+  }
+  for (const r of p.raw || []) {
+    try {
+      const n = await figma.getNodeByIdAsync(r.sourceId);
+      await n.setReactionsAsync(r.reactions);
+      result.raw.push({ id: n.id, reactions: n.reactions.length });
+    } catch (e) {
+      result.errors.push({ id: r.sourceId, error: String(e.message || e) });
+    }
+  }
+  for (const s of p.scroll || []) {
+    try {
+      const f = await figma.getNodeByIdAsync(s.frameId);
+      if (s.overflow) f.overflowDirection = s.overflow;
+      if (s.fixedChildren != null) f.numberOfFixedChildren = s.fixedChildren;
+      result.scroll.push({ id: f.id, overflow: f.overflowDirection, fixedChildren: f.numberOfFixedChildren });
+    } catch (e) {
+      result.errors.push({ id: s.frameId, error: String(e.message || e) });
+    }
+  }
+  if (p.flows) {
+    figma.currentPage.flowStartingPoints = p.flows.map((f) => ({ nodeId: f.nodeId, name: f.name }));
+    result.flows = figma.currentPage.flowStartingPoints;
+  }
+  return result;
+}
+
+const VECTOR_PROPS = ["TRANSLATION_XY", "SCALE_XY"];
+function motionValue(prop, v, isColor) {
+  if (isColor || (typeof v === "string" && /^#/.test(v))) return { type: "COLOR", value: rgbaFrom(v, 1) };
+  if (VECTOR_PROPS.includes(prop)) {
+    const o = typeof v === "number" ? { x: v, y: v } : v;
+    return { type: "VECTOR", value: { x: o.x, y: o.y } };
+  }
+  if (typeof v === "boolean") return { type: "BOOL", value: v };
+  return { type: "FLOAT", value: Number(v) };
+}
+
+function topFrameOf(n) {
+  let p = n;
+  while (p.parent && p.parent.type !== "PAGE" && p.parent.type !== "SECTION") p = p.parent;
+  return p;
+}
+
+async function setMotion(p) {
+  if (p.listPresets) {
+    const s = await figma.motion.figmaAnimationStyles();
+    return s.map((x) => ({ preset: x.styleId, description: x.description, settings: x.props }));
+  }
+  requireEdits();
+  const nodes = await nodesOrThrow(p.nodeIds);
+  const result = { animated: [], errors: [], timelines: [] };
+  // Presets resolve only after the library is loaded, and only on a page the plugin has loaded.
+  if (p.presets && p.presets.length) await figma.motion.figmaAnimationStyles();
+  const pageOf = (n) => { let x = n; while (x && x.type !== "PAGE") x = x.parent; return x; };
+  const applyPreset = async (n, preset, props) => {
+    try { n.applyAnimationStyle(preset, { type: "FIGMA", props }); }
+    catch (e) {
+      if (!/resolve/i.test(String(e.message))) throw e;
+      const page = pageOf(n);
+      if (page && page !== figma.currentPage) await figma.setCurrentPageAsync(page);
+      n.applyAnimationStyle(preset, { type: "FIGMA", props });
+    }
+  };
+  for (const n of nodes) {
+    try {
+      const pg = pageOf(n);
+      if (pg) await pg.loadAsync();
+      const applied = { presets: [], tracks: [] };
+      if (p.clear) {
+        for (const s of n.animationStyles || []) n.removeAnimationStyle(s.id);
+        // removeManualKeyframeTrack takes the same field object the track was applied with.
+        const EFFECT_FIELDS = ["OFFSET_X", "OFFSET_Y", "RADIUS", "SPREAD", "COLOR", "REFRACTION_RADIUS", "SPECULAR_ANGLE", "SPECULAR_INTENSITY", "CHROMATIC_ABERRATION", "SPLAY", "REFRACTION_INTENSITY", "START_RADIUS", "NOISE_SIZE_X", "NOISE_SIZE_Y", "DENSITY", "EFFECT_OPACITY", "SECONDARY_COLOR"];
+        const quiet = (field) => { try { n.removeManualKeyframeTrack(field); } catch (e) { /* no such track */ } };
+        for (const k of Object.keys(n.manualKeyframeTracks || {})) {
+          if (k === "fills") { for (let i = 0; i < (Array.isArray(n.fills) ? n.fills.length : 0); i++) quiet({ type: "INDEXED_ITEM", collection: "fills", index: i }); }
+          else if (k === "effects") { for (let i = 0; i < (n.effects || []).length; i++) for (const f of EFFECT_FIELDS) quiet({ type: "INDEXED_ITEM", collection: "effects", index: i, field: f }); }
+          else quiet({ type: "PROPERTY", name: k });
+        }
+      }
+      for (const pr of p.presets || []) {
+        const props = Object.assign({}, pr.settings);
+        if (props.easing) props.easing = toEasing(props.easing);
+        await applyPreset(n, pr.preset, props);
+        applied.presets.push(pr.preset);
+      }
+      for (const k of p.keyframes || []) {
+        const field = k.property ? { type: "PROPERTY", name: k.property }
+          : k.effect ? { type: "INDEXED_ITEM", collection: "effects", index: k.effect.index, field: k.effect.field }
+          : { type: "INDEXED_ITEM", collection: "fills", index: k.fillIndex };
+        const isColor = k.fillIndex != null || !!(k.effect && /COLOR/.test(k.effect.field));
+        const keyframes = k.keys.map((key) => {
+          const kf = { timelinePosition: key.time, value: motionValue(k.property, key.value, isColor) };
+          if (key.easing) kf.easing = toEasing(key.easing);
+          return kf;
+        });
+        n.applyManualKeyframeTrack(field, { keyframes });
+        applied.tracks.push(k.property || (k.effect ? "effects[" + k.effect.index + "]." + k.effect.field : "fills[" + k.fillIndex + "]"));
+      }
+      // manualKeyframeTracks reads back stale inside the same call, so report what was applied.
+      result.animated.push({ id: n.id, name: n.name, presets: applied.presets, tracks: applied.tracks, cleared: !!p.clear });
+    } catch (e) {
+      result.errors.push({ id: n.id, name: n.name, error: String(e.message || e) });
+    }
+  }
+  if (p.timelineSeconds) {
+    const done = new Set();
+    for (const n of nodes) {
+      const f = topFrameOf(n);
+      for (const t of f.timelines || []) {
+        if (done.has(t.id)) continue;
+        f.setTimelineDuration(t.id, p.timelineSeconds);
+        done.add(t.id);
+        result.timelines.push({ frame: f.name, id: t.id, duration: p.timelineSeconds });
+      }
+    }
+  }
+  return result;
 }

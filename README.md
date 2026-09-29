@@ -1,8 +1,8 @@
 # Webority Figma MCP: Reverse Engineering Notes
 
 > **Current product:** these notes cover the read-only weborityos Figma MCP (port 3691), kept for reference.
-> The active tool is `webority-figma-write/`, registered in Claude Code as **`Figma-MCP-Webority`**: 49 tools that
-> read and write the open file, generate images into it, map components to code, and answer design questions with no Figma seat at all.
+> The active tool is `webority-figma-write/`, registered in Claude Code as **`Figma-MCP-Webority`**: 55 tools that
+> read and write the open file, generate images into it, place ChatGPT or Gemini creatives from the Creative tab, drive Figma Draw, prototyping and Motion, map components to code, and answer design questions with no Figma seat at all.
 > See `webority-figma-write/README.md` and `CLAUDE.md`.
 
 Captured 15-Sep-2026 from weborityos CLI **v0.3.21** on this machine.
@@ -11,7 +11,7 @@ Captured 15-Sep-2026 from weborityos CLI **v0.3.21** on this machine.
 
 | Path | What it is |
 |---|---|
-| `webority-figma-write/plugin/manifest.json` | The only Figma plugin manifest here: the active Webority Figma MCP plugin (v1.3.0, port 3692; id `webority-figma-write`) |
+| `webority-figma-write/plugin/manifest.json` | The only Figma plugin manifest here: the active Webority Figma MCP plugin (v1.6.0, ports 3692-3699; id `webority-figma-write`) |
 | `README.md` | These notes |
 | `ANALYSIS.md` | Full codebase analysis of the server and plugin source |
 | `FLOW.md` | End-to-end flow, process and setup |

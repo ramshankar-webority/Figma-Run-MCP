@@ -1,4 +1,4 @@
-# Webority Figma MCP · v1.3.0 (50 tools)
+# Webority Figma MCP · v1.6.0 (55 tools)
 
 Lets Claude **read and write the Figma file open in Figma desktop**: create layouts, edit text, run any Figma Plugin API code, and export images to check its own work. It runs entirely on your PC through a small Figma plugin, so there are **no Figma MCP rate limits** and no plan restrictions beyond having edit access to the file.
 
@@ -46,7 +46,7 @@ The panel turns green once Claude makes its first Figma call ("Connected to Clau
 
 ## 3. Tools
 
-All 50 tools, grouped: core 8, reading 10, Code Connect 7, shaders 6, generative plugins 5, video 1, image generation 1, open access 8, Laya decisions 2, design review 2. Plus 9 prompts (design personas). "Needs Allow edits" means the tick box in the plugin panel.
+All 55 tools, grouped: core 8, reading 10, Code Connect 7, shaders 6, generative plugins 5, video 1, image generation 1, Creative 2, Draw, Prototype and Motion 3, open access 8, Laya decisions 2, design review 2. Plus 9 prompts (design personas). "Needs Allow edits" means the tick box in the plugin panel.
 
 ### Core (8)
 
@@ -59,7 +59,7 @@ All 50 tools, grouped: core 8, reading 10, Code Connect 7, shaders 6, generative
 | `figma_execute` | Yes | Yes | Run any Plugin API JavaScript. One undo step per call |
 | `figma_set_text` | Yes | Yes | Replace text in one or many layers, fonts loaded automatically |
 | `figma_create_from_spec` | Yes | Yes | Build a layer tree from JSON: frames, auto layout, fills, text. Colours take hex or a colour token name |
-| `figma_color_tokens` | No | No | The 39 default colour tokens with hex, grouped, plus usage and contrast rules |
+| `figma_color_tokens` | No | No | The 46 default colour tokens with hex, grouped, plus usage and contrast rules |
 
 **Default colour tokens** (`lib/color-tokens.js`, from the Social Media Library colour sheet, node `1080:63`). The server teaches them to Claude on connect, and `figma_create_from_spec` accepts the names wherever it takes a colour (`fill: "info-100"`, `text.color: "heading"`); unknown names are refused with the list. `design_review` reports fill colours outside the tokens as `offTokenColors` (not scored).
 
@@ -67,6 +67,7 @@ All 50 tools, grouped: core 8, reading 10, Code Connect 7, shaders 6, generative
 |---|---|
 | Ink | `heading` #071437, `text-1` #252F4A, `text-2` #4B5675, `text-3` #78829D, `text-4` #99A1B7, `text-5` #C4CADA, `white` #FFFFFF |
 | Surfaces | `border-dark` #EBEDF3, `border-light` #F4F6F8, `bg-dark` #F5F6FA, `bg-light` #F9FBFC |
+| Primary (brand blue) | `primary-active` #193EE4, `primary-100` #2F50E4, `primary-50` #97A8F2, `primary-30` #C1CBF7, `primary-20` #D5DCFA, `primary-10` #EAEEFC, `primary-5` #F5F6FE. Not on the colour sheet: from the panel palette, tints mixed toward white. White text passes 4.5:1 on `-100` and `-active` |
 | Status | `info-*`, `warning-*`, `success-*`, `error-*`, each `-active`, `-100`, `-50`, `-30`, `-20`, `-10`, `-5` |
 
 
@@ -153,6 +154,23 @@ python -m venv laya-venv && laya-venv/Scripts/pip install torch --index-url http
 LAYA_HOST=127.0.0.1 LAYA_PORT=8765 LAYA_MODELS=english laya-venv/Scripts/laya-serve   # then FIGMA_WRITE_LAYA_URL=http://127.0.0.1:8765
 ```
 
+### Creative tab
+
+The plugin panel has two tabs. **Design** is everything above: the live session, Allow edits, counters and the activity log. **Creative** is for making social media creatives (and any other image or video work) with ChatGPT or Gemini, by hand:
+
+- **Open ChatGPT / Open Gemini** starts an isolated Chrome (or Edge) window with its own profile in `%LOCALAPPDATA%\webority-figma-mcp\creative-browser`. Sign in once; it is remembered and never touches your normal browser. No automation flags, so Google sign-in works, and nothing is generated for you.
+- **Inbox:** a new profile saves downloads to `%USERPROFILE%\Pictures\Webority Creative` (`FIGMA_CREATIVE_DIR` moves it). The tab lists the newest 20 images and videos with thumbnails and refreshes every 4 seconds. **Open folder** shows it in Explorer.
+- **Place** puts a file in the file. **Place as** picks: fill the selected layers, a new layer at the original size, or a new frame at a social size (Instagram 1:1 and 4:5, Story or Reel 9:16, LinkedIn, X, YouTube thumbnail, Facebook cover). It is your own click, so it needs no Allow edits; one undo step. WEBP and images over 4096 px are converted to PNG in the panel.
+- **Paste or drop:** copy an image in ChatGPT or Gemini and press Ctrl+V in the tab, or drop a file. It is saved to the inbox and placed.
+- **No Claude session running:** the buttons open the sites in your normal browser (not isolated) and paste still places images.
+
+| Tool | Writes? | Needs Allow edits | Does |
+|---|---|---|---|
+| `figma_creative_inbox` | No | No | Lists the inbox, newest first, plus the social sizes |
+| `figma_creative_place` | Yes | Yes | Places an inbox file as the fill of `nodeIds`, or as a new layer at a social `size`. Images and videos (videos need a paid plan) |
+
+Claude never opens the isolated browser itself; that stays your click. Ask it things like "put the Gemini image I just made into a 4:5 Instagram post with the headline in heading colour".
+
 ### Laya decisions
 
 | Tool | Writes? | Needs Allow edits | Does |
@@ -230,6 +248,22 @@ Saved, reusable Plugin API scripts with parameters, for example "12-column grid"
 |---|---|---|---|
 | `figma_export_video` | File on disk | Only for `animate` | MP4, WebM or GIF from a list of frames, the children of a section, or an animation script run on a temporary copy of a layer. Uses the bundled ffmpeg |
 
+### Draw, Prototype and Motion
+
+Figma's newer features, driven from Claude. Each call is one undo step and shows in the panel log. `tools/live-check-draw.mjs` re-checks the underlying Plugin API against real Figma.
+
+| Tool | Writes? | Needs Allow edits | Does |
+|---|---|---|---|
+| `figma_draw_style` | Yes | Yes | Draw styling on existing layers: brush strokes (15 stretch brushes such as NOIR, VERITE, HARDBOILED, with direction; 10 scatter brushes such as SHOEGAZE, SPOKEN_WORD, with gap, wiggle, jitter, rotation and size jitter), the pencil's wobbly stroke, variable width (6 profiles or custom points), stroke colour and weight, effects (noise in 3 types, texture, glass, progressive blur, a shader effect copied from a layer that uses one), text on a path, and union, subtract, intersect, exclude or flatten |
+| `figma_set_prototype` | Yes | Yes | Prototype links from a layer: every trigger (click, hover, press, drag, mouse enter/leave/up/down with delay, after a timeout, key press, video end), actions (navigate, overlay, swap, scroll to, change to a variant, back, close, open a link), transitions (instant, dissolve, smart animate, scroll animate, move/push/slide from any side) and easings (11 presets, cubic bezier, spring). Also flow starting points, scrolling frames with fixed top layers, clearing links, and raw reactions for variables and if/else logic |
+| `figma_set_motion` | Yes | Yes, except `listPresets` | Figma Motion on layers: the 6 presets (Position, Scale, Rotation, Size, Opacity, Path) with custom settings, keyframe tracks on 30 properties (move, rotate, scale, size, opacity, corner radius, spacing, path trim), a fill colour or an effect value, an easing per keyframe, timeline length, and clearing |
+
+**What only a person can do in Figma:** lasso select and shape builder (`figma_draw_style` booleans reproduce shape-builder results), pattern fills, overlay position and background, sticky layers, pressing Play, and moving the Motion playhead. Exports always show a layer's resting state, so Motion is previewed in Figma.
+
+**Shaders need one hand-applied use.** Code cannot import a shader, not even Figma's built-in ones. Apply a shader effect or fill to any layer once by hand; after that `figma_draw_style` (`effects: [{ type: "shader", copyFromNodeId }]`) or `figma_execute` can reuse it, change its settings, and stack it with other effects. Shader settings have hashed names, so find each one by trying values.
+
+**Hover and press links** need `change_to` on a variant (interactive components) or an overlay; Figma rejects `back` on them.
+
 ### Image generation
 
 | Tool | Writes? | Needs Allow edits | Does |
@@ -244,7 +278,8 @@ The prompt goes to **pollinations.ai** (free, no key, cloud), not a local model.
 
 ## 4. Safety
 
-- **Local only:** listens on `127.0.0.1` / `::1` port 3692, never the network.
+- **Local only:** listens on `127.0.0.1` / `::1`, never the network. Each session takes the first free port of 3692-3699.
+- **Several files at once:** run one Claude session per Figma file. Each file's panel pairs with a session that has no file yet and never takes a busy one. The panel shows the session's folder and port; **Switch** hands the session back and pairs the file with another.
 - **Access checks on every connection:**
   - The Host header must be localhost (blocks DNS rebinding).
   - The Origin must be `null`, the Figma plugin iframe (blocks web pages).
@@ -253,6 +288,7 @@ The prompt goes to **pollinations.ai** (free, no key, cloud), not a local model.
 - **Edits are opt-in:** refused unless **Allow edits** is ticked, and always refused in Dev Mode. Only the tick box can turn it on; the panel drops any other message that tries to, and the tick box always shows the real state.
 - **Undo:** every call is one Ctrl+Z.
 - **Image generation is the one cloud call:** `figma_generate_image` sends its prompt (and nothing from the file) to pollinations.ai, or to the server in `FIGMA_IMAGE_GEN_URL`. Its image-gen token sits next to the bridge token in `%LOCALAPPDATA%\webority-figma-mcp\`; keep it private too.
+- **Creative tab:** panel requests are accepted only from the authenticated plugin and only for a fixed set of actions (open the browser, list, read, save, open the folder). Inbox reads and saves take a bare file name inside the inbox, check the real file type from its first bytes, and stop at 40 MB. The isolated browser uses its own profile in `%LOCALAPPDATA%\webority-figma-mcp\creative-browser`, and only your click opens it; no tool does.
 - **Destructive tools** (`figma_execute`, `figma_set_text`, `figma_generate_image`) are flagged, so Claude Code asks before running them unless you allow them.
 - **Keep the bridge token private.** Delete `%LOCALAPPDATA%webority-figma-mcpridge-token` to rotate it; restart Claude Code, then reopen the plugin. An old `.bridge-token` in this folder is moved there on first start.
 - **Shader pixel code is sandboxed:** it runs in a separate Node process with no file system, no child processes, no string eval and an empty environment, inside a context that gets no host objects.
@@ -271,8 +307,12 @@ The prompt goes to **pollinations.ai** (free, no key, cloud), not a local model.
 | Panel: "Another Figma window took over" | Plugin open in a second file | Keep it open in one file; click Reconnect in the one you want |
 | Red line "DEV MODE: read-only" | Plugin opened in Dev Mode | Close plugin, Shift + D, reopen in design editor |
 | "Edits are off" | Allow edits unticked (it resets every time the plugin opens) | Tick Allow edits |
-| "Port 3692 is already in use" | Another Claude session is using it | Use that session, or close it |
+| "Port 3692 is already in use" | `FIGMA_WRITE_PORT` pins one port and another session holds it | Unset it, or use that session |
+| "Ports 3692-3699 are all in use" | Eight sessions already hold a port | Close one of them |
+| A file paired with the wrong session | Panels pair with the first free session | Click **Switch** in that file's panel |
 | Manifest error "editorType does not include dev" | Old prototype manifest | Import this folder's `plugin/manifest.json` |
+| Creative: "No Chrome or Edge found" | Neither browser is in the usual install folders | Set `FIGMA_CREATIVE_BROWSER` to a Chromium browser's `.exe` |
+| Creative: downloads do not appear in the inbox | The isolated profile existed before, so its download folder was left as you set it | Point its download folder at `%USERPROFILE%\Pictures\Webority Creative`, or save into it |
 | `figma_status` in weborityos shows a different file | That is the separate read-only Webority plugin on port 3691 | Both can run side by side |
 
 **Plugin API limits to know:** fonts must be available in Figma; OpenType features (e.g. lining figures) can't be set directly (copy a layer that has them and edit its characters); image fills need bytes passed in code (≤ 4096 px); huge loops block Figma until they finish.
@@ -283,7 +323,7 @@ The prompt goes to **pollinations.ai** (free, no key, cloud), not a local model.
 
 | Path | Role |
 |---|---|
-| `server.js` | MCP server (stdio), the core 8 tools, lazy port bind, version 1.3.0 |
+| `server.js` | MCP server (stdio), the core 8 tools, lazy port bind, version 1.5.0 |
 | `bridge.js` | Secure WebSocket bridge (Host, Origin, token, single plugin, shared bind) |
 | `plugin/manifest.json` · `code.js` · `ui.template.html` | Figma plugin (`ui.html` is generated with the token and font) |
 | `plugin/zalando-sans-latin.woff2` | Panel font, embedded into `ui.html` because the plugin window cannot load web fonts |
@@ -292,18 +332,41 @@ The prompt goes to **pollinations.ai** (free, no key, cloud), not a local model.
 | `lib/tools-extra.js` | 19 tools: Code Connect (7), shaders (6), generative plugins (5), video (1) |
 | `lib/tools-open.js` | 8 no-seat tools: access check, repo code map (3), sync, REST reading (3) |
 | `lib/color-tokens.js` | Default colour tokens, name-to-hex resolution for specs, and the rules taught on connect |
+| `lib/creative.js` · `tools-creative.js` | Isolated browser launch, inbox listing, safe reads and saves, panel requests · the two Creative tools |
 | `lib/tools-image.js` · `image-gen.js` | `figma_generate_image` · the image provider call (Pollinations by default) |
+| `lib/tools-figma-features.js` | `figma_draw_style`, `figma_set_prototype`, `figma_set_motion` (plugin commands `draw_style`, `set_prototype`, `set_motion`) |
 | `lib/snapshot.js` · `code-map-repo.js` · `rest.js` | Design snapshots and project lookup, `.figma/code-map.json`, REST with a budget-aware cache |
 | `lib/token.js` · `util.js` | Bridge token storage (user profile, owner-only) · shared node-id, save-path, mapping-key and source-path helpers |
 | `lib/shaders.js` · `png.js` · `code-scan.js` · `video.js` · `library.js` | Pixel shader renderer, PNG encoder, code scanner, ffmpeg wrapper, JSON library |
 | `library/` | Your saved shaders and generative plugins (created on first save) |
-| `test.js` | 23 automated checks (`npm test`), including the two-way token handshake, token storage, real ffmpeg encodes, image generation against a local stub, and the no-seat path |
+| `test.js` | 28 automated checks (`npm test`), including the two-way token handshake, token storage, real ffmpeg encodes, image generation against a local stub, and the no-seat path |
 | `tools/live-check-1.1.mjs` | 24 checks against real Figma (needs the plugin and Allow edits) |
+| `tools/live-check-draw.mjs` | 34 checks (all passing on 29-Sep-2026) of the Draw, Prototype and Motion Plugin API and the three tools against real Figma, including the known limits (pattern fill, sticky layers, overlay settings, playhead). Shader checks run only when a layer already uses a shader |
 | `tools/demo-all-tools.mjs` | Calls every tool once against the open file |
 | `tools/plan-assets.mjs` · `figma-to-html.mjs` · `merge-code-connect.mjs` · `make-viewer.mjs` | The Figma-to-HTML rebuild pipeline and the offline viewer generator |
 | `design-run.js` · `designs/` | Runs a folder of design scripts against Figma |
 
-**Colour tokens (26-Sep-2026, no version change):**
+**Changelog 1.6.0 (29-Sep-2026): Draw, Prototype and Motion tools.**
+- **New tools:** `figma_draw_style`, `figma_set_prototype` and `figma_set_motion` cover Figma Draw (brushes, pencil wobble, variable width, noise, texture, glass, progressive blur, shader reuse, text on a path, booleans), prototyping (triggers, actions, transitions, easings, flows, scrolling) and Motion (presets, keyframe tracks, timeline length). All three were probed live against Figma first.
+- **New live check:** `tools/live-check-draw.mjs` asserts what the Plugin API accepts and what it rejects, so a Figma change shows up there first.
+- **Panel redesign:** white, edge to edge, sections split by thin lines, underline tabs, a slim status row shown on both tabs, smaller controls. The window is 620 px tall (was 700).
+- `npm test` has 28 checks (one new test for the three tools; the tool list is 55).
+
+**Changelog 1.5.0 (28-Sep-2026): several Figma files at once.**
+- Each Claude session binds the first free port of 3692-3699 instead of failing when 3692 is taken.
+- Each file's panel scans those ports and pairs with a session that has no file yet (`claim:"free"`; a busy session answers 4409 and is never taken over).
+- The panel shows the paired session's folder and port, and a **Switch** button re-pairs the file with another session.
+- `figma_write_status` reports `port` and `session`.
+- Panel header: **Reset connection** (drop the session and pair again) and **Minimise** (the window shrinks to a round button with a connection dot; click it to open the panel).
+
+**Changelog 1.4.0 (26-Sep-2026): Creative tab.**
+- **Panel:** Design and Creative tabs. Creative opens ChatGPT or Gemini in an isolated browser, lists the inbox, and places files at social sizes; paste and drop work too.
+- **New tools:** `figma_creative_inbox`, `figma_creative_place`. **New plugin command:** `place_media` (images and videos). **Bridge:** the panel can now ask the server `{type:"panel", id, action, params}` for a fixed set of Creative actions.
+- **Primary colour tokens (28-Sep-2026):** a `primary` brand-blue scale (7 shades, base #2F50E4) joins the defaults, so there are 46 tokens and the Webority blue no longer shows in `offTokenColors`.
+- **Verified:** `npm test` 25/25. Not yet tried in Figma.
+- **After updating:** restart Claude Code, then close and reopen the plugin.
+
+**Also in 1.4.0 (26-Sep-2026, shipped earlier the same day): default colour tokens.**
 - **New tool:** `figma_color_tokens` returns the 39 default tokens from the Social Media Library colour sheet.
 - **Specs take token names:** `figma_create_from_spec` resolves names such as `info-100` or `heading` to hex on the server, so the plugin is unchanged.
 - **Server instructions** now teach the tokens and their contrast rules; `design_review` lists off-token fills as `offTokenColors`.

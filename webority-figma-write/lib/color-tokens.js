@@ -19,6 +19,17 @@ export const COLOR_TOKEN_GROUPS = {
     "bg-dark": "#F5F6FA",
     "bg-light": "#F9FBFC",
   },
+  // Webority brand blue. Not on the colour sheet: taken from the plugin panel palette (pressed #193EE4,
+  // base #2F50E4), with tints mixed toward white like the status scales.
+  primary: {
+    "primary-active": "#193EE4",
+    "primary-100": "#2F50E4",
+    "primary-50": "#97A8F2",
+    "primary-30": "#C1CBF7",
+    "primary-20": "#D5DCFA",
+    "primary-10": "#EAEEFC",
+    "primary-5": "#F5F6FE",
+  },
   info: {
     "info-active": "#056EE9",
     "info-100": "#1B84FF",
@@ -90,5 +101,6 @@ export const COLOR_TOKEN_RULES = `Default colour tokens (webority-figma-write)
 Use these by name for any fill, stroke or text colour instead of ad hoc hex. figma_create_from_spec accepts the names directly (e.g. fill: "info-100", text.color: "heading"); in figma_execute use the hex. figma_color_tokens returns the full table.
 - Ink: heading ${COLOR_TOKENS.heading}, text-1 to text-5 (${COLOR_TOKENS["text-1"]} darkest to ${COLOR_TOKENS["text-5"]} lightest), white ${COLOR_TOKENS.white}.
 - Surfaces: border-dark ${COLOR_TOKENS["border-dark"]}, border-light ${COLOR_TOKENS["border-light"]}, bg-dark ${COLOR_TOKENS["bg-dark"]}, bg-light ${COLOR_TOKENS["bg-light"]}.
+- Primary (brand blue): primary-100 ${COLOR_TOKENS["primary-100"]} for main buttons, links and accents, primary-active ${COLOR_TOKENS["primary-active"]} for hover or pressed, primary-50 to primary-5 tints for soft backgrounds. White text passes 4.5:1 on primary-100 and primary-active; primary-active text passes 4.5:1 on primary-30 and lighter.
 - Status scales info, warning, success, error, each with -active, -100, -50, -30, -20, -10, -5. -100 is the base colour, -active is hover or pressed, -50 to -5 are tints for backgrounds and chips.
-- Contrast (WCAG): white text reaches 4.5:1 only on info-active; it reaches 3:1 (large text) on info-100, error-active and error-100, and fails on every warning and success shade, so use heading there. On tints (-50 to -5) write text in heading or text-1; the -active shade on its own tints reaches only 3:1 (info and error at -10 and lighter) and fails elsewhere. For body text on white use heading, text-1 or text-2; text-3 is large text only; text-4 and text-5 are decorative.`;
+- Contrast (WCAG): white text reaches 4.5:1 only on info-active; it reaches 3:1 (large text) on info-100, error-active and error-100, and fails on every warning and success shade, so use heading there. On tints (-50 to -5) write text in heading or text-1; the -active shade on its own tints never reaches 4.5:1, reaches 3:1 (large text) only for info at -30 and lighter and error at -20 and lighter, and fails on every warning and success tint. For body text on white use heading, text-1 or text-2; text-3 is large text only; text-4 and text-5 are decorative.`;
