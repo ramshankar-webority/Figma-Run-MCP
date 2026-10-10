@@ -216,7 +216,7 @@
       <button class="iconbtn" id="switchSession" hidden title="Hand this Claude session back and pair this file with another one">Switch</button>
     </div>
 
-    <div class="tabs" role="tablist">
+    <div class="tabs" role="tablist" hidden>
       <button id="tabDesign" class="on" role="tab">Design</button>
       <button id="tabCreative" role="tab">Creative</button>
     </div>
@@ -365,7 +365,7 @@
       function randomHex(n) { var b = new Uint8Array(n); crypto.getRandomValues(b); return toHex(b); }
 
       var ws = null, retryTimer = null, everConnected = false, authed = false, myNonce = null;
-      var goodPort = null, skipPort = null, scanNote = null;
+      var goodPort = null, skipPort = null, scanNote = null, joinable = [];
       var pending = {}, logRows = [], counts = { calls: 0, writes: 0, errors: 0 };
 
       var statusEl = document.getElementById("status");
@@ -489,6 +489,8 @@
       // the ports and pairs with a session that has no Figma file yet ({claim:"free"}); a busy session
       // answers 4409 and the scan moves on. The last good port is tried first, so a file stays with
       // its session across reconnects. "Switch" hands this session back and pairs with another.
+      // When every session already has a file, a second pass joins one ({claim:"join"}) that offers it,
+      // so one Claude session can drive several files; it picks the target file with figma_use_file.
       function scanOrder() {
         var order = [];
         if (goodPort && goodPort !== skipPort) order.push(goodPort);
@@ -502,19 +504,21 @@
         reconnectBtn.hidden = true;
         switchBtn.hidden = true;
         scanNote = null;
+        joinable = [];
         if (!authed) setStatus(everConnected ? "Looking for a Claude session…" : "Waiting for Claude…", "wait");
-        tryPort(scanOrder(), 0);
+        tryPort(scanOrder(), 0, "free");
       }
 
-      function tryPort(order, i) {
+      function tryPort(order, i, mode) {
         if (i >= order.length) {
+          if (mode === "free" && joinable.length) { tryPort(joinable.slice(), 0, "join"); return; }
           setStatus(scanNote || (everConnected ? "Claude session ended · waiting" : "Waiting for Claude…"), scanNote ? "bad" : "wait");
           retryTimer = setTimeout(connect, 2000);
           return;
         }
         var port = order[i];
         var sock = new WebSocket("ws://localhost:" + port);
-        var done = false, authSent = false;
+        var done = false, authSent = false, canJoin = false;
         ws = sock;
         authed = false;
         var giveUp = setTimeout(function () { next(); }, 3000);
@@ -525,16 +529,16 @@
           sock.onclose = sock.onerror = sock.onmessage = null;
           try { sock.close(); } catch (e) {}
           if (ws === sock) ws = null;
-          tryPort(order, i + 1);
+          tryPort(order, i + 1, mode);
         }
-        function paired(session) {
+        function paired(session, files) {
           if (done) return;
           done = true;
           clearTimeout(giveUp);
           authed = true;
           everConnected = true;
           goodPort = port;
-          setStatus("Connected to " + (session || "Claude") + " · port " + port, "ok");
+          setStatus("Connected to " + (session || "Claude") + " · port " + port + (files > 1 ? " · " + files + " files" : ""), "ok");
           switchBtn.hidden = PORTS.length < 2;
           parent.postMessage({ pluginMessage: { type: "request-state" } }, "*");
           paintCreative();
@@ -548,6 +552,7 @@
         sock.onclose = function (ev) {
           if (!done) {
             if (ev.code === 4401) scanNote = "Rejected: token mismatch · reopen the plugin";
+            if (ev.code === 4409 && canJoin && mode === "free") joinable.push(port);
             next(); // not paired yet: busy (4409), refused or closed, try the next port
             return;
           }
@@ -566,7 +571,7 @@
           try { m = JSON.parse(ev.data); } catch (e) { return; }
           if (!m || typeof m !== "object") return;
           if (!authed) {
-            if (m.type === "welcome" && authSent) { paired(typeof m.session === "string" ? m.session : null); return; }
+            if (m.type === "welcome" && authSent) { paired(typeof m.session === "string" ? m.session : null, Number(m.files) || 1); return; }
             if (authSent) return;
             if (m.type !== "auth-challenge" || typeof m.nonce !== "string" || !sameHex(m.proof, hmacHex(TOKEN, "server|" + myNonce))) {
               // Something other than your Claude session is on this port. Tell it nothing, run nothing.
@@ -574,7 +579,9 @@
               next();
               return;
             }
-            send({ auth: hmacHex(TOKEN, "plugin|" + m.nonce), claim: "free" });
+            // Join only where the bridge says it can hold several files; an older one would replace the file.
+            canJoin = Array.isArray(m.features) && m.features.indexOf("join") >= 0;
+            send({ auth: hmacHex(TOKEN, "plugin|" + m.nonce), claim: mode === "join" && canJoin ? "join" : "free" });
             authSent = true;
             // An older server sends no welcome and ignores the claim; treat silence as paired.
             clearTimeout(giveUp);

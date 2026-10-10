@@ -75,6 +75,9 @@ export function registerLayaTools({ server, text, fail }) {
         }
         return text({ count: results.length, ms: Date.now() - t0, note: "Probabilities are uncalibrated. Verify before acting.", results: states ? results : results[0] });
       } catch (e) {
+        if (/fetch failed|ECONNREFUSED|ENOTFOUND/i.test(String(e?.cause?.code || e?.message))) {
+          return fail(new Error(`Laya is not reachable at ${process.env.FIGMA_WRITE_LAYA_URL}. Start laya-serve or unset FIGMA_WRITE_LAYA_URL, then decide this yourself; do not retry in a loop.`));
+        }
         return fail(e);
       }
     }

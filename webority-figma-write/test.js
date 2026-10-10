@@ -212,6 +212,39 @@ await test("a panel asking for a free session is turned away (4409); the file ke
   assert.equal(bridge.status().connected, false);
 });
 
+await test("several files: a joining panel adds a file, the target stays put until useFile, and falls back on close", async () => {
+  const a = await openSocket(port, { token: TOKEN, claim: "free" });
+  const wa = await new Promise((resolve) => a.ws.once("message", (d) => resolve(JSON.parse(String(d)))));
+  assert.equal(wa.fileId, "f" + bridge.fileSeq);
+  fakePlugin(a.ws, "File A");
+  const b = await openSocket(port, { token: TOKEN, claim: "join" });
+  const wb = await new Promise((resolve) => b.ws.once("message", (d) => resolve(JSON.parse(String(d)))));
+  assert.equal(wb.type, "welcome");
+  assert.equal(wb.files, 2);
+  fakePlugin(b.ws, "File B");
+  await wait(150);
+  assert.equal(a.bridgeProved, true);
+  assert.equal(a.closeCode, null, "joining must not drop the first file");
+  assert.equal((await bridge.request("status", {}, 2000)).fileName, "File A", "the first file stays the target");
+  assert.equal(bridge.status().files.length, 2);
+  bridge.useFile("file b");
+  assert.equal((await bridge.request("status", {}, 2000)).fileName, "File B");
+  assert.throws(() => bridge.useFile("file"), /matches 2 files/);
+  assert.throws(() => bridge.useFile("nope"), /No connected file 'nope'/);
+  bridge.useFile(wa.fileId);
+  assert.equal((await bridge.request("status", {}, 2000)).fileName, "File A");
+  a.ws.close();
+  await wait(150);
+  assert.equal((await bridge.request("status", {}, 2000)).fileName, "File B", "the target falls back to the file left");
+  assert.equal(bridge.status().files, undefined, "one file: no list");
+  const c = await openSocket(port, { token: TOKEN });
+  await wait(150);
+  assert.equal(b.closeCode, CLOSE_REPLACED, "no claim keeps the old replace behaviour");
+  c.ws.close();
+  await wait(100);
+  assert.equal(bridge.status().connected, false);
+});
+
 await bridge.stop();
 
 // ---- 1.1.0 library units (no Figma, no server) ----
@@ -370,6 +403,7 @@ const EXPECTED_TOOLS = [
   "design_review",
   "figma_access_check",
   "figma_add_code_connect_map",
+  "figma_animation_styles",
   "figma_apply_shader",
   "figma_color_tokens",
   "figma_create_from_spec",
@@ -381,12 +415,14 @@ const EXPECTED_TOOLS = [
   "figma_execute",
   "figma_export",
   "figma_export_many",
+  "figma_export_motion",
   "figma_export_video",
   "figma_find_nodes",
   "figma_generate_image",
   "figma_get_code_connect_map",
   "figma_get_code_connect_suggestions",
   "figma_get_context_for_code_connect",
+  "figma_get_css",
   "figma_get_document",
   "figma_get_generative_plugin",
   "figma_get_metadata",
@@ -401,6 +437,7 @@ const EXPECTED_TOOLS = [
   "figma_list_file_shaders",
   "figma_list_generative_plugins",
   "figma_list_shaders",
+  "figma_place_references",
   "figma_remove_code_connect_map",
   "figma_remove_repo_code_map",
   "figma_rest_file",
@@ -414,10 +451,12 @@ const EXPECTED_TOOLS = [
   "figma_set_prototype",
   "figma_set_repo_code_map",
   "figma_set_text",
+  "figma_set_variables",
   "figma_snapshot_code_map",
   "figma_sync_code_map",
   "figma_update_generative_plugin",
   "figma_update_shader",
+  "figma_use_file",
   "figma_write_status",
   "laya_decide",
   "laya_status",
@@ -437,12 +476,13 @@ await test(`MCP server starts over stdio, binds lazily, lists ${EXPECTED_TOOLS.l
     assert.match(init.result.instructions || "", /Laya decision rules/, "server instructions must teach the Laya policy");
     assert.match(init.result.instructions || "", /Default colour tokens/, "server instructions must teach the colour tokens");
     assert.match(init.result.instructions || "", /Creative tab/, "server instructions must teach the Creative tab");
+    assert.match(init.result.instructions || "", /Design references \(Mobbin\)/, "server instructions must teach the Mobbin reference rules");
     const tokens = toolJson(await s.tool("figma_color_tokens", {}));
     assert.equal(tokens.count, 46);
     assert.equal(tokens.groups.primary["primary-100"], "#2F50E4");
     assert.equal(tokens.groups.info["info-100"], "#1B84FF");
     const prompts = await s.rpc("prompts/list", {});
-    assert.deepEqual(prompts.result.prompts.map((p) => p.name).sort(), ["design_panel", "persona_accessibility", "persona_critic", "persona_interaction", "persona_researcher", "persona_strategist", "persona_systems", "persona_visual", "persona_writer"]);
+    assert.deepEqual(prompts.result.prompts.map((p) => p.name).sort(), ["design_panel", "design_with_references", "persona_accessibility", "persona_critic", "persona_interaction", "persona_researcher", "persona_strategist", "persona_systems", "persona_visual", "persona_writer"]);
     const status = toolJson(await s.tool("figma_write_status", {}));
     assert.equal(status.connected, false);
     assert.equal(status.server, SERVER_VERSION);
@@ -741,6 +781,79 @@ await test("Draw, Prototype and Motion tools validate input and forward one plug
     sock.ws.close();
   } finally {
     s.child.kill();
+  }
+});
+
+await test("Figma 2026 tools: native Motion export, animation styles, CSS, variables, new spec options (fake plugin)", async () => {
+  const mcpPort = await freePort();
+  const s = startServer({ FIGMA_WRITE_PORT: String(mcpPort) });
+  const seen = [];
+  const out = path.join(os.tmpdir(), "wfw-motion-" + process.pid + ".mp4");
+  try {
+    await s.rpc("initialize", { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "test", version: "0" } });
+    s.send({ jsonrpc: "2.0", method: "notifications/initialized" });
+    await s.tool("figma_write_status");
+    const token = fs.readFileSync(TEST_TOKEN_FILE, "utf8").trim();
+    const sock = await openSocket(mcpPort, { token });
+    sock.ws.on("message", (data) => {
+      const msg = JSON.parse(String(data));
+      if (!msg.command) return;
+      seen.push(msg);
+      const result = msg.command === "export_motion"
+        ? { base64: Buffer.from("fake-mp4-bytes").toString("base64"), format: msg.params.format, duration: 2.5, node: { id: msg.params.nodeId, name: "Hero" } }
+        : { ok: true, command: msg.command };
+      sock.ws.send(JSON.stringify({ id: msg.id, result }));
+    });
+    sock.ws.send(JSON.stringify({ type: "state", state: { fileName: "Fake", editsAllowed: true } }));
+    await wait(150);
+    const last = () => seen[seen.length - 1];
+
+    const vid = await s.tool("figma_export_motion", { nodeId: "4-1", savePath: out, fps: 60 });
+    assert.equal(vid.isError, undefined, JSON.stringify(vid));
+    assert.equal(last().command, "export_motion");
+    assert.equal(last().params.nodeId, "4:1");
+    assert.equal(last().params.format, "MP4");
+    assert.equal(last().params.savePath, undefined, "the path stays on the server");
+    assert.equal(fs.readFileSync(out, "utf8"), "fake-mp4-bytes");
+    assert.equal(toolJson(vid).duration, 2.5);
+    const badFps = await s.tool("figma_export_motion", { nodeId: "4:1", savePath: out, format: "GIF", fps: 60 });
+    assert.match(badFps.content[0].text, /GIF takes fps 8, 12, 15, 24, 30/);
+
+    const create = await s.tool("figma_animation_styles", { action: "create", name: "Card in", entries: [{ preset: "Opacity" }, { preset: "Position", settings: { direction: "bottom", easing: { spring: { bounce: 0.3 } } } }] });
+    assert.equal(create.isError, undefined, JSON.stringify(create));
+    assert.equal(last().command, "animation_styles");
+    assert.equal(last().params.entries.length, 2);
+    await s.tool("figma_animation_styles", { action: "apply", style: "Card in", nodeIds: ["5-1", "5-2"], stagger: 0.1 });
+    assert.deepEqual(last().params.nodeIds, ["5:1", "5:2"]);
+    const noEntries = await s.tool("figma_animation_styles", { action: "create", name: "Empty" });
+    assert.match(noEntries.content[0].text, /create needs name and at least one entry/);
+
+    await s.tool("figma_get_css", { nodeIds: ["6-1"], depth: 2 });
+    assert.equal(last().command, "get_css");
+    assert.equal(last().params.depth, 2);
+
+    const vars = await s.tool("figma_set_variables", { collection: "Brand", mode: "Light", variables: [
+      { type: "COLOR", name: "brand/primary", value: "primary-100" },
+      { type: "COLOR", name: "brand/primary-soft", value: { color: "@brand/primary", opacity: 0.2 }, scopes: ["ALL_FILLS"] },
+      { type: "EASING", name: "motion/enter", value: { bezier: [0.2, 0, 0, 1] } },
+      { type: "TIMING", name: "motion/fast", value: 0.15 },
+    ] });
+    assert.equal(vars.isError, undefined, JSON.stringify(vars));
+    assert.equal(last().command, "set_variables");
+    assert.equal(last().params.variables[0].value, "#2F50E4", "token names resolve to hex on the server");
+    assert.equal(last().params.variables[1].value.color, "@brand/primary", "aliases pass through");
+    const badVar = await s.tool("figma_set_variables", { collection: "Brand", variables: [{ type: "COLOR", name: "x", value: "nope" }] });
+    assert.match(badVar.content[0].text, /Unknown colour 'nope'/);
+
+    const spec = await s.tool("figma_create_from_spec", { spec: { type: "FRAME", layout: { mode: "VERTICAL", wrap: true, wrapGap: 24, primaryAlign: "SPACE_EVENLY" }, children: [{ type: "TEXT", text: { characters: "Hi", variation: { wght: 450 }, wrapStyle: "BALANCE" } }] } });
+    assert.equal(spec.isError, undefined, JSON.stringify(spec));
+    assert.equal(last().command, "create_from_spec");
+    assert.equal(last().params.spec.layout.wrapGap, 24);
+    assert.deepEqual(last().params.spec.children[0].text.variation, { wght: 450 });
+    sock.ws.close();
+  } finally {
+    s.child.kill();
+    fs.rmSync(out, { force: true });
   }
 });
 

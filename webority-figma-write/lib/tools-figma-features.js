@@ -21,6 +21,8 @@ const easing = z.union([
   z.object({ bezier: z.tuple([z.number(), z.number(), z.number(), z.number()]) }),
   z.object({ spring: z.object({ mass: z.number().positive(), stiffness: z.number().positive(), damping: z.number().min(0) }) }),
 ]);
+// Motion (timelines, keyframes, styles) also takes Figma's normalized spring; prototype transitions take only the physical one.
+const motionEasing = z.union([easing, z.object({ spring: z.object({ bounce: z.number().min(0).max(1) }) })]);
 
 const effect = z.discriminatedUnion("type", [
   z.object({ type: z.literal("noise"), noiseType: z.enum(["MONOTONE", "DUOTONE", "MULTITONE"]).default("MONOTONE"), density: z.number().min(0).max(1).default(0.5), size: z.number().positive().default(1.5), color: hex.default("#00000040"), secondaryColor: hex.optional().describe("DUOTONE only"), opacity: z.number().min(0).max(1).optional().describe("MULTITONE only") }),
@@ -128,12 +130,12 @@ export function registerFeatureTools({ server, bridge, text, fail }) {
     "figma_set_motion",
     {
       description:
-        "Figma Motion (timeline animation) on layers: list the 6 animation presets and their settings (listPresets), apply presets (Position, Scale, Rotation, Size, Opacity, Path) with custom settings, add keyframe tracks (30 properties such as TRANSLATION_X, ROTATION, SCALE_XY, OPACITY, WIDTH, CORNER_RADIUS, PATH_TRIM_END; a fill colour; or an effect value such as blur RADIUS), with an easing per keyframe, set the timeline length, or clear a layer's motion. Values: numbers, {x,y} for TRANSLATION_XY and SCALE_XY, hex for colours. Figma plays the timeline; the playhead cannot be moved and exports show the resting state. Needs 'Allow edits' except for listPresets. One undo step.",
+        "Figma Motion (timeline animation) on layers: list the 7 animation presets and their settings (listPresets), apply presets (Position, Scale, Rotation, Size, Opacity, Path, TextStagger for text layers) with custom settings, add keyframe tracks (30 properties such as TRANSLATION_X, ROTATION, SCALE_XY, OPACITY, WIDTH, CORNER_RADIUS, PATH_TRIM_END; a fill colour; or an effect value such as blur RADIUS), with an easing per keyframe, set the timeline length, or clear a layer's motion. Values: numbers, {x,y} for TRANSLATION_XY and SCALE_XY, hex for colours. Figma plays the timeline; the playhead cannot be moved and exports show the resting state. Needs 'Allow edits' except for listPresets. One undo step.",
       inputSchema: {
         listPresets: z.boolean().optional().describe("Only return the presets, their descriptions and settings."),
         nodeIds: z.array(id).max(200).optional(),
         presets: z
-          .array(z.object({ preset: z.enum(["Position", "Scale", "Rotation", "Size", "Opacity", "Path"]), settings: z.record(z.any()).default({}).describe("e.g. Position {type:'slide_in', direction:'bottom', distance:120, duration:0.8, delay:0, easing:'EASE_OUT_BACK'}") }))
+          .array(z.object({ preset: z.enum(["Position", "Scale", "Rotation", "Size", "Opacity", "Path", "TextStagger"]), settings: z.record(z.any()).default({}).describe("e.g. Position {type:'slide_in', direction:'bottom', distance:120, duration:0.8, delay:0, easing:'EASE_OUT_BACK'}") }))
           .optional(),
         keyframes: z
           .array(
@@ -141,7 +143,7 @@ export function registerFeatureTools({ server, bridge, text, fail }) {
               property: z.enum(MOTION_PROPERTIES).optional(),
               fillIndex: z.number().int().min(0).optional().describe("Animate the colour of this fill instead of a property."),
               effect: z.object({ index: z.number().int().min(0), field: z.enum(EFFECT_FIELDS) }).optional().describe("Animate a value of this effect."),
-              keys: z.array(z.object({ time: z.number().min(0), value: keyValue, easing: easing.optional() })).min(1),
+              keys: z.array(z.object({ time: z.number().min(0), value: keyValue, easing: motionEasing.optional() })).min(1),
             })
           )
           .optional(),

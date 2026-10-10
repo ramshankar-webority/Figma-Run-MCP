@@ -1,4 +1,4 @@
-# Webority Figma MCP · v1.7.0 (55 tools)
+# Webority Figma MCP · v1.7.0 (61 tools)
 
 Lets Claude **read and write the Figma file open in Figma desktop**: create layouts, edit text, run any Figma Plugin API code, and export images to check its own work. It runs entirely on your PC through a small Figma plugin, so there are **no Figma MCP rate limits** and no plan restrictions beyond having edit access to the file.
 
@@ -46,19 +46,20 @@ The panel turns green once Claude makes its first Figma call ("Connected to Clau
 
 ## 3. Tools
 
-All 55 tools, grouped: core 8, reading 10, Code Connect 7, shaders 6, generative plugins 5, video 1, image generation 1, Creative 2, Draw, Prototype and Motion 3, open access 8, Laya decisions 2, design review 2. Plus 9 prompts (design personas). "Needs Allow edits" means the tick box in the plugin panel.
+All 61 tools, grouped: core 9, reading 10, Code Connect 7, shaders 6, generative plugins 5, video 1, image generation 1, design references 1, Figma 2026 additions 4, Creative 2, Draw, Prototype and Motion 3, open access 8, Laya decisions 2, design review 2. Plus 10 prompts (design personas, and `design_with_references`). "Needs Allow edits" means the tick box in the plugin panel.
 
 ### Core (8)
 
 | Tool | Writes? | Needs Allow edits | Does |
 |---|---|---|---|
 | `figma_write_status` | No | No | Connection, file, page, editor type, selection count, Allow edits state, plugin vs server version |
+| `figma_use_file` | No | No | Lists the Figma files connected to this session and picks the one every call goes to (by name or id). A file whose panel finds no free session joins this one; the first file stays the target until you switch |
 | `figma_get_selection_brief` | No | No | Ids, names, sizes and parent of the current selection |
 | `figma_export` | No | No | Render a node to PNG, JPG or SVG, optionally saving it |
 | `figma_export_many` | No | No | Export up to 500 nodes to files in one call, returning only a manifest |
 | `figma_execute` | Yes | Yes | Run any Plugin API JavaScript. One undo step per call |
 | `figma_set_text` | Yes | Yes | Replace text in one or many layers, fonts loaded automatically |
-| `figma_create_from_spec` | Yes | Yes | Build a layer tree from JSON: frames, auto layout, fills, text. Colours take hex or a colour token name |
+| `figma_create_from_spec` | Yes | Yes | Build a layer tree from JSON: frames, auto layout (horizontal or vertical wrap with `wrapGap`, space between/evenly/around), fills, text (variable font axes via `variation`, `wrapStyle` BALANCE or PRETTY). Colours take hex or a colour token name |
 | `figma_color_tokens` | No | No | The 46 default colour tokens with hex, grouped, plus usage and contrast rules |
 
 **Default colour tokens** (`lib/color-tokens.js`, from the Social Media Library colour sheet, node `1080:63`). The server teaches them to Claude on connect, and `figma_create_from_spec` accepts the names wherever it takes a colour (`fill: "info-100"`, `text.color: "heading"`); unknown names are refused with the list. `design_review` reports fill colours outside the tokens as `offTokenColors` (not scored).
@@ -269,6 +270,11 @@ Figma's newer features, driven from Claude. Each call is one undo step and shows
 | Tool | Writes? | Needs Allow edits | Does |
 |---|---|---|---|
 | `figma_generate_image` | Yes | Yes | Generates an image from a prompt and places it: as the image fill of `nodeIds`, or as a new selected rectangle (inside `parentId`, else next to the selection). Sizes itself to the target layer at 2x. Stores prompt and seed on the layer; the same seed repeats the image. Returns the image; `savePath` also writes the file |
+| `figma_place_references` | Yes | Yes | Puts design references on a board next to the frame being designed (`nextTo`, else the selection): each an https image (a Mobbin result `image_url`, searched with `image_format` jpg) or local file, captioned with its title linked to `sourceUrl` and a note. Pairs with the Mobbin MCP; prompt `design_with_references` runs search, board, design and review |
+| `figma_export_motion` | No | No | Exports a top-level frame's Motion animation as MP4, GIF or WEBM rendered by Figma itself (fps, quality, loop count, scale or fixed size, 4K cap), saved to `savePath`. Code-driven animations stay on `figma_export_video` |
+| `figma_animation_styles` | Yes | Yes (not `list`) | Custom animation styles: list Figma's presets and the file's styles, create a named style from presets, apply it to layers with an offset and per-layer stagger, delete it |
+| `figma_get_css` | No | No | The CSS Figma's inspect panel shows, per layer and optionally down the tree (`depth`), for design-to-code |
+| `figma_set_variables` | Yes | Yes | Creates or updates variables in a collection and mode: colour (hex, token name, or colour + opacity with a variable side), number, string, boolean, Motion easing and timing; `@name` aliases another variable; optional scopes such as `COLOR_OPACITY` |
 
 The prompt goes to **pollinations.ai** (free, no key, cloud), not a local model. It checks the target before generating, so nothing is sent when Figma cannot take the result. Free images carry a small Pollinations logo in the corner; save a free Pollinations token (auth.pollinations.ai) in `%LOCALAPPDATA%\webority-figma-mcp\image-gen-token`, or set `FIGMA_IMAGE_GEN_TOKEN`, to remove it and raise the rate limit. `FIGMA_IMAGE_GEN_URL` points the tool at another server with the same `GET /prompt/<text>?width&height&seed&model` shape.
 
@@ -345,6 +351,8 @@ The prompt goes to **pollinations.ai** (free, no key, cloud), not a local model.
 | `tools/demo-all-tools.mjs` | Calls every tool once against the open file |
 | `tools/plan-assets.mjs` · `figma-to-html.mjs` · `merge-code-connect.mjs` · `make-viewer.mjs` | The Figma-to-HTML rebuild pipeline and the offline viewer generator |
 | `design-run.js` · `designs/` | Runs a folder of design scripts against Figma |
+
+**Changelog 1.7.0 (10-Oct-2026): Figma Jul to Oct 2026 API and Mobbin references.** `figma_export_motion` (native MP4/GIF/WEBM), `figma_animation_styles`, `figma_get_css`, `figma_set_variables` (colour + opacity, easing, timing); `figma_create_from_spec` gains vertical wrap with `wrapGap`, `SPACE_EVENLY`/`SPACE_AROUND`, text `wrapStyle` and variable font `variation`; `figma_place_references` and prompt `design_with_references` put Mobbin references on a board next to the design. Several files per session: a panel that finds no free session joins a busy one, and `figma_use_file` picks which file the calls go to. The Creative tab is hidden in the panel (its tools still work).
 
 **Changelog 1.6.0 (29-Sep-2026): Draw, Prototype and Motion tools.**
 - **New tools:** `figma_draw_style`, `figma_set_prototype` and `figma_set_motion` cover Figma Draw (brushes, pencil wobble, variable width, noise, texture, glass, progressive blur, shader reuse, text on a path, booleans), prototyping (triggers, actions, transitions, easings, flows, scrolling) and Motion (presets, keyframe tracks, timeline length). All three were probed live against Figma first.

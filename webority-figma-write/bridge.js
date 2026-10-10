@@ -10,10 +10,11 @@
 //      {type:"auth-challenge", proof: HMAC(token, "server|"+pluginNonce), nonce}; the plugin checks the
 //      proof (so a program squatting on the port learns nothing and cannot drive the file) and replies
 //      {auth: HMAC(token, "plugin|"+bridgeNonce)}. A wrong or missing answer closes with 4401.
-//   5. One plugin at a time: writes must never silently land in a different file. A panel that asks
-//      for a free session ({auth, claim:"free"}) is closed with 4409 when this bridge already has a
-//      plugin, and moves on to the next port. Without a claim, a newly authenticated plugin replaces
-//      the old one, which is closed with 4000.
+//   5. Writes never silently land in a different file. A panel that asks for a free session
+//      ({auth, claim:"free"}) is closed with 4409 when this bridge already has a file, and moves on to
+//      the next port. A panel that asks to join ({claim:"join"}, offered only when the challenge lists
+//      the "join" feature) is added as one more file: commands keep going to the target file (the first
+//      one, until useFile picks another). Without a claim, a new plugin replaces every file (4000).
 //   7. Several sessions at once: each bridge binds the first free port of its list (3692-3699 by
 //      default), and each Figma file's panel pairs with one session that has no file yet.
 //   6. Panel requests ({type:"panel", id, action, params}) come only from the authenticated current
@@ -36,12 +37,39 @@ export class FigmaWriteBridge {
     this.allowedOrigins = allowedOrigins;
     this.log = log;
     this.servers = [];
-    this.plugin = null; // { socket, state }
+    this.files = new Map(); // id -> { id, socket, state, since }
+    this.targetId = null; // the file commands go to; the first paired file until useFile changes it
+    this.fileSeq = 0;
     this.pending = new Map();
     this.seq = 0;
     this.bound = false;
     this.bindError = null;
     this.waiters = new Set(); // resolvers waiting for a plugin to authenticate
+  }
+
+  // The file commands go to. Kept as `plugin` so callers that predate several files still work.
+  get plugin() {
+    return this.files.get(this.targetId) || null;
+  }
+
+  // Every connected file, in pairing order, with the target marked.
+  listFiles() {
+    return [...this.files.values()].map((f) => ({ id: f.id, fileName: f.state.fileName ?? null, page: f.state.currentPage?.name ?? f.state.page ?? null, editorType: f.state.editorType ?? null, editsAllowed: f.state.editsAllowed ?? null, target: f.id === this.targetId }));
+  }
+
+  // Points commands at one file, by id (f1) or by file name (exact, then a unique case-insensitive part).
+  useFile(ref) {
+    const all = [...this.files.values()];
+    if (!all.length) throw new Error("No Figma file is connected to this session.");
+    const r = String(ref).trim().toLowerCase();
+    const hit = all.find((f) => f.id === ref) || all.find((f) => String(f.state.fileName || "").toLowerCase() === r) || (() => {
+      const part = all.filter((f) => String(f.state.fileName || "").toLowerCase().includes(r));
+      if (part.length > 1) throw new Error(`'${ref}' matches ${part.length} files: ${part.map((f) => f.state.fileName).join(", ")}. Use the id.`);
+      return part[0];
+    })();
+    if (!hit) throw new Error(`No connected file '${ref}'. Connected: ${all.map((f) => `${f.id} ${f.state.fileName}`).join(", ")}.`);
+    this.targetId = hit.id;
+    return this.listFiles();
   }
 
   // Binds if needed, then waits up to waitMs for a plugin. The panel rescans its ports every 2s, so right
@@ -137,11 +165,12 @@ export class FigmaWriteBridge {
     // reconnects in the meantime would otherwise keep this process alive forever.
     for (const s of this.servers) s.close();
     for (const c of this.wss?.clients ?? []) c.terminate();
-    this.plugin?.socket.terminate();
+    for (const f of this.files.values()) f.socket.terminate();
     for (const s of this.servers) s.closeAllConnections?.();
     for (const [id, p] of this.pending) { this.pending.delete(id); p.reject(new Error("The bridge stopped.")); }
     this.servers = [];
-    this.plugin = null;
+    this.files.clear();
+    this.targetId = null;
     this.bound = false;
   }
 
@@ -186,25 +215,32 @@ export class FigmaWriteBridge {
           }
           bridgeNonce = crypto.randomBytes(32).toString("hex");
           helloVersion = msg.version ?? null;
-          ws.send(JSON.stringify({ type: "auth-challenge", proof: hmac(this.token, "server|" + msg.nonce), nonce: bridgeNonce }));
+          ws.send(JSON.stringify({ type: "auth-challenge", proof: hmac(this.token, "server|" + msg.nonce), nonce: bridgeNonce, features: ["join"] }));
           return;
         }
         if (tokenMatches(msg?.auth, hmac(this.token, "plugin|" + bridgeNonce))) {
           clearTimeout(helloTimer);
-          const previous = this.plugin;
+          const others = [...this.files.values()].filter((f) => f.socket !== ws);
           // A panel looking for a free session never takes one that already drives a file.
-          if (msg.claim === "free" && previous && previous.socket !== ws) {
+          if (msg.claim === "free" && others.length) {
             ws.close(CLOSE_BUSY, "session busy");
             return;
           }
           authed = true;
-          this.plugin = { socket: ws, state: { origin: origin ?? "(none)", version: helloVersion } };
-          if (previous && previous.socket !== ws) {
-            previous.socket.close(CLOSE_REPLACED, "replaced by another plugin window");
-            this.log("[bridge] plugin replaced by a newer window");
+          const id = "f" + ++this.fileSeq;
+          if (msg.claim !== "join" && msg.claim !== "free") {
+            // No claim: the old single-file behaviour, the newest window replaces every other.
+            for (const f of others) {
+              this.files.delete(f.id);
+              f.socket.close(CLOSE_REPLACED, "replaced by another plugin window");
+            }
+            if (others.length) this.log("[bridge] plugin replaced by a newer window");
           }
-          this.log("[bridge] plugin authenticated");
-          ws.send(JSON.stringify({ type: "welcome", session: this.label, port: this.port }));
+          this.files.set(id, { id, socket: ws, state: { origin: origin ?? "(none)", version: helloVersion }, since: Date.now() });
+          ws.fileId = id;
+          if (!this.files.has(this.targetId)) this.targetId = id;
+          this.log(`[bridge] plugin authenticated (${id}, ${this.files.size} file${this.files.size === 1 ? "" : "s"})`);
+          ws.send(JSON.stringify({ type: "welcome", session: this.label, port: this.port, fileId: id, files: this.files.size }));
           for (const w of [...this.waiters]) w(true);
         } else {
           ws.close(CLOSE_BAD_TOKEN, "bad token");
@@ -212,13 +248,14 @@ export class FigmaWriteBridge {
         return;
       }
       if (msg?.type === "state") {
-        if (this.plugin?.socket === ws) this.plugin.state = { ...this.plugin.state, ...msg.state };
+        const f = this.files.get(ws.fileId);
+        if (f) f.state = { ...f.state, ...msg.state };
         return;
       }
       // The panel's own requests (the person's clicks in the Creative tab). Only the current plugin
       // may ask; a failing handler answers with an error and never drops the socket.
       if (msg?.type === "panel") {
-        if (this.plugin?.socket !== ws || typeof msg.id !== "string") return;
+        if (!this.files.has(ws.fileId) || typeof msg.id !== "string") return;
         const answer = (body) => { try { ws.send(JSON.stringify({ type: "panel-reply", id: msg.id, ...body })); } catch { /* socket gone */ } };
         if (!this.onPanelRequest) return answer({ error: "This server does not take panel requests." });
         Promise.resolve()
@@ -241,9 +278,11 @@ export class FigmaWriteBridge {
         : code === 1009
           ? "The plugin's answer was larger than the 64 MB limit and the connection closed. Export smaller or at a lower scale."
           : "The Figma plugin disconnected before it answered (closed, reloaded or the file changed).");
-      if (this.plugin?.socket === ws) {
-        this.plugin = null;
-        this.log("[bridge] plugin disconnected");
+      if (this.files.get(ws.fileId)?.socket === ws) {
+        this.files.delete(ws.fileId);
+        // The target falls back to the longest-connected file left, never to nothing while one remains.
+        if (this.targetId === ws.fileId) this.targetId = this.files.keys().next().value ?? null;
+        this.log(`[bridge] plugin disconnected (${ws.fileId}, ${this.files.size} left)`);
       }
     });
   }
@@ -255,6 +294,7 @@ export class FigmaWriteBridge {
       session: this.label,
       connected: !!this.plugin,
       ...(this.plugin ? this.plugin.state : {}),
+      ...(this.files.size > 1 ? { fileId: this.targetId, files: this.listFiles() } : {}),
     };
   }
 

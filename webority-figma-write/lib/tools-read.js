@@ -217,9 +217,20 @@ export function registerReadTools({ server, bridge, text, fail, call }) {
             payload.variablesError = e.message;
           }
         }
+        // Mappings saved in the file come first; the repo's override them (they are the reviewed copy).
+        try {
+          const listed = await bridge.request("components", { pageId: "all", mappedOnly: true }, 120000);
+          for (const c of listed.components || []) {
+            if (!c.mapping) continue;
+            payload.codeMap = payload.codeMap || {};
+            payload.codeMap[c.id] = { name: c.name, ...c.mapping };
+          }
+        } catch (e) {
+          payload.codeMapError = e.message;
+        }
         if (codeMapRepo) {
           const mapFile = path.join(codeMapRepo, ".figma", "code-map.json");
-          if (fs.existsSync(mapFile)) payload.codeMap = JSON.parse(fs.readFileSync(mapFile, "utf8")).components || null;
+          if (fs.existsSync(mapFile)) payload.codeMap = { ...(payload.codeMap || {}), ...(JSON.parse(fs.readFileSync(mapFile, "utf8")).components || {}) };
         }
         const saved = saveSnapshot(savePath, payload);
         let layers = 0;

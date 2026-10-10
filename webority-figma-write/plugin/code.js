@@ -111,7 +111,8 @@ const ACTIVITY_NAMES = {
   find_nodes: "Searched layers", get_text: "Read text", get_styles: "Read styles",
   get_variable_defs: "Read variables", get_image: "Read image fill", place_image: "Placed generated image",
   place_media: "Placed creative file", draw_style: "Applied Draw style", set_prototype: "Set prototype links",
-  set_motion: "Set motion",
+  set_motion: "Set motion", export_motion: "Exported Motion video", animation_styles: "Animation styles",
+  get_css: "Read CSS", set_variables: "Set variables",
 };
 
 // Records layers created, changed or deleted on the current page while one command runs.
@@ -200,7 +201,7 @@ async function postActivity(id, command, params, result, error, changes) {
 }
 
 // set_motion checks edits itself: listing the presets is read-only.
-const WRITE_COMMANDS = new Set(["execute", "set_text", "create_from_spec", "code_map_set", "code_map_remove", "apply_effect", "apply_shader", "render_frame", "place_image", "place_media", "draw_style", "set_prototype"]);
+const WRITE_COMMANDS = new Set(["execute", "set_text", "create_from_spec", "code_map_set", "code_map_remove", "apply_effect", "apply_shader", "render_frame", "place_image", "place_media", "draw_style", "set_prototype", "set_variables"]);
 
 async function handle(command, params) {
   if (WRITE_COMMANDS.has(command)) requireEdits();
@@ -247,6 +248,14 @@ async function handle(command, params) {
       return await setPrototype(params);
     case "set_motion":
       return await setMotion(params);
+    case "export_motion":
+      return await exportMotion(params);
+    case "animation_styles":
+      return await animationStyles(params);
+    case "get_css":
+      return await getCss(params);
+    case "set_variables":
+      return await setVariables(params);
     case "shader_usage":
       return await shaderUsage(params.pageId || null);
     case "render_frame":
@@ -433,14 +442,22 @@ async function build(spec, parent, counter) {
 
   if (spec.type === "TEXT") {
     const t = spec.text || { characters: "" };
-    const font = { family: t.fontFamily || "Inter", style: t.fontStyle || "Regular" };
+    // Variable fonts: axis values (wght 450, wdth 90) on top of the named style, or alone so Figma picks the closest instance.
+    const fn = t.fontName || {};
+    const variation = t.variation || fn.variationSettings;
+    const font = { family: t.fontFamily || fn.family || "Inter" };
+    const style = t.fontStyle || fn.style;
+    if (style || !variation) font.style = style || "Regular";
+    if (variation) font.variationSettings = variation;
     try {
       await figma.loadFontAsync(font);
     } catch (e) {
-      throw new Error("Font not available: " + font.family + " " + font.style);
+      const axes = variation && figma.getFontFamilyVariationAxes ? figma.getFontFamilyVariationAxes(font.family) : null;
+      throw new Error("Font not available: " + font.family + " " + (font.style || "") + (variation ? " with " + JSON.stringify(variation) + (axes ? " (axes this family has: " + axes.join(", ") + ")" : " (not a variable font here)") : "") + ": " + (e && e.message ? e.message : e));
     }
     node.fontName = font;
     node.characters = t.characters;
+    if (t.wrapStyle) node.textWrapStyle = t.wrapStyle;
     if (t.fontSize) node.fontSize = t.fontSize;
     if (t.lineHeight) node.lineHeight = { value: t.lineHeight, unit: "PIXELS" };
     if (t.letterSpacing !== undefined) node.letterSpacing = { value: t.letterSpacing, unit: "PIXELS" };
@@ -458,7 +475,13 @@ async function build(spec, parent, counter) {
   if (spec.layout && spec.type === "FRAME") {
     const l = spec.layout;
     node.layoutMode = l.mode;
-    if (l.wrap && l.mode === "HORIZONTAL") node.layoutWrap = "WRAP";
+    // Vertical wrap needs Figma from 25-Sep-2026 (Plugin API update 140).
+    if (l.wrap) {
+      try { node.layoutWrap = "WRAP"; }
+      catch (e) { throw new Error((spec.name || "Frame") + ": " + l.mode.toLowerCase() + " wrap is not supported by this Figma version: " + (e && e.message ? e.message : e)); }
+      const wrapGap = l.wrapGap !== undefined ? l.wrapGap : l.rowGap; // rowGap is what get_node reads back
+      if (wrapGap !== undefined) node.counterAxisSpacing = wrapGap;
+    }
     const p = typeof l.padding === "number" ? { top: l.padding, right: l.padding, bottom: l.padding, left: l.padding } : l.padding;
     if (p) {
       node.paddingTop = p.top;
@@ -622,7 +645,11 @@ async function codeMapGet(nodeId) {
   const target = await mapTarget(node);
   if (!target) return { node: brief(node), mapped: false, reason: "Not a component, component set or instance." };
   let devResources = [];
-  try { devResources = (await target.getDevResourcesAsync()).map((r) => ({ name: r.name, url: r.url })); } catch (e) {}
+  // The first call fetches dev resources from Figma's servers and has hung for 30 s; cap it so the mapping still comes back.
+  try {
+    const res = await Promise.race([target.getDevResourcesAsync(), new Promise((r) => setTimeout(() => r(null), 5000))]);
+    if (res) devResources = res.map((r) => ({ name: r.name, url: r.url }));
+  } catch (e) {}
   const mapping = await readMap(node);
   return { node: brief(node), target: brief(target), mapped: !!mapping, mapping, props: propDefs(target), devResources, preview: mapping ? buildSnippet(node, mapping) : null };
 }
@@ -655,7 +682,7 @@ async function codeMapSet(p) {
   let devResource = null;
   if (/^https?:\/\//.test(mapping.source)) {
     try {
-      const existing = await target.getDevResourcesAsync();
+      const existing = await Promise.race([target.getDevResourcesAsync(), new Promise((_, no) => setTimeout(() => no(new Error("Figma did not answer within 5 s")), 5000))]);
       if (!existing.some((r) => r.url === mapping.source)) await target.addDevResourceAsync(mapping.source, mapping.componentName);
       devResource = "added";
     } catch (e) {
@@ -1156,6 +1183,7 @@ function textMetrics(n) {
   t.lineHeight = val(n.lineHeight);
   t.letterSpacing = val(n.letterSpacing);
   if (n.textCase !== undefined) t.textCase = n.textCase === figma.mixed ? MIXED : n.textCase;
+  if (n.textWrapStyle !== undefined && n.textWrapStyle !== "AUTO") t.wrapStyle = n.textWrapStyle === figma.mixed ? MIXED : n.textWrapStyle;
   if (n.textDecoration !== undefined) t.textDecoration = n.textDecoration === figma.mixed ? MIXED : n.textDecoration;
   if (n.paragraphSpacing) t.paragraphSpacing = n.paragraphSpacing;
   if (n.textTruncation && n.textTruncation !== "DISABLED") t.truncation = n.textTruncation;
@@ -1420,6 +1448,7 @@ async function getText(p) {
         row.lineHeight = t.lineHeight;
         row.letterSpacing = t.letterSpacing;
         row.align = t.textAlignHorizontal;
+        if (t.wrapStyle) row.wrapStyle = t.wrapStyle;
         const sid = n.textStyleId;
         if (sid && sid !== figma.mixed) row.textStyle = (await styleName(sid)) || sid;
         if (n.fills !== figma.mixed && n.fills[0] && n.fills[0].type === "SOLID") row.color = hexOf(n.fills[0].color, n.fills[0].opacity);
@@ -1464,15 +1493,196 @@ async function getVariableDefs() {
       const values = {};
       for (const m of modes) {
         const raw = v.valuesByMode[m.id];
-        if (raw && raw.type === "VARIABLE_ALIAS") values[m.name] = "-> " + ((await variableName(raw.id)) || raw.id);
-        else if (raw && typeof raw === "object" && "r" in raw) values[m.name] = hexOf(raw, raw.a);
-        else values[m.name] = raw;
+        const part = async (x) => (x && x.type === "VARIABLE_ALIAS" ? "-> " + ((await variableName(x.id)) || x.id) : x && typeof x === "object" && "r" in x ? hexOf(x, x.a) : x);
+        if (raw && typeof raw === "object" && "color" in raw && "opacity" in raw) values[m.name] = { color: await part(raw.color), opacity: await part(raw.opacity) };
+        else values[m.name] = await part(raw);
       }
       variables.push({ id: v.id, name: v.name, type: v.resolvedType, scopes: v.scopes, description: v.description || undefined, values });
     }
     out.push({ id: c.id, name: c.name, defaultMode: (modes[0] || {}).name, modes, variableCount: variables.length, variables });
   }
   return { collections: out.length, variableCollections: out };
+}
+
+// ---- Figma 2026 additions: native Motion video export, custom animation styles, CSS, variables ----
+
+// A top-level frame's Motion timeline exported by Figma itself (Plugin API update 131).
+async function exportMotion(p) {
+  const node = await figma.getNodeByIdAsync(String(p.nodeId));
+  if (!node) throw new Error("Node not found: " + p.nodeId);
+  if (!node.parent || node.parent.type !== "PAGE") throw new Error("Only a top-level frame (directly on a page) exports as video. " + node.name + " is inside " + (node.parent ? node.parent.name : "nothing") + ".");
+  const settings = { format: p.format };
+  if (p.fps) settings.fps = p.fps;
+  if (p.quality && p.format !== "GIF") settings.quality = p.quality;
+  if (p.loopCount != null && p.format === "GIF") settings.loopCount = p.loopCount;
+  if (p.width) settings.constraint = { type: "WIDTH", value: p.width };
+  else if (p.height) settings.constraint = { type: "HEIGHT", value: p.height };
+  else if (p.scale) settings.constraint = { type: "SCALE", value: p.scale };
+  let bytes;
+  try {
+    bytes = await node.exportAsync(settings);
+  } catch (e) {
+    throw new Error("Figma could not export this frame as " + p.format + " (it needs a Motion animation, and Figma from July 2026): " + (e && e.message ? e.message : e) + ". figma_export_video renders code-driven animations instead.");
+  }
+  // The bridge takes messages up to 64 MB and base64 adds a third, so refuse before the socket would drop.
+  if (bytes.length > 45 * 1024 * 1024) throw new Error("The " + p.format + " is " + Math.round(bytes.length / 1048576) + " MB, over the 45 MB the bridge can carry. Lower scale, fps or quality and export again.");
+  const timeline = (node.timelines || [])[0];
+  return { base64: figma.base64Encode(bytes), format: p.format, node: brief(node), duration: timeline ? timeline.duration : null, bytes: bytes.length };
+}
+
+// Custom animation styles (Plugin API update 140): list, create from Figma presets, apply, remove, delete.
+async function animationStyles(p) {
+  const presets = figma.motion.figmaAnimationStyles();
+  const custom = await figma.getLocalCustomAnimationStylesAsync();
+  // Entry names come back as translation keys (motion.preset_name.opacity); report the preset id instead.
+  const presetOf = (name) => { const k = String(name || "").replace(/^motion.preset_name./, "").replace(/_/g, ""); const hit = presets.find((x) => x.styleId.toLowerCase() === k.toLowerCase()); return hit ? hit.styleId : name; };
+  const describe = (s) => ({ id: s.id, name: s.name, description: s.description || undefined, entries: s.animationEntries.map((e) => ({ id: e.id, preset: presetOf(e.name), props: e.props })) });
+  if (p.action === "list") return { presets: presets.map((x) => ({ preset: x.styleId, settings: x.props })), custom: custom.map(describe) };
+  requireEdits();
+  const presetId = (name) => {
+    const hit = presets.find((x) => x.styleId === name || x.name === name);
+    if (!hit) throw new Error("Unknown Motion preset '" + name + "'. Presets: " + presets.map((x) => x.name).join(", "));
+    return hit.styleId;
+  };
+  const findStyle = (ref) => {
+    const hit = custom.find((s) => s.id === ref || s.name === ref);
+    if (!hit) throw new Error("No local animation style '" + ref + "'. Styles: " + (custom.map((s) => s.name).join(", ") || "none"));
+    return hit;
+  };
+  const props = (settings) => {
+    const o = Object.assign({}, settings);
+    if (o.easing) o.easing = toEasing(o.easing);
+    return o;
+  };
+  if (p.action === "create") {
+    let style = custom.find((s) => s.name === p.name);
+    const existed = !!style;
+    if (!style) { style = figma.createCustomAnimationStyle(); style.name = p.name; }
+    if (p.description != null) style.description = p.description;
+    if (existed && p.replace) for (const e of style.animationEntries.slice()) style.removeAnimationEntry(e.id);
+    for (const e of p.entries || []) await style.addAnimationEntryAsync(presetId(e.preset), props(e.settings));
+    figma.commitUndo();
+    return { created: !existed, style: describe(style) };
+  }
+  if (p.action === "apply") {
+    const style = findStyle(p.style);
+    const nodes = await nodesOrThrow(p.nodeIds);
+    const applied = [], errors = [];
+    const pageOf = (n) => { let x = n; while (x && x.type !== "PAGE") x = x.parent; return x; };
+    for (let i = 0; i < nodes.length; i++) {
+      const n = nodes[i];
+      try {
+        const offset = (p.timelineOffset || 0) + (p.stagger || 0) * i;
+        const page = pageOf(n);
+        if (page) await page.loadAsync();
+        let appliedId;
+        // Styles resolve only on the current page, as in setMotion.
+        try { appliedId = n.applyAnimationStyle(style.id, { type: "CUSTOM", timelineOffset: offset }); }
+        catch (e) {
+          if (!/resolve/i.test(String(e.message)) || !page || page === figma.currentPage) throw e;
+          await figma.setCurrentPageAsync(page);
+          appliedId = n.applyAnimationStyle(style.id, { type: "CUSTOM", timelineOffset: offset });
+        }
+        applied.push({ id: n.id, name: n.name, applied: appliedId, timelineOffset: offset });
+      } catch (e) {
+        errors.push({ id: n.id, name: n.name, error: String(e.message || e) });
+      }
+    }
+    figma.commitUndo();
+    return { style: style.name, applied, errors };
+  }
+  if (p.action === "delete") {
+    const style = findStyle(p.style);
+    const name = style.name;
+    style.remove();
+    figma.commitUndo();
+    return { deleted: name };
+  }
+  throw new Error("Unknown action: " + p.action);
+}
+
+// The CSS Figma's inspect panel shows, per layer, optionally down the tree.
+async function getCss(p) {
+  let roots = p.nodeIds && p.nodeIds.length ? await nodesOrThrow(p.nodeIds) : figma.currentPage.selection.slice();
+  if (!roots.length) throw new Error("Select layers or pass nodeIds.");
+  const max = Math.min(Number(p.maxNodes) || 200, 1000);
+  const depth = Math.max(0, Number(p.depth) || 0);
+  const list = [];
+  const walk = (n, d) => {
+    if (list.length >= max) return;
+    list.push({ n, d });
+    if (d < depth && "children" in n) for (const c of n.children) walk(c, d + 1);
+  };
+  for (const r of roots) walk(r, 0);
+  const out = await Promise.all(list.map(async ({ n, d }) => {
+    try {
+      return { id: n.id, name: n.name, type: n.type, depth: d, css: await n.getCSSAsync() };
+    } catch (e) {
+      return { id: n.id, name: n.name, type: n.type, depth: d, error: String(e.message || e) };
+    }
+  }));
+  return { nodes: out, truncated: list.length >= max };
+}
+
+// Create or update local variables in one call: colours (plain or colour + opacity), numbers, strings,
+// booleans, Motion easings and timings, and aliases to other variables by name.
+async function setVariables(p) {
+  const collections = await figma.variables.getLocalVariableCollectionsAsync();
+  let col = collections.find((c) => c.name === p.collection);
+  const createdCollection = !col;
+  if (!col) col = figma.variables.createVariableCollection(p.collection);
+  let modeId = col.modes[0].modeId;
+  if (p.mode) {
+    const m = col.modes.find((x) => x.name === p.mode);
+    if (m) modeId = m.modeId;
+    else if (createdCollection) { col.renameMode(modeId, p.mode); }
+    else modeId = col.addMode(p.mode);
+  }
+  const all = await figma.variables.getLocalVariablesAsync();
+  const byName = (name) => {
+    const [cName, ...rest] = String(name).includes("::") ? String(name).split("::") : [null, name];
+    const vName = cName ? rest.join("::") : name;
+    const hit = all.find((v) => v.name === vName && (!cName || (collections.find((c) => c.id === v.variableCollectionId) || {}).name === cName))
+      || all.find((v) => v.name === vName && v.variableCollectionId === col.id);
+    if (!hit) throw new Error("No variable named '" + name + "' (use 'Collection::name' for another collection).");
+    return figma.variables.createVariableAlias(hit);
+  };
+  const ref = (x) => (typeof x === "string" && x.startsWith("@") ? byName(x.slice(1)) : null);
+  const colour = (x) => { const c = parseHex(x); return { r: c.color.r, g: c.color.g, b: c.color.b, a: c.opacity }; };
+  const valueOf = (v) => {
+    const r = ref(v.value);
+    if (r) return r;
+    switch (v.type) {
+      case "COLOR":
+        if (v.value && typeof v.value === "object") {
+          const c = ref(v.value.color) || colour(v.value.color);
+          const o = ref(v.value.opacity);
+          const op = o || Number(v.value.opacity);
+          if (!c.type && !o) throw new Error(v.name + ": a colour with opacity needs the colour or the opacity to be a variable (@name).");
+          return { color: c, opacity: op };
+        }
+        return colour(v.value);
+      case "EASING": return toEasing(v.value);
+      default: return v.value;
+    }
+  };
+  const done = [], errors = [];
+  for (const v of p.variables) {
+    try {
+      let variable = all.find((x) => x.name === v.name && x.variableCollectionId === col.id);
+      const created = !variable;
+      if (!variable) { variable = figma.variables.createVariable(v.name, col, v.type); all.push(variable); }
+      else if (variable.resolvedType !== v.type) throw new Error("exists as " + variable.resolvedType + ", not " + v.type);
+      variable.setValueForMode(modeId, valueOf(v));
+      if (v.scopes) variable.scopes = v.scopes;
+      if (v.description != null) variable.description = v.description;
+      done.push({ id: variable.id, name: v.name, type: v.type, created });
+    } catch (e) {
+      errors.push({ name: v.name, error: String(e.message || e) });
+    }
+  }
+  figma.commitUndo();
+  return { collection: { id: col.id, name: col.name, created: createdCollection }, mode: (col.modes.find((m) => m.modeId === modeId) || {}).name, variables: done, errors };
 }
 
 async function getImage(p) {
@@ -1506,6 +1716,7 @@ function toEasing(e) {
   if (!e) return { type: "EASE_OUT" };
   if (typeof e === "string") return { type: e };
   if (e.bezier) return { type: "CUSTOM_CUBIC_BEZIER", easingFunctionCubicBezier: { x1: e.bezier[0], y1: e.bezier[1], x2: e.bezier[2], y2: e.bezier[3] } };
+  if (e.spring && e.spring.bounce != null) return { type: "CUSTOM_SPRING", easingFunctionSpring: { bounce: e.spring.bounce } };
   if (e.spring) return { type: "CUSTOM_SPRING", easingFunctionSpring: { mass: e.spring.mass, stiffness: e.spring.stiffness, damping: e.spring.damping } };
   return e;
 }
@@ -1605,7 +1816,7 @@ async function drawStyle(p) {
       }
       const out = brief(n);
       if ("complexStrokeProperties" in n) out.stroke = n.complexStrokeProperties;
-      if (s && s.width && "variableWidthStrokeProperties" in n) out.width = n.variableWidthStrokeProperties.widthProfile;
+      if (s && s.width && "variableWidthStrokeProperties" in n) out.widthProfile = n.variableWidthStrokeProperties.widthProfile;
       if (effects.length) out.effects = n.effects.map((x) => x.type);
       result.styled.push(out);
     } catch (e) {

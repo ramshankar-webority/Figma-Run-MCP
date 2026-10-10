@@ -19,8 +19,11 @@ import { registerDesignTools } from "./lib/tools-design.js";
 import { registerImageTools } from "./lib/tools-image.js";
 import { registerCreativeTools } from "./lib/tools-creative.js";
 import { registerFeatureTools } from "./lib/tools-figma-features.js";
+import { registerReferenceTools } from "./lib/tools-references.js";
+import { registerFigma2026Tools } from "./lib/tools-figma-2026.js";
 import { CREATIVE_RULES, handlePanelRequest } from "./lib/creative.js";
 import { LAYA_RULES } from "./lib/laya.js";
+import { REFERENCE_RULES } from "./lib/references.js";
 import { COLOR_TOKENS, COLOR_TOKEN_GROUPS, COLOR_TOKEN_RULES, resolveSpecColors } from "./lib/color-tokens.js";
 import { normId, prepareSavePath } from "./lib/util.js";
 import { ensureToken, restrictToOwner } from "./lib/token.js";
@@ -84,10 +87,10 @@ const bridge = new FigmaWriteBridge({ ports: PORTS, token, label: path.basename(
 bridge.onPanelRequest = (action, params) => handlePanelRequest(action, params);
 if (process.env.FIGMA_WRITE_EAGER === "1") await bridge.start();
 
-// Server instructions reach every client model on connect: this is where the Laya policy, the default colour tokens and the Creative tab are taught.
+// Server instructions reach every client model on connect: this is where the Laya policy, the default colour tokens, the Creative tab and the Mobbin reference rules are taught.
 const server = new McpServer(
   { name: "webority-figma-write", version: VERSION },
-  { instructions: "Webority Figma MCP: read and write the open Figma file through the local plugin, plus Code Connect, shaders, generative plugins, video and no-seat snapshot reads. Call figma_write_status first and whenever a write fails. For design critique, run design_review on the frame, then the design_panel or persona_<id> prompts (or design_personas) for judgement.\n\n" + LAYA_RULES + "\n\n" + COLOR_TOKEN_RULES + "\n\n" + CREATIVE_RULES }
+  { instructions: "Webority Figma MCP: read and write the open Figma file through the local plugin, plus Code Connect, shaders, generative plugins, video and no-seat snapshot reads. Call figma_write_status first and whenever a write fails. Several Figma files can share this session: figma_use_file lists them and picks which one every call goes to. For design critique, run design_review on the frame, then the design_panel or persona_<id> prompts (or design_personas) for judgement.\n\n" + LAYA_RULES + "\n\n" + COLOR_TOKEN_RULES + "\n\n" + CREATIVE_RULES + "\n\n" + REFERENCE_RULES }
 );
 
 const text = (value) => ({ content: [{ type: "text", text: typeof value === "string" ? value : JSON.stringify(value) }] });
@@ -111,13 +114,33 @@ server.registerTool(
     await bridge.ensureConnected();
     const status = { server: VERSION, ...bridge.status(), ...(PORT_WARNING ? { portWarning: PORT_WARNING } : {}) };
     if (!status.connected) {
-      return text({ ...status, hint: bridge.bound ? `Open the 'Webority Figma MCP' plugin in the Figma file you want this session to drive (design editor) and keep it open. Each open file pairs with one Claude session; this one is '${bridge.label}' on port ${bridge.port}. If another file's panel took this session, click Switch session in that panel.` : status.bridge });
+      return text({ ...status, hint: bridge.bound ? `Open the 'Webority Figma MCP' plugin in the Figma file you want this session to drive (design editor) and keep it open. A file pairs with a free Claude session, or joins this one when none is free (figma_use_file then picks which file gets the calls); this one is '${bridge.label}' on port ${bridge.port}. Switch in a panel moves that file to another session.` : status.bridge });
     }
     if (status.version && status.version !== VERSION) status.warning = `Plugin build ${status.version} differs from server ${VERSION}. Close and reopen the plugin in Figma.`;
     try {
       return text({ ...status, ...(await bridge.request("status", {}, 10000)) });
     } catch (e) {
       return text({ ...status, statusError: e.message });
+    }
+  }
+);
+
+server.registerTool(
+  "figma_use_file",
+  {
+    description:
+      "Several Figma files can be connected to this session at once (open the plugin in each; a file whose panel finds no free session joins this one). Every figma_* call goes to the target file: the first one connected, until this tool picks another by file name or id. Without file: lists the connected files and which is the target. Read-only.",
+    inputSchema: { file: z.string().min(1).optional().describe("File name (exact, or a unique part) or id from the list, e.g. 'f2'.") },
+    annotations: { readOnlyHint: true },
+  },
+  async ({ file }) => {
+    try {
+      await bridge.ensureConnected();
+      const files = file ? bridge.useFile(file) : bridge.listFiles();
+      if (!files.length) return fail(new Error("No Figma file is connected. Open the 'Webority Figma MCP' plugin in each file you want this session to use."));
+      return text({ target: files.find((f) => f.target) || null, files });
+    } catch (e) {
+      return fail(e);
     }
   }
 );
@@ -251,9 +274,10 @@ const specShape = z.lazy(() =>
         mode: z.enum(["HORIZONTAL", "VERTICAL"]),
         padding: z.union([z.number(), z.object({ top: z.number(), right: z.number(), bottom: z.number(), left: z.number() })]).optional(),
         gap: z.number().optional(),
-        primaryAlign: z.enum(["MIN", "CENTER", "MAX", "SPACE_BETWEEN"]).optional(),
+        primaryAlign: z.enum(["MIN", "CENTER", "MAX", "SPACE_BETWEEN", "SPACE_EVENLY", "SPACE_AROUND"]).optional().describe("SPACE_EVENLY / SPACE_AROUND need Figma from Aug 2026."),
         counterAlign: z.enum(["MIN", "CENTER", "MAX", "BASELINE"]).optional(),
-        wrap: z.boolean().optional(),
+        wrap: z.boolean().optional().describe("Wrap children onto new rows (HORIZONTAL) or columns (VERTICAL, Figma from Sep 2026)."),
+        wrapGap: z.number().optional().describe("Gap between wrapped rows or columns."),
       })
       .optional(),
     sizing: z
@@ -264,7 +288,10 @@ const specShape = z.lazy(() =>
       .object({
         characters: z.string(),
         fontFamily: z.string().optional().describe("Default Inter"),
-        fontStyle: z.string().optional().describe("Default Regular"),
+        fontStyle: z.string().optional().describe("Default Regular (omit with variation to let Figma pick the closest instance)"),
+        variation: z.record(z.number()).optional().describe("Variable font axes, e.g. {wght: 450} or {wght: 650, wdth: 90}. Figma from Sep 2026."),
+        fontName: z.object({ family: z.string(), style: z.string().optional(), variationSettings: z.record(z.number()).optional() }).optional().describe("The fontName shape figma_get_node returns; fontFamily, fontStyle and variation win over it."),
+        wrapStyle: z.enum(["AUTO", "BALANCE", "PRETTY"]).optional().describe("BALANCE evens out heading lines; PRETTY avoids a lone last word. Figma from Aug 2026."),
         fontSize: z.number().positive().optional(),
         color: z.string().optional().describe("Hex or a colour token name, e.g. heading or text-2."),
         lineHeight: z.number().positive().optional().describe("Pixels"),
@@ -280,7 +307,7 @@ server.registerTool(
   "figma_create_from_spec",
   {
     description:
-      "Build a whole layer tree in one call from a JSON spec: frames with auto layout, padding, gap, Fill/Hug/Fixed sizing, fills, strokes, radius, and text with font, size, colour, line height. Placed on the current page (or inside parentId), then selected and zoomed into view. Needs 'Allow edits'. One undo step.",
+      "Build a whole layer tree in one call from a JSON spec: frames with auto layout (horizontal or vertical wrap, space between/evenly/around), padding, gap, Fill/Hug/Fixed sizing, fills, strokes, radius, and text with font (variable font axes too), size, colour, line height and balanced or pretty wrapping. Placed on the current page (or inside parentId), then selected and zoomed into view. Needs 'Allow edits'. One undo step.",
     inputSchema: {
       spec: specShape,
       parentId: z.string().optional().describe("Frame to append into. Omit for the current page."),
@@ -332,6 +359,12 @@ registerImageTools({ server, bridge, text, fail });
 // figma_creative_inbox, figma_creative_place (the Creative tab's inbox)
 registerCreativeTools({ server, bridge, text, fail });
 registerFeatureTools({ server, bridge, text, fail });
+
+// figma_place_references, prompt design_with_references (Mobbin references board)
+registerReferenceTools({ server, bridge, text, fail });
+
+// figma_export_motion, figma_animation_styles, figma_get_css, figma_set_variables (Figma's Jul to Oct 2026 API)
+registerFigma2026Tools({ server, bridge, text, fail, call });
 
 await server.connect(new StdioServerTransport());
 log(`[webority-figma-write ${VERSION}] MCP server ready (bridge ports ${PORTS.join(",")}, binds the first free one on first use)`);
