@@ -1,4 +1,4 @@
-// Webority Figma Write (v1.6.0): plugin sandbox.
+// Webority Figma Write (v1.7.0): plugin sandbox.
 // Runs Figma Plugin API calls sent by the local MCP server (via ui.html, which owns the socket).
 // Writes are refused unless the user ticks "Allow edits" in the panel. Commands run one at a time.
 

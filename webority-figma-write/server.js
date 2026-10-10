@@ -1,4 +1,4 @@
-// Webority Figma Write MCP (v1.6.0): MCP server over stdio.
+// Webority Figma Write MCP (v1.7.0): MCP server over stdio.
 // Lets Claude read and write the Figma file open in Figma desktop, through the
 // "Webority Figma Write" plugin. Local only: ports 3692-3699 (first free), per-machine token, no Figma rate limits.
 // stdout is the MCP protocol; every log line goes to stderr.
@@ -25,7 +25,7 @@ import { COLOR_TOKENS, COLOR_TOKEN_GROUPS, COLOR_TOKEN_RULES, resolveSpecColors 
 import { normId, prepareSavePath } from "./lib/util.js";
 import { ensureToken, restrictToOwner } from "./lib/token.js";
 
-export const VERSION = "1.6.0";
+export const VERSION = "1.7.0";
 const here = path.dirname(fileURLToPath(import.meta.url));
 const log = (line) => process.stderr.write(line + "\n");
 

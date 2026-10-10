@@ -1,4 +1,4 @@
-# Webority Figma MCP · v1.6.0 (55 tools)
+# Webority Figma MCP · v1.7.0 (55 tools)
 
 Lets Claude **read and write the Figma file open in Figma desktop**: create layouts, edit text, run any Figma Plugin API code, and export images to check its own work. It runs entirely on your PC through a small Figma plugin, so there are **no Figma MCP rate limits** and no plan restrictions beyond having edit access to the file.
 
