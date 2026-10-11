@@ -54,7 +54,7 @@ export class FigmaWriteBridge {
 
   // Every connected file, in pairing order, with the target marked.
   listFiles() {
-    return [...this.files.values()].map((f) => ({ id: f.id, fileName: f.state.fileName ?? null, page: f.state.currentPage?.name ?? f.state.page ?? null, editorType: f.state.editorType ?? null, editsAllowed: f.state.editsAllowed ?? null, target: f.id === this.targetId }));
+    return [...this.files.values()].map((f) => ({ id: f.id, fileName: f.state.fileName ?? null, page: (typeof f.state.currentPage === "string" ? f.state.currentPage : f.state.currentPage?.name) ?? null, editorType: f.state.editorType ?? null, editsAllowed: f.state.editsAllowed ?? null, target: f.id === this.targetId }));
   }
 
   // Points commands at one file, by id (f1) or by file name (exact, then a unique case-insensitive part).
