@@ -1,7 +1,6 @@
 # Capnix Social Media Library: Design Research and Analysis
 
 Analysed 15-Sep-2026 · Figma file `Social-Media-Library` · section **Capnix** (`783:90`)
-Screenshots in `screens/`, full layer and text dump in `social-posts.json`.
 
 ## Summary
 

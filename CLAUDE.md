@@ -10,10 +10,9 @@ Research and tooling around driving Figma desktop from Claude through a local pl
 |---|---|---|
 | `webority-figma-write/` | **Active product** | Node MCP server + Figma plugin (v1.7.0). 61 tools and 10 prompts: read, write, Figma Draw, prototyping and Motion (native MP4/GIF/WEBM export, custom animation styles), variables (colour + opacity, easing, timing), inspect CSS, default colour tokens, a Creative tab (isolated ChatGPT/Gemini browser + inbox for social media creatives), Code Connect, shaders, generative plugins, video, image generation, Mobbin reference boards, offline access for people with no Figma seat, Laya decisions, and the design review harness with 8 expert personas. Ports 3692-3699: each session binds the first free one; each Figma file's panel pairs with a free session, or joins a busy one when none is free, so one session can drive several files (`figma_use_file` picks the target; Switch button re-pairs). Registered in `~/.claude.json` as **`Figma-MCP-Webority`**. The plugin shows in Figma as **Webority Figma MCP** (id `webority-figma-write`) |
 | `webority-figma-write/icons/iconsax/` | Asset library | All 993 Iconsax icons, 6 styles, 5,958 SVGs, plus `index.json` |
-| `build/partners/` | Output | The Webority Partners page rebuilt from Figma: `index.html` (pixel exact, 0.927 SSIM), `responsive.html` (responsive and interactive), `assets/`, `design.json`, `verify/`. Has its own README |
-| `build/viewer-project/` | Output | A project folder with `.figma/design-snapshot.json` and `.figma/code-map.json`, used to test the no-seat path |
+| `build/partners/` | Output | The Webority Partners page rebuilt from Figma: `index.html` (pixel exact, 0.927 SSIM), `responsive.html` (responsive and interactive), `assets/`, `design.json`, `viewer/`. Has its own README |
 | `source/` | Reference copy | The read-only weborityos CLI (C# `FigmaBridge.cs`, port 3691) copied from `Webority/webority-os`. Edit upstream, not here. The TS plugin copies (`plugin/`, `source/figma-plugin/`) were deleted on 21-Sep-2026 as stale v0.3.21 duplicates; pull them from upstream if ever needed |
-| `research/` | Notes + screenshots | Capnix site research, social carousel spec |
+| `research/` | Notes | Capnix site research, social carousel spec |
 
 Top-level docs: `README.md` (weborityos plugin notes, tool map, what `serializeNode` omits), `ANALYSIS.md` (C# bridge code review), `FLOW.md` (weborityos end-to-end flow), `WRITE-RESEARCH.md` (why/how the write MCP was designed). The MCP's own README lists every tool.
 

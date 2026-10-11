@@ -50,14 +50,11 @@ FAQ answers: the design only contained the answer for question 02, since the res
 | Path | What |
 |---|---|
 | `index.html` | The page. Every layer absolutely positioned, real text, no framework |
-| `assets/` | 67 SVG icons and illustrations, 23 PNG images, 15 MB total |
+| `assets/` | 52 SVG icons and illustrations, 23 PNG images, 14 MB total |
 | `design.json` | The full design read from Figma, 1,129 layers, with Code Connect data merged in |
 | `assets.json` · `items.json` | Which layer became which file |
 | `mappings.json` | Code Connect mappings pulled from the file |
-| `verify/figma.png` | Figma's render of the frame |
-| `verify/html.png` | Chrome's render of this page |
-| `verify/diff.png` | Difference map, bright where they disagree |
-| `verify/band-*.png` · `w*.png` | Side-by-side crops, Figma left, HTML right |
+| `viewer/` | `viewer.html` over `render.png`, Figma's render of the frame |
 
 ## How it was built
 
@@ -71,9 +68,9 @@ node tools/plan-assets.mjs <dump.json> ../build/partners
 node tools/merge-code-connect.mjs <dump.json> ../build/partners/mappings.json ../build/partners/design.json
 # 5. generate the page
 node tools/figma-to-html.mjs ../build/partners/design.json ../build/partners ../build/partners/assets.json
-# 6. verify
+# 6. verify (writes to verify/, a scratch folder that is not kept)
 chrome --headless --window-size=1440,8803 --screenshot=verify/html.png index.html
-ffmpeg -i verify/html.png -i verify/figma.png -lavfi "[0:v][1:v]ssim" -f null -
+ffmpeg -i verify/html.png -i viewer/render.png -lavfi "[0:v][1:v]ssim" -f null -
 ```
 
 ## Code Connect

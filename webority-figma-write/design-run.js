@@ -1,7 +1,7 @@
 // Runs a design folder (preamble.js + s*.js in order) against the open Figma file via the write bridge.
 // Optional in the folder: icons.json (injected as ISX) and assets/<id>.jpg (injected as B64 when a
 // step references img("<id>")).
-// Usage: node design-run.js designs/music-v2 [--check]
+// Usage: node design-run.js designs/music-v3 [--check]
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -9,7 +9,7 @@ import { FigmaWriteBridge } from "./bridge.js";
 import { ensureToken } from "./lib/token.js";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const dir = path.resolve(here, process.argv[2] || "designs/music");
+const dir = path.resolve(here, process.argv[2] || "designs/music-v3");
 const preamble = fs.readFileSync(path.join(dir, "preamble.js"), "utf8");
 const iconsFile = path.join(dir, "icons.json");
 const ISX = fs.existsSync(iconsFile) ? fs.readFileSync(iconsFile, "utf8") : "{}";

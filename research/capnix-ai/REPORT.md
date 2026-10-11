@@ -1,7 +1,7 @@
 # Capnix (capnix.ai): Brand, Product and Website Analysis
 
 Analysed 15-Sep-2026 from the live site https://capnix.ai (home, blog, about), desktop 1440 px and mobile 390 px.
-Screenshots in this folder. Companion: `../social-media-library/REPORT.md`.
+Companion: `../social-media-library/REPORT.md`.
 
 ## Summary
 
