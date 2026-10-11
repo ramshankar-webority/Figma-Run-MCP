@@ -53,8 +53,11 @@
 
       /* Header */
       header { display: flex; align-items: center; gap: 6px; height: 44px; padding: 0 8px 0 14px; border-bottom: 1px solid var(--line); }
-      header h1 { font-size: 13px; font-weight: 700; letter-spacing: -.01em; margin: 0; }
-      .ver { font-size: 10.5px; font-weight: 600; color: var(--faint); font-variant-numeric: tabular-nums; margin-right: 4px; }
+      header h1 { display: flex; align-items: baseline; gap: 5px; font-size: 13px; font-weight: 700; letter-spacing: -.01em; margin: 0; min-width: 0; }
+      header h1 span { font-weight: 500; color: var(--muted); }
+      .logo { flex: none; width: 24px; height: 24px; display: grid; }
+      .logo svg { width: 24px; height: 24px; stroke: none; }
+      .ver { font-size: 10px; font-weight: 600; color: var(--muted); background: var(--soft); border-radius: 999px; padding: 2px 7px; font-variant-numeric: tabular-nums; margin-right: 2px; }
       header .hbtn { width: 28px; height: 28px; padding: 0; border-radius: 6px; display: grid; place-items: center;
                      background: transparent; color: var(--muted); }
       header .hbtn:hover { background: var(--soft); color: var(--ink); }
@@ -70,7 +73,8 @@
         background: var(--blue); color: #ffffff; box-shadow: 0 4px 14px rgba(47, 80, 228, .35);
       }
       body.mini #bubble:hover { background: var(--blue-hover); }
-      #bubble svg { width: 22px; height: 22px; }
+      #bubble .logo, #bubble .logo svg { width: 48px; height: 48px; }
+      body.mini #bubble { overflow: visible; }
       #bubble .dot { position: absolute; right: 2px; top: 2px; width: 12px; height: 12px; border-radius: 999px;
                      border: 2px solid #ffffff; background: var(--wait); animation: none; }
       #bubble.ok .dot { background: var(--ok); }
@@ -79,9 +83,13 @@
 
       /* Connection row, shown on both tabs */
       #status {
-        display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-bottom: 1px solid var(--line);
-        font-weight: 600; font-size: 11px; color: var(--wait); background: var(--soft);
+        display: flex; align-items: center; gap: 10px; padding: 9px 14px; border-bottom: 1px solid var(--line);
+        font-weight: 600; font-size: 11.5px; color: var(--wait); background: var(--soft);
       }
+      #statusSub { display: block; margin-top: 1px; font-size: 10.5px; font-weight: 500; color: var(--muted); }
+      #statusSub:empty { display: none; }
+      #status .pill { flex: none; width: auto; padding: 4px 10px; border-radius: 999px; font-size: 10.5px; font-weight: 700; background: rgba(255, 255, 255, .75); color: inherit; border: 1px solid currentColor; }
+      #status .pill:hover { background: #fff; }
       #status svg { width: 14px; height: 14px; }
       #status.ok { color: var(--ok); background: var(--ok-soft); }
       #status.bad { color: var(--bad); background: var(--bad-soft); }
@@ -195,7 +203,8 @@
   </head>
   <body>
     <header>
-      <h1 class="grow">Figma MCP</h1>
+      <span class="logo">__LOGO_SVG__</span>
+      <h1 class="grow">Webority <span>Figma MCP</span></h1>
       <span class="ver">v__VERSION__</span>
       <button class="hbtn" id="resetConn" title="Reset connection: drop the Claude session and look for one again">
         <svg viewBox="0 0 24 24"><path d="M14.55 21.67C18.84 20.54 22 16.64 22 12c0-5.52-4.44-10-10-10C5.33 2 2 7.56 2 7.56m0 0V3m0 4.56H6.44" stroke-width="1.8"/><path d="M2 12c0 5.52 4.48 10 10 10" stroke-width="1.8"/></svg>
@@ -206,14 +215,14 @@
     </header>
 
     <button id="bubble" title="Open Webority Figma MCP">
-      <svg viewBox="0 0 24 24"><path d="M9 22h6c5 0 7-2 7-7V9c0-5-2-7-7-7H9C4 2 2 4 2 9v6c0 5 2 7 7 7Z" stroke-width="1.6"/><path d="M8.5 12.5 11 15l4.5-6" stroke-width="1.6"/></svg>
+      <span class="logo">__LOGO_SVG__</span>
       <span class="dot"></span>
     </button>
 
     <div id="status" class="wait">
       <svg viewBox="0 0 24 24" id="statusIcon"><path d="M14.55 21.67C18.84 20.54 22 16.64 22 12c0-5.52-4.44-10-10-10C5.33 2 2 7.56 2 7.56m0 0V3m0 4.56H6.44" stroke-width="1.5"/><path d="M2 12c0 5.52 4.48 10 10 10" stroke-width="1.5"/></svg>
-      <span class="grow" id="statusText">Waiting for Claude…</span>
-      <button class="iconbtn" id="switchSession" hidden title="Hand this Claude session back and pair this file with another one">Switch</button>
+      <span class="grow"><span class="trunc" style="display:block" id="statusText">Waiting for Claude…</span><span class="trunc" id="statusSub"></span></span>
+      <button class="pill" id="switchSession" hidden title="Hand this Claude session back and pair this file with another one">Switch</button>
     </div>
 
     <div class="tabs" role="tablist" hidden>
@@ -237,7 +246,7 @@
       <div class="rowitem" id="allowRow">
         <svg class="ic bulk" viewBox="0 0 24 24" id="allowIcon"><path d="M18.75 8v2.1c-.44-.06-.94-.09-1.5-.1V8c0-3.15-.89-5.25-5.25-5.25S6.75 4.85 6.75 8v2c-.56.01-1.06.04-1.5.1V8c0-2.9.7-6.75 6.75-6.75S18.75 5.1 18.75 8Z"/><path d="M22 15v2c0 4-1 5-5 5H7c-4 0-5-1-5-5v-2c0-3.34.7-4.59 3.25-4.9.44-.06.94-.09 1.5-.1h10.5c.56.01 1.06.04 1.5.1C21.3 10.41 22 11.66 22 15Z" opacity=".4"/><path d="M8 16.999c-.13 0-.26-.03-.38-.08-.13-.05-.23-.12-.33-.21-.18-.19-.29-.45-.29-.71 0-.13.03-.26.08-.38s.12-.23.21-.33c.1-.09.2-.16.33-.21.37-.16.81-.07 1.09.21.09.1.16.21.21.33.05.12.08.25.08.38 0 .26-.11.52-.29.71-.19.18-.45.29-.71.29ZM12 17c-.27 0-.52-.11-.71-.29-.09-.1-.16-.21-.21-.33A.995.995 0 0 1 11 16c0-.27.11-.52.29-.71.37-.37 1.04-.37 1.42 0 .18.19.29.44.29.71 0 .13-.03.26-.08.38s-.12.23-.21.33c-.19.18-.45.29-.71.29ZM16 17c-.26 0-.52-.11-.71-.29-.18-.19-.29-.44-.29-.71 0-.27.11-.52.29-.71.38-.37 1.05-.37 1.42 0 .04.05.08.1.12.16.04.05.07.11.09.17.03.06.05.12.06.18.01.07.02.14.02.2 0 .26-.11.52-.29.71-.19.18-.45.29-.71.29Z"/></svg>
         <span class="grow">
-          <div class="title" id="allowText">Allow Edits</div>
+          <div class="title" id="allowText">Read only</div>
           <div class="desc" id="allowWhy">Claude can read this file, but not change it.</div>
         </span>
         <span class="switch">
@@ -370,6 +379,7 @@
 
       var statusEl = document.getElementById("status");
       var statusText = document.getElementById("statusText");
+      var statusSub = document.getElementById("statusSub");
       var fileEl = document.getElementById("file");
       var pageEl = document.getElementById("page");
       var modeEl = document.getElementById("mode");
@@ -384,8 +394,10 @@
       var bubble = document.getElementById("bubble");
 
       var statusIcon = document.getElementById("statusIcon");
-      function setStatus(text, cls) {
+      function setStatus(text, cls, sub) {
         statusText.textContent = text;
+        statusSub.textContent = sub || "";
+        statusEl.title = sub ? text + " · " + sub : text;
         statusEl.className = cls || "";
         bubble.className = cls || "";
         bubble.title = "Webority Figma MCP · " + text + " · click to open";
@@ -538,7 +550,7 @@
           authed = true;
           everConnected = true;
           goodPort = port;
-          setStatus("Connected to " + (session || "Claude") + " · port " + port + (files > 1 ? " · " + files + " files" : ""), "ok");
+          setStatus(files > 1 ? "Connected · " + files + " files share this session" : "Connected", "ok", (session || "Claude") + " · port " + port);
           switchBtn.hidden = PORTS.length < 2;
           parent.postMessage({ pluginMessage: { type: "request-state" } }, "*");
           paintCreative();
@@ -629,7 +641,7 @@
       function paintAllow() {
         allowRow.className = "rowitem" + (allow.checked ? " on" : "");
         icon(document.getElementById("allowIcon"), allow.checked ? "edit" : "lock");
-        allowText.textContent = allow.checked ? "Allow Edits · On" : "Allow Edits";
+        allowText.textContent = allow.checked ? "Edits allowed" : "Read only";
         if (modeEl.textContent !== "Dev Mode") {
           allowWhy.textContent = allow.checked
             ? "Claude can create, change and delete layers here."

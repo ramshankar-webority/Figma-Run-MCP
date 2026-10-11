@@ -63,11 +63,15 @@ function stampPluginUi(token) {
   const template = fs.readFileSync(path.join(here, "plugin", "ui.template.html"), "utf8");
   // Zalando Sans is embedded: the plugin iframe may only reach the local bridge.
   const font = fs.readFileSync(path.join(here, "plugin", "zalando-sans-latin.woff2")).toString("base64");
+  // The panel's logo: replace plugin/logo.svg with the brand mark to rebrand the header and the floating button.
+  const logoFile = path.join(here, "plugin", "logo.svg");
+  const logo = fs.existsSync(logoFile) ? fs.readFileSync(logoFile, "utf8").trim() : "";
   const html = template
     .replaceAll("__BRIDGE_TOKEN__", token)
     .replaceAll("__BRIDGE_PORTS__", JSON.stringify(MANIFEST_PORTS ?? PORTS))
     .replaceAll("__VERSION__", VERSION)
-    .replaceAll("__FONT_B64__", font);
+    .replaceAll("__FONT_B64__", font)
+    .replaceAll("__LOGO_SVG__", logo);
   const target = path.join(here, "plugin", "ui.html");
   if (!fs.existsSync(target) || fs.readFileSync(target, "utf8") !== html) {
     fs.writeFileSync(target, html);
